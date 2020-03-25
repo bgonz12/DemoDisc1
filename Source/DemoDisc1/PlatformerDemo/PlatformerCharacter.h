@@ -40,6 +40,9 @@ public:
 	float BaseLookUpRate;
 
 protected:
+	UPROPERTY()
+	class APlayerController* PlayerController;
+
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 

@@ -7,6 +7,7 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
@@ -43,16 +44,17 @@ APlatformerCharacter::APlatformerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
 
 // Called when the game starts or when spawned
 void APlatformerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (Controller != NULL)
+	{
+		PlayerController = Cast<APlayerController>(Controller);
+	}
 }
 
 // Called every frame
@@ -96,10 +98,10 @@ void APlatformerCharacter::LookUpAtRate(float Rate)
 
 void APlatformerCharacter::MoveForward(float Value)
 {
-	if ((Controller != NULL) && (Value != 0.0f))
+	if ((PlayerController != NULL) && (Value != 0.0f))
 	{
 		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator Rotation = PlayerController->PlayerCameraManager->GetCameraRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
 		// get forward vector
@@ -110,10 +112,10 @@ void APlatformerCharacter::MoveForward(float Value)
 
 void APlatformerCharacter::MoveRight(float Value)
 {
-	if ((Controller != NULL) && (Value != 0.0f))
+	if ((PlayerController != NULL) && (Value != 0.0f))
 	{
 		// find out which way is right
-		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator Rotation = PlayerController->PlayerCameraManager->GetCameraRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
 		// get right vector 
