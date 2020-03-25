@@ -59,7 +59,6 @@ void ACameraSplineTrack::Tick(float DeltaTime)
 	FVector TargetLocation = TargetActor->GetActorLocation();
 
 	FTransform CameraTransform = SplineComponent->FindTransformClosestToWorldLocation(TargetLocation, ESplineCoordinateSpace::World);
-	//CameraTransform.SetLocation(CameraTransform.GetLocation() + FVector(CameraLeadDistance, 0.0f, 0.0f));
 	CameraContainer->SetWorldTransform(CameraTransform);
 	CameraContainer->AddRelativeLocation(FVector(CameraLeadDistance, 0.0f, 0.0f));
 }
