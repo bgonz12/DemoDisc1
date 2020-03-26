@@ -14,7 +14,7 @@
 APlatformerCharacter::APlatformerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -44,6 +44,9 @@ APlatformerCharacter::APlatformerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	JumpGravity = 1.5f;
+	FallGravity = 2.0f;
 }
 
 // Called when the game starts or when spawned
@@ -61,7 +64,12 @@ void APlatformerCharacter::BeginPlay()
 void APlatformerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
+	FVector CurrentVelocity = GetVelocity();
+	if (CurrentVelocity.Z < -1.0f)
+	{
+		GetCharacterMovement()->GravityScale = FallGravity;
+	}
 }
 
 // Called to bind functionality to input
@@ -69,8 +77,8 @@ void APlatformerCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlatformerCharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlatformerCharacter::StopJumping);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlatformerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlatformerCharacter::MoveRight);
@@ -82,6 +90,20 @@ void APlatformerCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAxis("TurnRate", this, &APlatformerCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &APlatformerCharacter::LookUpAtRate);
+}
+
+void APlatformerCharacter::Jump()
+{
+	Super::Jump();
+
+	GetCharacterMovement()->GravityScale = JumpGravity;
+}
+
+void APlatformerCharacter::StopJumping()
+{
+	Super::StopJumping();
+
+	GetCharacterMovement()->GravityScale = FallGravity;
 }
 
 void APlatformerCharacter::TurnAtRate(float Rate)

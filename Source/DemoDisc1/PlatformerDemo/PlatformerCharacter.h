@@ -39,9 +39,19 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate;
 
+	UPROPERTY(EditAnywhere, Category = Jump)
+	float JumpGravity;
+
+	UPROPERTY(EditAnywhere, Category = Jump)
+	float FallGravity;
+
 protected:
 	UPROPERTY()
 	class APlayerController* PlayerController;
+
+	virtual void Jump() override;
+
+	virtual void StopJumping() override;
 
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
