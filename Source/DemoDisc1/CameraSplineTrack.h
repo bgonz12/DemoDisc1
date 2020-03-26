@@ -25,20 +25,17 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere)
-	float CameraLeadDistance;
-
-	UPROPERTY(EditAnywhere)
 	AActor* TargetActor;
 
 	UPROPERTY(VisibleAnywhere)
 	class USceneComponent* CameraContainer;
 
 	UPROPERTY(VisibleAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* CameraBoom;
+
+	UPROPERTY(VisibleAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* Camera;
 
 	UPROPERTY(VisibleAnywhere)
 	class USplineComponent* SplineComponent;
-
-	UPROPERTY(VisibleAnywhere)
-	class UStaticMeshComponent* StaticMesh;
 };

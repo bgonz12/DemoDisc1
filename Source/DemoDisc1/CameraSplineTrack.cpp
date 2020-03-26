@@ -7,6 +7,7 @@
 #include "Components/SplineComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "Components/StaticMeshComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
 ACameraSplineTrack::ACameraSplineTrack()
@@ -18,15 +19,15 @@ ACameraSplineTrack::ACameraSplineTrack()
 	SetRootComponent(SplineComponent);
 
 	CameraContainer = CreateDefaultSubobject<USceneComponent>(TEXT("CameraContainer"));
-	CameraContainer->AttachToComponent(SplineComponent, FAttachmentTransformRules::KeepWorldTransform);
+	CameraContainer->SetupAttachment(SplineComponent);
+
+	// Create a camera boom (pulls in towards the player if there is a collision)
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraBoom->SetupAttachment(CameraContainer);
+	CameraBoom->TargetArmLength = 300.0f; // The camera leads at this distance ahead of the character
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	Camera->AttachToComponent(CameraContainer, FAttachmentTransformRules::KeepRelativeTransform);
-
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-	StaticMesh->AttachToComponent(SplineComponent, FAttachmentTransformRules::KeepWorldTransform);
-
-	CameraLeadDistance = 700.0f;
+	Camera->SetupAttachment(CameraBoom);
 }
 
 // Called when the game starts or when spawned
@@ -60,6 +61,5 @@ void ACameraSplineTrack::Tick(float DeltaTime)
 
 	FTransform CameraTransform = SplineComponent->FindTransformClosestToWorldLocation(TargetLocation, ESplineCoordinateSpace::World);
 	CameraContainer->SetWorldTransform(CameraTransform);
-	//CameraContainer->AddRelativeLocation(FVector(CameraLeadDistance, 0.0f, 0.0f));
 }
 
