@@ -29,6 +29,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float MoveSpeed;
 
+	UPROPERTY(EditAnywhere)
+	float BoulderRotateSpeed;
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 	class USceneComponent* StaticMeshContainer;

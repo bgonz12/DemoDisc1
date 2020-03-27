@@ -30,6 +30,8 @@ APlatformerChaser::APlatformerChaser()
 	//BoulderFallSequence = CreateDefaultSubobject<UActorSequenceComponent>(TEXT("BoulderFallSequence"));
 
 	MoveSpeed = 500.0f;
+
+	BoulderRotateSpeed = 200.0f;
 }
 
 // Called when the game starts or when spawned
@@ -54,7 +56,7 @@ void APlatformerChaser::Tick(float DeltaTime)
 		FTransform FinalTransform = SplineComponent->FindTransformClosestToWorldLocation(TargetLocation, ESplineCoordinateSpace::World);
 		StaticMeshContainer->SetWorldTransform(FinalTransform);
 
-		StaticMesh->AddLocalRotation(FRotator(-MoveSpeed * DeltaTime / 2.0f, 0.0f, 0.0f));
+		StaticMesh->AddLocalRotation(FRotator(-BoulderRotateSpeed * DeltaTime, 0.0f, 0.0f));
 
 		if (FVector::Dist(StaticMeshContainer->GetComponentLocation(), EndLocation) <= MoveSpeed * DeltaTime * 2.0f)
 		{
