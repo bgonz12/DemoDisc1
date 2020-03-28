@@ -72,9 +72,6 @@ protected:
 	void LookUpAtRate(float Rate);
 
 protected:
-	UFUNCTION()
-	void ActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
-
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface

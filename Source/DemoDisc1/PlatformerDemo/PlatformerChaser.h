@@ -34,16 +34,21 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere)
-	class USceneComponent* StaticMeshContainer;
+	class USceneComponent* ChaserContainer;
 
 	UPROPERTY(VisibleAnywhere)
-	class UStaticMeshComponent* StaticMesh;
+	class UStaticMeshComponent* BoulderStaticMesh;
 
 	UPROPERTY(VisibleAnywhere)
 	class USplineComponent* SplineComponent;
 
 	UPROPERTY(VisibleAnywhere)
-	class UBoxComponent* TriggerBox;
+	class UBoxComponent* ChaseTriggerBox;
+
+	UPROPERTY(VisibleAnywhere)
+	class USphereComponent* BoulderKillSphere;
+
+	FVector StartLocation;
 
 	FVector EndLocation;
 
@@ -55,6 +60,15 @@ protected:
 
 	void StopChasing();
 
+	void EnableChaser();
+
+	void DisableChaser();
+
+	void ResetChaser();
+
 	UFUNCTION()
-	void BeginOverlap(UPrimitiveComponent* OverlappedComponent,	AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
+	void BeginChaseTriggerOverlap(UPrimitiveComponent* OverlappedComponent,	AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
+
+	UFUNCTION()
+	void BeginBoulderOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
 };

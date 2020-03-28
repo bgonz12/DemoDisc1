@@ -5,7 +5,7 @@
 #include "Components/SplineComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
-//#include "ActorSequenceComponent.h"
+#include "Components/SphereComponent.h"
 
 #include "PlatformerCharacter.h"
 
@@ -18,18 +18,19 @@ APlatformerChaser::APlatformerChaser()
 	SplineComponent = CreateDefaultSubobject<USplineComponent>(TEXT("SplineComponent"));
 	SetRootComponent(SplineComponent);
 
-	StaticMeshContainer = CreateDefaultSubobject<USceneComponent>(TEXT("StaticMeshContainer"));
-	StaticMeshContainer->SetupAttachment(RootComponent);
+	ChaserContainer = CreateDefaultSubobject<USceneComponent>(TEXT("StaticMeshContainer"));
+	ChaserContainer->SetupAttachment(RootComponent);
 
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-	StaticMesh->SetupAttachment(StaticMeshContainer);
+	BoulderStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BoulderStaticMesh"));
+	BoulderStaticMesh->SetupAttachment(ChaserContainer);
 
-	TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
-	TriggerBox->SetupAttachment(RootComponent);
+	BoulderKillSphere = CreateDefaultSubobject<USphereComponent>(TEXT("BoulderKillSphere"));
+	BoulderKillSphere->SetupAttachment(BoulderStaticMesh);
 
-	//BoulderFallSequence = CreateDefaultSubobject<UActorSequenceComponent>(TEXT("BoulderFallSequence"));
+	ChaseTriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
+	ChaseTriggerBox->SetupAttachment(RootComponent);
 
-	MoveSpeed = 500.0f;
+	MoveSpeed = 600.0f;
 
 	BoulderRotateSpeed = 200.0f;
 }
@@ -38,13 +39,18 @@ APlatformerChaser::APlatformerChaser()
 void APlatformerChaser::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &APlatformerChaser::BeginOverlap);
 
+	ResetChaser();
+
+	ChaseTriggerBox->OnComponentBeginOverlap.AddDynamic(this, &APlatformerChaser::BeginChaseTriggerOverlap);
+
+	BoulderKillSphere->OnComponentBeginOverlap.AddDynamic(this, &APlatformerChaser::BeginBoulderOverlap);
+
+	StartLocation = ChaserContainer->GetComponentLocation();
 	EndLocation = SplineComponent->GetWorldLocationAtTime(SplineComponent->Duration);
 
 	FRotator StartRotation = SplineComponent->GetRotationAtTime(0.0f, ESplineCoordinateSpace::World);
-	StaticMeshContainer->SetWorldRotation(StartRotation);
+	ChaserContainer->SetWorldRotation(StartRotation);
 }
 
 // Called every frame
@@ -54,14 +60,14 @@ void APlatformerChaser::Tick(float DeltaTime)
 
 	if (bIsChasing)
 	{
-		FVector TargetLocation = StaticMeshContainer->GetComponentLocation() + GetActorForwardVector() * MoveSpeed * DeltaTime;
+		FVector TargetLocation = ChaserContainer->GetComponentLocation() + GetActorForwardVector() * MoveSpeed * DeltaTime;
 
 		FTransform FinalTransform = SplineComponent->FindTransformClosestToWorldLocation(TargetLocation, ESplineCoordinateSpace::World);
-		StaticMeshContainer->SetWorldTransform(FinalTransform);
+		ChaserContainer->SetWorldTransform(FinalTransform);
 
-		StaticMesh->AddLocalRotation(FRotator(-BoulderRotateSpeed * DeltaTime, 0.0f, 0.0f));
+		BoulderStaticMesh->AddLocalRotation(FRotator(-BoulderRotateSpeed * DeltaTime, 0.0f, 0.0f));
 
-		if (FVector::Dist(StaticMeshContainer->GetComponentLocation(), EndLocation) <= MoveSpeed * DeltaTime * 2.0f)
+		if (FVector::Dist(ChaserContainer->GetComponentLocation(), EndLocation) <= MoveSpeed * DeltaTime * 2.0f)
 		{
 			StopChasing();
 		}
@@ -70,7 +76,6 @@ void APlatformerChaser::Tick(float DeltaTime)
 
 void APlatformerChaser::StartChasing()
 {
-	//BoulderFallSequence
 	bIsChasing = true;
 }
 
@@ -79,11 +84,45 @@ void APlatformerChaser::StopChasing()
 	bIsChasing = false;
 }
 
-void APlatformerChaser::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+void APlatformerChaser::EnableChaser()
+{
+	BoulderStaticMesh->SetVisibility(true);
+	BoulderStaticMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+}
+
+void APlatformerChaser::DisableChaser()
+{
+	BoulderStaticMesh->SetVisibility(false);
+	BoulderStaticMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void APlatformerChaser::ResetChaser()
+{
+	bIsChasing = false;
+	DisableChaser();
+	ChaserContainer->SetWorldLocation(StartLocation);
+}
+
+void APlatformerChaser::BeginChaseTriggerOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	if (!bIsChasing && Cast<APlatformerCharacter>(OtherActor))
 	{
+		EnableChaser();
+		StartChasing();
 		this->PlayStartAnimation();
+	}
+}
+
+void APlatformerChaser::BeginBoulderOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	if (!bIsChasing) return;
+
+	APlatformerCharacter* Player = Cast<APlatformerCharacter>(OtherActor);
+
+	if (Player)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("KILL THE PLAYER"));
+		ResetChaser();
 	}
 }
 
