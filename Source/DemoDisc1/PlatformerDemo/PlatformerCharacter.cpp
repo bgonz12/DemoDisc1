@@ -10,6 +10,8 @@
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
 
+#include "PlatformerChaser.h"
+
 // Sets default values
 APlatformerCharacter::APlatformerCharacter()
 {
@@ -58,6 +60,8 @@ void APlatformerCharacter::BeginPlay()
 	{
 		PlayerController = Cast<APlayerController>(Controller);
 	}
+
+	OnActorHit.AddDynamic(this, &APlatformerCharacter::ActorHit);
 }
 
 // Called every frame
@@ -69,6 +73,16 @@ void APlatformerCharacter::Tick(float DeltaTime)
 	if (CurrentVelocity.Z < -1.0f)
 	{
 		GetCharacterMovement()->GravityScale = FallGravity;
+	}
+}
+
+void APlatformerCharacter::ActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
+{
+	APlatformerChaser* Chaser = Cast<APlatformerChaser>(OtherActor);
+
+	if (Chaser)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("I'm Dead :("));
 	}
 }
 
