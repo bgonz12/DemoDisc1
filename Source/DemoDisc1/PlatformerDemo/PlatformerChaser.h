@@ -45,11 +45,12 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* TriggerBox;
 
-	//UPROPERTY(VisibleAnywhere)
-	//class UActorSequenceComponent* BoulderFallSequence;
-
 	FVector EndLocation;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayStartAnimation();
+
+	UFUNCTION(BlueprintCallable)
 	void StartChasing();
 
 	void StopChasing();

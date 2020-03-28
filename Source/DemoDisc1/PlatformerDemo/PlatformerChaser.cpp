@@ -42,6 +42,9 @@ void APlatformerChaser::BeginPlay()
 	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &APlatformerChaser::BeginOverlap);
 
 	EndLocation = SplineComponent->GetWorldLocationAtTime(SplineComponent->Duration);
+
+	FRotator StartRotation = SplineComponent->GetRotationAtTime(0.0f, ESplineCoordinateSpace::World);
+	StaticMeshContainer->SetWorldRotation(StartRotation);
 }
 
 // Called every frame
@@ -80,7 +83,7 @@ void APlatformerChaser::BeginOverlap(UPrimitiveComponent * OverlappedComponent, 
 {
 	if (!bIsChasing && Cast<APlatformerCharacter>(OtherActor))
 	{
-		StartChasing();
+		this->PlayStartAnimation();
 	}
 }
 
