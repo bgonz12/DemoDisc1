@@ -6,8 +6,10 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "PlatformerCharacter.h"
+#include "PlatformerGameModeBase.h"
 
 // Sets default values
 APlatformerChaser::APlatformerChaser()
@@ -40,7 +42,8 @@ void APlatformerChaser::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ResetChaser();
+	bIsChasing = false;
+	DisableChaser();
 
 	ChaseTriggerBox->OnComponentBeginOverlap.AddDynamic(this, &APlatformerChaser::BeginChaseTriggerOverlap);
 
@@ -96,8 +99,10 @@ void APlatformerChaser::DisableChaser()
 	BoulderStaticMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
-void APlatformerChaser::ResetChaser()
+void APlatformerChaser::Reset()
 {
+	Super::Reset();
+
 	bIsChasing = false;
 	DisableChaser();
 	ChaserContainer->SetWorldLocation(StartLocation);
@@ -121,8 +126,7 @@ void APlatformerChaser::BeginBoulderOverlap(UPrimitiveComponent * OverlappedComp
 
 	if (Player)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("KILL THE PLAYER"));
-		ResetChaser();
+		Player->KillPlayer();
 	}
 }
 

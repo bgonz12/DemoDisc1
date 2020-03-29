@@ -11,14 +11,6 @@ class DEMODISC1_API APlatformerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
-
-	/** Follow camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FollowCamera;
-
 public:
 	// Sets default values for this character's properties
 	APlatformerCharacter();
@@ -45,9 +37,27 @@ public:
 	UPROPERTY(EditAnywhere, Category = Jump)
 	float FallGravity;
 
+	void KillPlayer();
+
+	virtual void Reset() override;
+
 protected:
+	/** Camera boom positioning the camera behind the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* CameraBoom;
+
+	/** Follow camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UCameraComponent* FollowCamera;
+
 	UPROPERTY()
 	class APlayerController* PlayerController;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayPlayerDeathAnimation();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ResetPlayerDeathAnimation();
 
 	virtual void Jump() override;
 
@@ -71,7 +81,6 @@ protected:
 	 */
 	void LookUpAtRate(float Rate);
 
-protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface

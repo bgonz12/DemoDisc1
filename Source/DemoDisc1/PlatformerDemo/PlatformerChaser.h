@@ -32,6 +32,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	float BoulderRotateSpeed;
 
+	virtual void Reset() override;
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 	class USceneComponent* ChaserContainer;
@@ -63,8 +65,6 @@ protected:
 	void EnableChaser();
 
 	void DisableChaser();
-
-	void ResetChaser();
 
 	UFUNCTION()
 	void BeginChaseTriggerOverlap(UPrimitiveComponent* OverlappedComponent,	AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);

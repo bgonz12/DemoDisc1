@@ -9,8 +9,10 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "PlatformerChaser.h"
+#include "PlatformerGameModeBase.h"
 
 // Sets default values
 APlatformerCharacter::APlatformerCharacter()
@@ -92,6 +94,28 @@ void APlatformerCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAxis("TurnRate", this, &APlatformerCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &APlatformerCharacter::LookUpAtRate);
+}
+
+void APlatformerCharacter::KillPlayer()
+{
+	PlayPlayerDeathAnimation();
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	AGameModeBase* GameMode = UGameplayStatics::GetGameMode(World);
+	if (!GameMode) return;
+
+	APlatformerGameModeBase* PlatformerGameMode = Cast<APlatformerGameModeBase>(GameMode);
+	if (!PlatformerGameMode) return;
+
+	PlatformerGameMode->TriggerLoadLastCheckpoint();
+}
+
+
+void APlatformerCharacter::Reset()
+{
+	ResetPlayerDeathAnimation();
 }
 
 void APlatformerCharacter::Jump()
