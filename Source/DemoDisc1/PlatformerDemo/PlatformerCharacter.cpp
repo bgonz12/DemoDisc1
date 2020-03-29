@@ -58,6 +58,8 @@ void APlatformerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	bIsPlayerDead = false;
+
 	if (Controller != NULL)
 	{
 		PlayerController = Cast<APlayerController>(Controller);
@@ -96,9 +98,15 @@ void APlatformerCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAxis("LookUpRate", this, &APlatformerCharacter::LookUpAtRate);
 }
 
-void APlatformerCharacter::KillPlayer()
+void APlatformerCharacter::KillPlayer(DeathAnimationType AnimType)
 {
-	PlayPlayerDeathAnimation();
+	if (bIsPlayerDead) return;
+
+	bIsPlayerDead = true;
+
+	DisableInput(PlayerController);
+
+	PlayPlayerDeathAnimation(AnimType);
 
 	UWorld* World = GetWorld();
 	if (!World) return;
@@ -112,10 +120,13 @@ void APlatformerCharacter::KillPlayer()
 	PlatformerGameMode->TriggerLoadLastCheckpoint();
 }
 
-
 void APlatformerCharacter::Reset()
 {
+	bIsPlayerDead = false;
+
 	ResetPlayerDeathAnimation();
+
+	EnableInput(PlayerController);
 }
 
 void APlatformerCharacter::Jump()

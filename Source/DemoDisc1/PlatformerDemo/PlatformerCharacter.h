@@ -6,6 +6,13 @@
 #include "GameFramework/Character.h"
 #include "PlatformerCharacter.generated.h"
 
+UENUM(BlueprintType)
+enum class DeathAnimationType : uint8 {
+	DECAPITATION UMETA(DisaplayName="Decapitation"),
+	FALL UMETA(DisaplayName = "Fall"),
+	SQUISH UMETA(DisaplayName = "Squish")
+};
+
 UCLASS()
 class DEMODISC1_API APlatformerCharacter : public ACharacter
 {
@@ -37,7 +44,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = Jump)
 	float FallGravity;
 
-	void KillPlayer();
+	bool bIsPlayerDead;
+
+	void KillPlayer(DeathAnimationType AnimType);
 
 	virtual void Reset() override;
 
@@ -54,7 +63,7 @@ protected:
 	class APlayerController* PlayerController;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void PlayPlayerDeathAnimation();
+	void PlayPlayerDeathAnimation(DeathAnimationType AnimType);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ResetPlayerDeathAnimation();

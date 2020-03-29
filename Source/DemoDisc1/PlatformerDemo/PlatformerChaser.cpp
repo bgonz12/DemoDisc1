@@ -126,7 +126,7 @@ void APlatformerChaser::BeginBoulderOverlap(UPrimitiveComponent * OverlappedComp
 
 	if (Player)
 	{
-		Player->KillPlayer();
+		Player->KillPlayer(DeathAnimationType::SQUISH);
 	}
 }
 
