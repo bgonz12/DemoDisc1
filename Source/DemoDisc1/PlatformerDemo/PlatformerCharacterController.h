@@ -14,4 +14,15 @@ class DEMODISC1_API APlatformerCharacterController : public APlayerController
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual void BeginPlay() override;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class UUserWidget> PlatformerUIClass;
+
+	class UPlatformerUI* PlatformerUI;
+
+public:
+	class UPlatformerUI* GetPlatformerUI();
 };

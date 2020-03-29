@@ -7,12 +7,13 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
-#include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "PlatformerCharacterController.h"
 #include "PlatformerChaser.h"
 #include "PlatformerGameModeBase.h"
+#include "PlatformerUI.h"
 
 // Sets default values
 APlatformerCharacter::APlatformerCharacter()
@@ -62,7 +63,7 @@ void APlatformerCharacter::BeginPlay()
 
 	if (Controller != NULL)
 	{
-		PlayerController = Cast<APlayerController>(Controller);
+		PlayerController = Cast<APlatformerCharacterController>(Controller);
 	}
 }
 
@@ -104,7 +105,17 @@ void APlatformerCharacter::KillPlayer(DeathAnimationType AnimType)
 
 	bIsPlayerDead = true;
 
-	DisableInput(PlayerController);
+	if (PlayerController)
+	{
+		DisableInput(PlayerController);
+
+		UPlatformerUI* PlatformerUI = PlayerController->GetPlatformerUI();
+
+		if (PlatformerUI)
+		{
+			PlatformerUI->PlayCurtainFadeOut();
+		}
+	}
 
 	PlayPlayerDeathAnimation(AnimType);
 
@@ -126,7 +137,17 @@ void APlatformerCharacter::Reset()
 
 	ResetPlayerDeathAnimation();
 
-	EnableInput(PlayerController);
+	if (PlayerController)
+	{
+		EnableInput(PlayerController);
+		
+		UPlatformerUI* PlatformerUI = PlayerController->GetPlatformerUI();
+
+		if (PlatformerUI)
+		{
+			PlatformerUI->PlayCurtainFadeIn();
+		}
+	}
 }
 
 void APlatformerCharacter::Jump()

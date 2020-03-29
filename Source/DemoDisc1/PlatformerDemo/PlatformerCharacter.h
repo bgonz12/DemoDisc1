@@ -60,7 +60,7 @@ protected:
 	class UCameraComponent* FollowCamera;
 
 	UPROPERTY()
-	class APlayerController* PlayerController;
+	class APlatformerCharacterController* PlayerController;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayPlayerDeathAnimation(DeathAnimationType AnimType);
