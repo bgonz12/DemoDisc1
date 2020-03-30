@@ -60,11 +60,6 @@ void ACameraSplineTrack::Tick(float DeltaTime)
 
 	FTransform CameraTransform = SplineComponent->FindTransformClosestToWorldLocation(TargetLocation, ESplineCoordinateSpace::World);
 	CameraContainer->SetWorldTransform(CameraTransform);
-
-	if (PlayerController && PlayerController->GetViewTarget() != this)
-	{
-		PlayerController->SetViewTarget(this);
-	}
 }
 
 void ACameraSplineTrack::Reset()

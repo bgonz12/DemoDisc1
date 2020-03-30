@@ -38,11 +38,11 @@ void APlatformerCheckpoint::BeginCheckpointOverlap(UPrimitiveComponent * Overlap
 	if (PlayerCharacter)
 	{
 		PlayerCharacter->SetRespawnLocation(GetActorLocation());
-	}
 
-	if (CheckpointChaser)
-	{
-		CheckpointChaser->bShouldReset = false;
+		if (CheckpointChaser)
+		{
+			CheckpointChaser->bShouldReset = false;
+		}
 	}
 }
 
@@ -50,4 +50,3 @@ APlatformerChaser * APlatformerCheckpoint::GetCheckpointChaser()
 {
 	return CheckpointChaser;
 }
-

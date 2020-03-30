@@ -5,6 +5,12 @@
 
 #include "PlatformerUI.h"
 
+APlatformerCharacterController::APlatformerCharacterController()
+{
+	// This needs to be done in order to stay focused on CameraSplineTrack after Reset
+	bAutoManageActiveCameraTarget = false;
+}
+
 void APlatformerCharacterController::BeginPlay()
 {
 	Super::BeginPlay();

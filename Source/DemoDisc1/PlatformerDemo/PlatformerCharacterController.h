@@ -14,6 +14,9 @@ class DEMODISC1_API APlatformerCharacterController : public APlayerController
 {
 	GENERATED_BODY()
 	
+public:
+	APlatformerCharacterController();
+
 protected:
 	virtual void BeginPlay() override;
 
