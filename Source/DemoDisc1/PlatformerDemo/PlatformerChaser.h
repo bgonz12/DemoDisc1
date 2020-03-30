@@ -24,6 +24,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(VisibleAnywhere)
+	bool bShouldReset;
+
+	UPROPERTY(VisibleAnywhere)
 	bool bIsChasing;
 
 	UPROPERTY(EditAnywhere)

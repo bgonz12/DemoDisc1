@@ -29,6 +29,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	AActor* TargetActor;
 
+	UPROPERTY(EditAnywhere)
+	class APlayerController* PlayerController;
+
 	UPROPERTY(VisibleAnywhere)
 	class USceneComponent* CameraContainer;
 

@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "PlatformerChaser.h"
 #include "PlatformerCharacter.h"
 #include "PlatformerGameModeBase.h"
 
@@ -39,16 +40,10 @@ void APlatformerCheckpoint::BeginCheckpointOverlap(UPrimitiveComponent * Overlap
 		PlayerCharacter->SetRespawnLocation(GetActorLocation());
 	}
 
-	UWorld* World = GetWorld();
-	if (!World) return;
-
-	AGameModeBase* GameMode = UGameplayStatics::GetGameMode(World);
-	if (!GameMode) return;
-
-	APlatformerGameModeBase* PlatformerGameMode = Cast<APlatformerGameModeBase>(GameMode);
-	if (!PlatformerGameMode) return;
-
-	PlatformerGameMode->SetCurrentCheckpoint(this);
+	if (CheckpointChaser)
+	{
+		CheckpointChaser->bShouldReset = false;
+	}
 }
 
 APlatformerChaser * APlatformerCheckpoint::GetCheckpointChaser()

@@ -47,16 +47,7 @@ void APlatformerGameModeBase::LoadLastCheckpoint()
 	UWorld* World = GetWorld();
 	if (World) World->GetTimerManager().ClearTimer(LoadCheckpointTimerHandle);
 
-	if (LastCheckpoint)
-	{
-		APlatformerChaser* Chaser = LastCheckpoint->GetCheckpointChaser();
-		if (Chaser) Chaser->Reset();
-
-	}
-
-	if (PlayerCharacter) PlayerCharacter->Reset();
-
-	//ResetLevel();
+	ResetLevel();
 }
 
 void APlatformerGameModeBase::SetCurrentCheckpoint(APlatformerCheckpoint* NewCheckpoint)

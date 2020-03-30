@@ -32,6 +32,10 @@ APlatformerChaser::APlatformerChaser()
 	ChaseTriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
 	ChaseTriggerBox->SetupAttachment(RootComponent);
 
+	bShouldReset = true;
+
+	bIsChasing = false;
+
 	MoveSpeed = 600.0f;
 
 	BoulderRotateSpeed = 200.0f;
@@ -41,6 +45,8 @@ APlatformerChaser::APlatformerChaser()
 void APlatformerChaser::BeginPlay()
 {
 	Super::BeginPlay();
+
+	bShouldReset = true;
 
 	bIsChasing = false;
 	DisableChaser();
@@ -101,6 +107,10 @@ void APlatformerChaser::DisableChaser()
 
 void APlatformerChaser::Reset()
 {
+	if (!bShouldReset) return;
+
+	Super::Reset();
+
 	bIsChasing = false;
 	DisableChaser();
 	ChaserContainer->SetWorldLocation(StartLocation);

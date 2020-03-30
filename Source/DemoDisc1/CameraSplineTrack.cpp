@@ -35,17 +35,17 @@ void ACameraSplineTrack::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	PlayerController = World->GetFirstPlayerController();
+	if (!PlayerController) return;
+
+	PlayerController->SetViewTarget(this);
+
 	if (TargetActor == nullptr)
 	{
-		UWorld* World = GetWorld();
-		if (!World) return;
-
-		APlayerController* PlayerController = World->GetFirstPlayerController();
-		if (!PlayerController) return;
-
 		TargetActor = PlayerController->GetPawn();
-
-		PlayerController->SetViewTarget(this);
 	}
 }
 
@@ -60,23 +60,20 @@ void ACameraSplineTrack::Tick(float DeltaTime)
 
 	FTransform CameraTransform = SplineComponent->FindTransformClosestToWorldLocation(TargetLocation, ESplineCoordinateSpace::World);
 	CameraContainer->SetWorldTransform(CameraTransform);
+
+	if (PlayerController && PlayerController->GetViewTarget() != this)
+	{
+		PlayerController->SetViewTarget(this);
+	}
 }
 
 void ACameraSplineTrack::Reset()
 {
 	Super::Reset();
 
-	/*if (TargetActor == nullptr)
+	if (PlayerController && PlayerController->GetViewTarget() != this)
 	{
-		UWorld* World = GetWorld();
-		if (!World) return;
-
-		APlayerController* PlayerController = World->GetFirstPlayerController();
-		if (!PlayerController) return;
-
-		TargetActor = PlayerController->GetPawn();
-
 		PlayerController->SetViewTarget(this);
-	}*/
+	}
 }
 

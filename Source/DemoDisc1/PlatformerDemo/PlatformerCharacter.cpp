@@ -135,6 +135,7 @@ void APlatformerCharacter::KillPlayer(DeathAnimationType AnimType)
 
 void APlatformerCharacter::Reset()
 {
+	// We do not call reset on parent class because doing so Destroys the actor 
 	//Super::Reset();
 
 	SetActorLocation(RespawnLocation);
@@ -145,7 +146,7 @@ void APlatformerCharacter::Reset()
 
 	if (PlayerController)
 	{
-		//PlayerController->Possess(this);
+		PlayerController->Possess(this);
 
 		EnableInput(PlayerController);
 		
