@@ -52,12 +52,9 @@ void APlatformerGameModeBase::LoadLastCheckpoint()
 		APlatformerChaser* Chaser = LastCheckpoint->GetCheckpointChaser();
 		if (Chaser) Chaser->Reset();
 
-		if (PlayerCharacter)
-		{
-			PlayerCharacter->Reset();
-			PlayerCharacter->SetActorLocation(LastCheckpoint->GetActorLocation());
-		}
 	}
+
+	if (PlayerCharacter) PlayerCharacter->Reset();
 
 	//ResetLevel();
 }
