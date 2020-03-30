@@ -32,6 +32,13 @@ void APlatformerCheckpoint::BeginPlay()
 
 void APlatformerCheckpoint::BeginCheckpointOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+	APlatformerCharacter* PlayerCharacter = Cast<APlatformerCharacter>(OtherActor);
+
+	if (PlayerCharacter)
+	{
+		PlayerCharacter->SetRespawnLocation(GetActorLocation());
+	}
+
 	UWorld* World = GetWorld();
 	if (!World) return;
 

@@ -101,8 +101,6 @@ void APlatformerChaser::DisableChaser()
 
 void APlatformerChaser::Reset()
 {
-	Super::Reset();
-
 	bIsChasing = false;
 	DisableChaser();
 	ChaserContainer->SetWorldLocation(StartLocation);

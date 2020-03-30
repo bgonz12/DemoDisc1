@@ -23,6 +23,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void Reset() override;
+
 protected:
 	UPROPERTY(EditAnywhere)
 	AActor* TargetActor;

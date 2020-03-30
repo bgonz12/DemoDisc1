@@ -45,9 +45,7 @@ void APlatformerGameModeBase::LoadLastCheckpoint()
 	bLoadingCheckpoint = false;
 
 	UWorld* World = GetWorld();
-	if (!World) return;
-
-	World->GetTimerManager().ClearTimer(LoadCheckpointTimerHandle);
+	if (World) World->GetTimerManager().ClearTimer(LoadCheckpointTimerHandle);
 
 	if (LastCheckpoint)
 	{
@@ -60,6 +58,8 @@ void APlatformerGameModeBase::LoadLastCheckpoint()
 			PlayerCharacter->SetActorLocation(LastCheckpoint->GetActorLocation());
 		}
 	}
+
+	//ResetLevel();
 }
 
 void APlatformerGameModeBase::SetCurrentCheckpoint(APlatformerCheckpoint* NewCheckpoint)

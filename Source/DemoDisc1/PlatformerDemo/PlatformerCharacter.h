@@ -30,6 +30,23 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+
+	/** Component References **/
+
+	/** Camera boom positioning the camera behind the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* CameraBoom;
+
+	/** Follow camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UCameraComponent* CharacterCamera;
+
+	UPROPERTY()
+	class APlatformerCharacterController* PlayerController;
+
+	/** Class Properties **/
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseTurnRate;
@@ -44,23 +61,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = Jump)
 	float FallGravity;
 
+	FVector RespawnLocation;
+
 	bool bIsPlayerDead;
 
-	void KillPlayer(DeathAnimationType AnimType);
-
-	virtual void Reset() override;
-
-protected:
-	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
-
-	/** Follow camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FollowCamera;
-
-	UPROPERTY()
-	class APlatformerCharacterController* PlayerController;
+	/** Class Member Functions **/
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayPlayerDeathAnimation(DeathAnimationType AnimType);
@@ -95,8 +100,19 @@ protected:
 	// End of APawn interface
 
 public:
-	/** Returns CameraBoom subobject **/
+	void KillPlayer(DeathAnimationType AnimType);
+
+	virtual void Reset() override;
+
+	/** GETTERS **/
+
+	/** Returns CameraBoom subobject */
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	/** Returns FollowCamera subobject */
+	FORCEINLINE class UCameraComponent* GetCharacterCamera() const { return CharacterCamera; }
+
+	/** SETTERS **/
+
+	FORCEINLINE void SetRespawnLocation(FVector NewRespawnLocation) { RespawnLocation = NewRespawnLocation;  }
 };

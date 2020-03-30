@@ -24,3 +24,8 @@ UPlatformerUI* APlatformerCharacterController::GetPlatformerUI()
 {
 	return PlatformerUI;
 }
+
+void APlatformerCharacterController::Reset()
+{
+	Super::Reset();
+}

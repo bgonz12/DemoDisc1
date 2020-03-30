@@ -47,7 +47,6 @@ void ACameraSplineTrack::BeginPlay()
 
 		PlayerController->SetViewTarget(this);
 	}
-	
 }
 
 // Called every frame
@@ -61,5 +60,23 @@ void ACameraSplineTrack::Tick(float DeltaTime)
 
 	FTransform CameraTransform = SplineComponent->FindTransformClosestToWorldLocation(TargetLocation, ESplineCoordinateSpace::World);
 	CameraContainer->SetWorldTransform(CameraTransform);
+}
+
+void ACameraSplineTrack::Reset()
+{
+	Super::Reset();
+
+	/*if (TargetActor == nullptr)
+	{
+		UWorld* World = GetWorld();
+		if (!World) return;
+
+		APlayerController* PlayerController = World->GetFirstPlayerController();
+		if (!PlayerController) return;
+
+		TargetActor = PlayerController->GetPawn();
+
+		PlayerController->SetViewTarget(this);
+	}*/
 }
 

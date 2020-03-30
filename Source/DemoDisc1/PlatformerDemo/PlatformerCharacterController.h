@@ -25,4 +25,6 @@ protected:
 
 public:
 	class UPlatformerUI* GetPlatformerUI();
+
+	virtual void Reset() override;
 };

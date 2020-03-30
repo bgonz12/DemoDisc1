@@ -46,9 +46,9 @@ APlatformerCharacter::APlatformerCharacter()
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 	// Create a follow camera
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+	CharacterCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CharacterCamera"));
+	CharacterCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	CharacterCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	JumpGravity = 1.0f;
 	FallGravity = 2.5f;
@@ -59,12 +59,14 @@ void APlatformerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	bIsPlayerDead = false;
-
-	if (Controller != NULL)
+	if (Controller != nullptr)
 	{
 		PlayerController = Cast<APlatformerCharacterController>(Controller);
 	}
+
+	RespawnLocation = GetActorLocation();
+
+	bIsPlayerDead = false;
 }
 
 // Called every frame
@@ -133,12 +135,18 @@ void APlatformerCharacter::KillPlayer(DeathAnimationType AnimType)
 
 void APlatformerCharacter::Reset()
 {
+	//Super::Reset();
+
+	SetActorLocation(RespawnLocation);
+
 	bIsPlayerDead = false;
 
 	ResetPlayerDeathAnimation();
 
 	if (PlayerController)
 	{
+		//PlayerController->Possess(this);
+
 		EnableInput(PlayerController);
 		
 		UPlatformerUI* PlatformerUI = PlayerController->GetPlatformerUI();
