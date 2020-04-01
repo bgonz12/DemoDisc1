@@ -54,3 +54,8 @@ void APlatformerGameModeBase::SetCurrentCheckpoint(APlatformerCheckpoint* NewChe
 {
 	LastCheckpoint = NewCheckpoint;
 }
+
+void APlatformerGameModeBase::SetCollectibleCounter(int Value)
+{
+	CollectibleCounter = Value;
+}

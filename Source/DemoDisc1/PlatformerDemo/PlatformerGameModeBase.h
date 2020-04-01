@@ -29,9 +29,15 @@ protected:
 
 	bool bLoadingCheckpoint;
 
+	int CollectibleCounter;
+
 	UFUNCTION()
 	void LoadLastCheckpoint();
 
 public:
 	void SetCurrentCheckpoint(class APlatformerCheckpoint* NewCheckpoint);
+
+	void SetCollectibleCounter(int Value);
+
+	FORCEINLINE int GetCollectibleCounter() { return CollectibleCounter; };
 };
