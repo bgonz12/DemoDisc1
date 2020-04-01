@@ -17,6 +17,13 @@ class DEMODISC1_API UPlatformerUI : public UUserWidget
 public:
 	virtual bool Initialize() override;
 
+protected:
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* CollectibleText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int CollectibleCounter;
+
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayCurtainFadeIn();
@@ -26,4 +33,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayShowCollectables();
+
+	int GetCollectibleCounter();
+
+	UFUNCTION()
+	void SetCollectibleCounter(int Value);
 };

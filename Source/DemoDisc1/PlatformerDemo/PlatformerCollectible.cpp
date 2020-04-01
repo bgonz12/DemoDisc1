@@ -4,17 +4,16 @@
 #include "PlatformerCollectible.h"
 #include "Components/MaterialBillboardComponent.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "PlatformerCharacter.h"
-#include "PlatformerCharacterController.h"
-#include "PlatformerUI.h"
+#include "PlatformerGameModeBase.h"
 
 // Sets default values
 APlatformerCollectible::APlatformerCollectible()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	SetRootComponent(SphereComponent);
@@ -43,15 +42,16 @@ void APlatformerCollectible::BeginOverlap(AActor* OverlappedActor, AActor* Other
 	APlatformerCharacter* Character = Cast<APlatformerCharacter>(OtherActor);
 	if (!Character) return;
 
-	AController* Controller = Character->GetController();
-	if (!Controller) return;
+	UWorld* World = GetWorld();
+	if (!World) return;
 
-	APlatformerCharacterController* CharacterController = Cast<APlatformerCharacterController>(Controller);
-	if (!CharacterController) return;
-	
-	UPlatformerUI* PlatformerUI = CharacterController->GetPlatformerUI();
-	if (!PlatformerUI) return;
-	
-	PlatformerUI->PlayShowCollectables();
+	AGameModeBase* GameMode = UGameplayStatics::GetGameMode(World);
+	if (!GameMode) return;
+
+	APlatformerGameModeBase* PlatformerGameMode = Cast<APlatformerGameModeBase>(GameMode);
+	if (!PlatformerGameMode) return;
+
+	PlatformerGameMode->SetCollectibleCount(PlatformerGameMode->GetCollectibleCount() + 1);
+
 	Destroy();
 }

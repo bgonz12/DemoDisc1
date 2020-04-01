@@ -12,6 +12,8 @@ void APlatformerGameModeBase::StartPlay()
 {
 	Super::StartPlay();
 
+	SetCollectibleCount(0);
+
 	bLoadingCheckpoint = false;
 
 	UWorld* World = GetWorld();
@@ -55,7 +57,9 @@ void APlatformerGameModeBase::SetCurrentCheckpoint(APlatformerCheckpoint* NewChe
 	LastCheckpoint = NewCheckpoint;
 }
 
-void APlatformerGameModeBase::SetCollectibleCounter(int Value)
+void APlatformerGameModeBase::SetCollectibleCount(int Value)
 {
-	CollectibleCounter = Value;
+	CollectibleCount = Value;
+
+	OnCollectibleCountUpdated.Broadcast(Value);
 }
