@@ -30,6 +30,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void Reset() override;
+
 protected:
 
 	/** Component References **/
@@ -101,8 +103,6 @@ protected:
 
 public:
 	void KillPlayer(DeathAnimationType AnimType);
-
-	virtual void Reset() override;
 
 	/** GETTERS **/
 
