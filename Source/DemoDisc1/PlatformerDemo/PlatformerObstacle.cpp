@@ -18,8 +18,11 @@ APlatformerObstacle::APlatformerObstacle()
 	MeshContainer = CreateDefaultSubobject<USceneComponent>(TEXT("MeshContainer"));
 	MeshContainer->SetupAttachment(RootComponent);
 
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	Mesh->SetupAttachment(MeshContainer);
+	NormalMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NormalMesh"));
+	NormalMesh->SetupAttachment(MeshContainer);
+
+	SpookyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SpookyMesh"));
+	SpookyMesh->SetupAttachment(MeshContainer);
 
 	bHasFallenOver = false;
 }

@@ -30,7 +30,10 @@ protected:
 	class USceneComponent* MeshContainer;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class UStaticMeshComponent* Mesh;
+	class UStaticMeshComponent* NormalMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UStaticMeshComponent* SpookyMesh;
 
 	bool bHasFallenOver;
 
