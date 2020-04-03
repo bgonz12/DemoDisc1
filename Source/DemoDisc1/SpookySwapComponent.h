@@ -16,13 +16,14 @@ public:
 	// Sets default values for this component's properties
 	USpookySwapComponent();
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+	UFUNCTION(BlueprintCallable)
+	void Initialize();
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	UFUNCTION(BlueprintCallable)
+	void AddNormalComponent(UPrimitiveComponent* Component);
+
+	UFUNCTION(BlueprintCallable)
+	void AddSpookyComponent(UPrimitiveComponent* Component);
 
 protected:
 	UPROPERTY(BlueprintReadWrite)
@@ -35,18 +36,14 @@ protected:
 
 	ECollisionEnabled::Type EnabledSpookyCollision;
 
-	UFUNCTION(BlueprintCallable)
-	void Initialize();
-
-	UFUNCTION(BlueprintCallable)
-	void AddNormalComponent(UPrimitiveComponent* Component);
-
-	UFUNCTION(BlueprintCallable)
-	void AddSpookyComponent(UPrimitiveComponent* Component);
+	bool bIsSpooky;
 
 	UFUNCTION(BlueprintCallable)
 	void DisplayNormal();
 
 	UFUNCTION(BlueprintCallable)
 	void DisplaySpooky();
+
+public:
+	FORCEINLINE bool GetIsSpooky() { return bIsSpooky; }
 };

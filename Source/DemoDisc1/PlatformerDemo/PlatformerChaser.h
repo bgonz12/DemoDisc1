@@ -41,8 +41,11 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class USceneComponent* ChaserContainer;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* BoulderStaticMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class USkeletalMeshComponent* SpookyLadySkeletalMesh;
 
 	UPROPERTY(VisibleAnywhere)
 	class USplineComponent* SplineComponent;
@@ -51,7 +54,10 @@ protected:
 	class UBoxComponent* ChaseTriggerBox;
 
 	UPROPERTY(VisibleAnywhere)
-	class USphereComponent* BoulderKillSphere;
+	class USphereComponent* KillSphere;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class USpookySwapComponent* SpookySwapComponent;
 
 	FVector StartLocation;
 

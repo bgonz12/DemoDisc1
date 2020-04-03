@@ -4,12 +4,14 @@
 #include "PlatformerChaser.h"
 #include "Components/SplineComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "PlatformerCharacter.h"
 #include "PlatformerGameModeBase.h"
+#include "DemoDisc1/SpookySwapComponent.h"
 
 // Sets default values
 APlatformerChaser::APlatformerChaser()
@@ -26,11 +28,16 @@ APlatformerChaser::APlatformerChaser()
 	BoulderStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BoulderStaticMesh"));
 	BoulderStaticMesh->SetupAttachment(ChaserContainer);
 
-	BoulderKillSphere = CreateDefaultSubobject<USphereComponent>(TEXT("BoulderKillSphere"));
-	BoulderKillSphere->SetupAttachment(BoulderStaticMesh);
+	SpookyLadySkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SpookyLadySkeletalMesh"));
+	SpookyLadySkeletalMesh->SetupAttachment(ChaserContainer);
+
+	KillSphere = CreateDefaultSubobject<USphereComponent>(TEXT("BoulderKillSphere"));
+	KillSphere->SetupAttachment(ChaserContainer);
 
 	ChaseTriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
 	ChaseTriggerBox->SetupAttachment(RootComponent);
+
+	SpookySwapComponent = CreateDefaultSubobject<USpookySwapComponent>(TEXT("SpookySwapComponent"));
 
 	bShouldReset = true;
 
@@ -49,11 +56,16 @@ void APlatformerChaser::BeginPlay()
 	bShouldReset = true;
 
 	bIsChasing = false;
+
+	SpookySwapComponent->AddNormalComponent(BoulderStaticMesh);
+	SpookySwapComponent->AddSpookyComponent(SpookyLadySkeletalMesh);
+	SpookySwapComponent->Initialize();
+
 	DisableChaser();
 
 	ChaseTriggerBox->OnComponentBeginOverlap.AddDynamic(this, &APlatformerChaser::BeginChaseTriggerOverlap);
 
-	BoulderKillSphere->OnComponentBeginOverlap.AddDynamic(this, &APlatformerChaser::BeginBoulderOverlap);
+	KillSphere->OnComponentBeginOverlap.AddDynamic(this, &APlatformerChaser::BeginBoulderOverlap);
 
 	StartLocation = ChaserContainer->GetComponentLocation();
 	EndLocation = SplineComponent->GetWorldLocationAtTime(SplineComponent->Duration);
@@ -95,14 +107,30 @@ void APlatformerChaser::StopChasing()
 
 void APlatformerChaser::EnableChaser()
 {
-	BoulderStaticMesh->SetVisibility(true);
-	BoulderStaticMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	if (!SpookySwapComponent->GetIsSpooky())
+	{
+		BoulderStaticMesh->SetVisibility(true);
+		BoulderStaticMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	}
+	else
+	{
+		SpookyLadySkeletalMesh->SetVisibility(true);
+		SpookyLadySkeletalMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	}
 }
 
 void APlatformerChaser::DisableChaser()
 {
-	BoulderStaticMesh->SetVisibility(false);
-	BoulderStaticMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (!SpookySwapComponent->GetIsSpooky())
+	{
+		BoulderStaticMesh->SetVisibility(false);
+		BoulderStaticMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	else
+	{
+		SpookyLadySkeletalMesh->SetVisibility(false);
+		SpookyLadySkeletalMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }
 
 void APlatformerChaser::Reset()
@@ -134,7 +162,15 @@ void APlatformerChaser::BeginBoulderOverlap(UPrimitiveComponent * OverlappedComp
 
 	if (Player)
 	{
-		Player->KillPlayer(DeathAnimationType::SQUISH);
+		if (!SpookySwapComponent->GetIsSpooky())
+		{
+			Player->KillPlayer(DeathAnimationType::SQUISH);
+		}
+		else
+		{
+			Player->KillPlayer(DeathAnimationType::SPOOKY_LADY);
+			bIsChasing = false;
+		}
 	}
 }
 

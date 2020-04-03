@@ -8,8 +8,9 @@
 
 UENUM(BlueprintType)
 enum class DeathAnimationType : uint8 {
-	DECAPITATION UMETA(DisaplayName="Decapitation"),
+	DROWN UMETA(DisplayName = "Drown"),
 	FALL UMETA(DisaplayName = "Fall"),
+	SPOOKY_LADY UMETA(DisaplayName = "Spooky Lady"),
 	SQUISH UMETA(DisaplayName = "Squish")
 };
 
