@@ -24,12 +24,20 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int SpookLevel;
+	class UMaterialParameterCollection* GlobalMaterialParameterCollection;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int SpookyLevel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int SpookyLevelToTransition;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bHasSpookyTransitioned;
 
 public:
+	bool GetIsTransitionTime();
+
 	void TriggerSpookyTransition();
 
 	bool GetHasSpookyTransitioned();

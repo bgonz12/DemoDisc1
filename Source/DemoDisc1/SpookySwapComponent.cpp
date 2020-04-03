@@ -32,16 +32,6 @@ void USpookySwapComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 void USpookySwapComponent::Initialize()
 {
-	if (NormalComponents.Num() > 0)
-	{
-		EnabledNormalCollision = NormalComponents[0]->GetCollisionEnabled();
-	}
-
-	if (SpookyComponents.Num() > 0)
-	{
-		EnabledSpookyCollision = SpookyComponents[0]->GetCollisionEnabled();
-	}
-
 	UWorld* World = GetWorld();
 	if (!World) return;
 
@@ -61,6 +51,38 @@ void USpookySwapComponent::Initialize()
 	{
 		DisplaySpooky();
 	}
+}
+
+void USpookySwapComponent::AddNormalComponent(UPrimitiveComponent* Component)
+{
+	if (!Component)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Attempting to add NULL NormalComponent to SpookySwapComponent"));
+		return;
+	}
+
+	if (NormalComponents.Num() <= 0)
+	{
+		EnabledNormalCollision = Component->GetCollisionEnabled();
+	}
+
+	NormalComponents.Add(Component);
+}
+
+void USpookySwapComponent::AddSpookyComponent(UPrimitiveComponent* Component)
+{
+	if (!Component)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Attempting to add NULL SpookyComponent to SpookySwapComponent"));
+		return;
+	}
+
+	if (SpookyComponents.Num() <= 0)
+	{
+		EnabledSpookyCollision = Component->GetCollisionEnabled();
+	}
+
+	SpookyComponents.Add(Component);
 }
 
 void USpookySwapComponent::DisplayNormal()

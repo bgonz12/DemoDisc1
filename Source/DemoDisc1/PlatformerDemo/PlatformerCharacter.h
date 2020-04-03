@@ -63,9 +63,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Jump)
 	float FallGravity;
 
-	FVector RespawnLocation;
-
+	UPROPERTY(BlueprintReadWrite)
 	bool bIsPlayerDead;
+
+	FVector RespawnLocation;
 
 	/** Class Member Functions **/
 

@@ -2,16 +2,35 @@
 
 
 #include "DemoDisc1GameInstance.h"
+#include "Engine/World.h"
+#include "Materials/MaterialParameterCollectionInstance.h"
 
 UDemoDisc1GameInstance::UDemoDisc1GameInstance()
 {
-	SpookLevel = 0;
+	SpookyLevel = 0;
+	SpookyLevelToTransition = 0;
 	bHasSpookyTransitioned = false;
+}
+
+bool UDemoDisc1GameInstance::GetIsTransitionTime()
+{
+	return !bHasSpookyTransitioned && SpookyLevel >= SpookyLevelToTransition;
 }
 
 void UDemoDisc1GameInstance::TriggerSpookyTransition()
 {
 	OnSpookyTransition.Broadcast();
+
+	if (!GlobalMaterialParameterCollection) return;
+	
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	UMaterialParameterCollectionInstance* inst;
+	inst = World->GetParameterCollectionInstance(GlobalMaterialParameterCollection);
+	if (!inst) return;
+
+	inst->SetScalarParameterValue(FName("SpookyLerp"), 1.0f);
 }
 
 bool UDemoDisc1GameInstance::GetHasSpookyTransitioned()

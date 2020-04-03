@@ -39,6 +39,12 @@ protected:
 	void Initialize();
 
 	UFUNCTION(BlueprintCallable)
+	void AddNormalComponent(UPrimitiveComponent* Component);
+
+	UFUNCTION(BlueprintCallable)
+	void AddSpookyComponent(UPrimitiveComponent* Component);
+
+	UFUNCTION(BlueprintCallable)
 	void DisplayNormal();
 
 	UFUNCTION(BlueprintCallable)
