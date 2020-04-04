@@ -7,6 +7,7 @@
 #include "Engine/World.h"
 #include "GameFramework/SpringArmComponent.h"
 
+#include "ArmyMenProjectile.h"
 
 // Sets default values
 AArmyMenCharacter::AArmyMenCharacter()
@@ -17,7 +18,7 @@ AArmyMenCharacter::AArmyMenCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character
+	CameraBoom->TargetArmLength = 500.0f; // The camera follows at this distance behind the character
 	CameraBoom->bUsePawnControlRotation = false; // Rotate the arm based on the controller
 
 	// Create a follow camera
@@ -25,7 +26,7 @@ AArmyMenCharacter::AArmyMenCharacter()
 	CharacterCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	CharacterCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	BaseTurnRate = 50.0f;
+	BaseTurnRate = 40.0f;
 }
 
 // Called when the game starts or when spawned
@@ -50,6 +51,9 @@ void AArmyMenCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &AArmyMenCharacter::TurnAtRate);
 
 	PlayerInputComponent->BindAxis(FName("MoveForward"), this, &AArmyMenCharacter::MoveForward);
+
+	PlayerInputComponent->BindAction(FName("Jump"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::Fire);
+	PlayerInputComponent->BindAction(FName("Fire"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::Fire);
 }
 
 void AArmyMenCharacter::TurnAtRate(float Rate)
@@ -67,4 +71,29 @@ void AArmyMenCharacter::MoveForward(float Value)
 		const FVector Direction = GetActorForwardVector();
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void AArmyMenCharacter::Fire()
+{
+	UE_LOG(LogTemp, Warning, TEXT("TEST 1"));
+
+	if (ProjectileClass == nullptr) return;
+
+	UE_LOG(LogTemp, Warning, TEXT("TEST 2"));
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	UE_LOG(LogTemp, Warning, TEXT("TEST 3"));
+
+	FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.0f;
+	FRotator SpawnRotation = GetActorRotation();
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Instigator = this;
+	SpawnParams.Owner = this;
+
+	World->SpawnActor<AArmyMenProjectile>(ProjectileClass->StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
+
+	UE_LOG(LogTemp, Warning, TEXT("TEST 4"));
 }
