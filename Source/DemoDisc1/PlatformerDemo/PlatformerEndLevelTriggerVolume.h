@@ -19,6 +19,9 @@ protected:
 	virtual void BeginPlay() override;
 
 protected:
+	UPROPERTY(EditAnywhere)
+	FName MenuLevelName;
+
 	UFUNCTION()
 	void BeginOverlap(AActor * OverlappedActor, AActor * OtherActor);
 };

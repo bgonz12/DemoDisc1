@@ -26,6 +26,10 @@ void APlatformerCharacterController::BeginPlay()
 	}
 }
 
+void APlatformerCharacterController::Tick(float DeltaTime)
+{
+}
+
 UPlatformerUI* APlatformerCharacterController::GetPlatformerUI()
 {
 	return PlatformerUI;
