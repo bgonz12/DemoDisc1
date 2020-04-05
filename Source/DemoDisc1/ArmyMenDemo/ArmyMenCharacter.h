@@ -23,6 +23,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void Reset() override;
+
 protected:
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -32,6 +34,19 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* CharacterCamera;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
+	int StartingHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
+	int MaxHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
+	int CurrentHealth;
+
+	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
+	float TurnRate;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	TSubclassOf<class AArmyMenProjectile> ProjectileClass;
 
@@ -39,10 +54,6 @@ protected:
 	TEnumAsByte<ETraceTypeQuery> AimTraceTypeQuery;
 
 	AActor* AimTarget;
-
-	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
-	float TurnRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	float FireRate;
@@ -54,6 +65,16 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	float AimSphereRadius;
+
+	bool bIsDead;
+
+	virtual void Kill();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayDeathAnimation();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ResetDeathAnimation();
 
 public:
 	/** Called for forwards/backward input */
@@ -67,7 +88,10 @@ public:
 
 	void Fire();
 
-protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	FORCEINLINE bool GetIsDead() { return bIsDead; }
 };

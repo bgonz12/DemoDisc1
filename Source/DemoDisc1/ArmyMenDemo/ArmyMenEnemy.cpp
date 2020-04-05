@@ -3,6 +3,8 @@
 
 #include "ArmyMenEnemy.h"
 
+#include "ArmyMenEnemyAIController.h"
+
 // Sets default values
 AArmyMenEnemy::AArmyMenEnemy()
 {
@@ -34,3 +36,30 @@ void AArmyMenEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void AArmyMenEnemy::Kill()
+{
+	Super::Kill();
+
+	AController* MyController = GetController();
+	if (!Controller) return;
+
+	AArmyMenEnemyAIController* AIController = Cast<AArmyMenEnemyAIController>(Controller);
+	if (!AIController) return;
+
+	AIController->NotifyKill();
+}
+
+float AArmyMenEnemy::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	AController* MyController = GetController();
+	if (!Controller) return DamageAmount;
+
+	AArmyMenEnemyAIController* AIController = Cast<AArmyMenEnemyAIController>(Controller);
+	if (!AIController) return DamageAmount;
+
+	AIController->NotifyTakeDamage();
+
+	return DamageAmount;
+}

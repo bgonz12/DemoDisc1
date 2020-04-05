@@ -32,8 +32,12 @@ void AArmyMenEnemyAIController::Tick(float DeltaTime)
 	case EArmyMenEnemyState::ATTACKING:
 		TickAttacking();
 		break;
+	case EArmyMenEnemyState::DEAD:
+		break;
 	case EArmyMenEnemyState::IDLE:
 		TickIdle();
+		break;
+	default:
 		break;
 	}
 }
@@ -47,6 +51,11 @@ void AArmyMenEnemyAIController::TickAttacking()
 
 	AArmyMenEnemy* MyCharacter = Cast<AArmyMenEnemy>(MyPawn);
 	if (!MyCharacter) return;
+
+	if (MyCharacter->GetIsDead())
+	{
+		ChangeState(EArmyMenEnemyState::DEAD);
+	}
 
 	FVector PlayerDirection = (PlayerPawn->GetActorLocation() - MyCharacter->GetActorLocation()).GetSafeNormal();
 	float RightDotPlayer = FVector::DotProduct(MyCharacter->GetActorRightVector(), PlayerDirection);
@@ -64,6 +73,11 @@ void AArmyMenEnemyAIController::TickIdle()
 
 	AArmyMenEnemy* MyCharacter = Cast<AArmyMenEnemy>(MyPawn);
 	if (!MyCharacter) return;
+
+	if (MyCharacter->GetIsDead())
+	{
+		ChangeState(EArmyMenEnemyState::DEAD);
+	}
 
 	float PlayerDistance = FVector::Dist(MyCharacter->GetActorLocation(), PlayerPawn->GetActorLocation());
 
@@ -109,7 +123,40 @@ void AArmyMenEnemyAIController::ChangeState(EArmyMenEnemyState NewState)
 	{
 	case EArmyMenEnemyState::ATTACKING:
 		break;
+	case EArmyMenEnemyState::DEAD:
+		break;
 	case EArmyMenEnemyState::IDLE:
 		break;
+	default:
+		break;
 	}
+}
+
+void AArmyMenEnemyAIController::NotifyTakeDamage()
+{
+	switch (CurrentState)
+	{
+	case EArmyMenEnemyState::ATTACKING:
+		break;
+	case EArmyMenEnemyState::DEAD:
+		break;
+	case EArmyMenEnemyState::IDLE:
+		ChangeState(EArmyMenEnemyState::ATTACKING);
+		break;
+	default:
+		break;
+	}
+}
+
+void AArmyMenEnemyAIController::NotifyKill()
+{
+	switch (CurrentState)
+	{
+	case EArmyMenEnemyState::DEAD:
+		break;
+	default:
+		ChangeState(EArmyMenEnemyState::DEAD);
+		break;
+	}
+
 }

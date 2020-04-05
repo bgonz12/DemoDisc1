@@ -7,7 +7,7 @@
 #include "ArmyMenEnemyAIController.generated.h"
 
 UENUM()
-enum EArmyMenEnemyState { ATTACKING, IDLE };
+enum EArmyMenEnemyState { ATTACKING, DEAD, IDLE };
 
 /**
  * 
@@ -34,4 +34,9 @@ protected:
 	void TickIdle();
 
 	void ChangeState(EArmyMenEnemyState NewState);
+
+public:
+	void NotifyTakeDamage();
+
+	void NotifyKill();
 };

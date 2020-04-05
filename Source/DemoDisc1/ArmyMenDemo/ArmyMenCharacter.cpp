@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Engine/World.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -35,6 +36,12 @@ AArmyMenCharacter::AArmyMenCharacter()
 	bUseControllerRotationYaw = false;
 
 	// Class defaults
+	bIsDead = false;
+
+	StartingHealth = 10;
+	MaxHealth = 10;
+	CurrentHealth = 10;
+
 	TurnRate = 90.0f;
 
 	FireRate = 1.0f;
@@ -49,6 +56,9 @@ void AArmyMenCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	bIsDead = false;
+
+	CurrentHealth = StartingHealth;
 }
 
 // Called every frame
@@ -90,7 +100,19 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 	{
 		AimTarget = nullptr;
 	}
+}
 
+void AArmyMenCharacter::Reset()
+{
+	// We do not call reset on parent class because doing so Destroys the actor 
+	//Super::Reset();
+
+	bIsDead = false;
+
+	ResetDeathAnimation();
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetCapsuleComponent()->SetSimulatePhysics(true);
 }
 
 // Called to bind functionality to input
@@ -103,6 +125,18 @@ void AArmyMenCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAction(FName("Jump"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::Fire);
 	PlayerInputComponent->BindAction(FName("Fire"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::Fire);
+}
+
+void AArmyMenCharacter::Kill()
+{
+	if (bIsDead) return;
+
+	bIsDead = true;
+
+	PlayDeathAnimation();
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetSimulatePhysics(false);
 }
 
 void AArmyMenCharacter::MoveForward(float Value)
@@ -161,4 +195,23 @@ void AArmyMenCharacter::Fire()
 	}
 
 	FireTimer = 1.0f / FireRate;
+}
+
+
+float AArmyMenCharacter::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	int Damage = FMath::FloorToInt(DamageAmount);
+
+	CurrentHealth -= Damage;
+
+	if (CurrentHealth <= 0)
+	{
+		CurrentHealth = 0;
+
+		Kill();
+	}
+
+	return DamageAmount;
 }

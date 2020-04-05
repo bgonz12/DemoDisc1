@@ -3,6 +3,7 @@
 
 #include "ArmyMenProjectile.h"
 #include "Components/StaticMeshComponent.h"
+#include "GameFramework/DamageType.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
@@ -16,6 +17,8 @@ AArmyMenProjectile::AArmyMenProjectile()
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
 	ProjectileMovement->ProjectileGravityScale = 0.0f;
+
+	Damage = 1.0f;
 }
 
 // Called when the game starts or when spawned
@@ -41,6 +44,12 @@ void AArmyMenProjectile::Tick(float DeltaTime)
 
 void AArmyMenProjectile::ActorHit(AActor * SelfActor, AActor * OtherActor, FVector NormalImpulse, const FHitResult & Hit)
 {
+	// Create a damage event  
+	TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
+	FDamageEvent DamageEvent(ValidDamageTypeClass);
+
+	OtherActor->TakeDamage(Damage, DamageEvent, GetInstigatorController(), this);
+
 	Destroy();
 }
 

@@ -30,6 +30,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Senses)
 	float VisionDistance;
 
+	virtual void Kill() override;
+
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 public:
 	FORCEINLINE float GetVisionDistance() { return VisionDistance; }
 };
