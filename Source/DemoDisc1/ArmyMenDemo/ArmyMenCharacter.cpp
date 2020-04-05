@@ -21,15 +21,23 @@ AArmyMenCharacter::AArmyMenCharacter()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 500.0f; // The camera follows at this distance behind the character
-	CameraBoom->bUsePawnControlRotation = false; // Rotate the arm based on the controller
+	CameraBoom->bUsePawnControlRotation = false;
+	CameraBoom->bAbsoluteRotation = false;
+	CameraBoom->bInheritPitch = false;
+	CameraBoom->bInheritYaw = true;
 
 	// Create a follow camera
 	CharacterCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CharacterCamera"));
 	CharacterCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	CharacterCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	TurnRate = 40.0f;
+	// Pawn defaults
+	bUseControllerRotationYaw = false;
 
+	// Class defaults
+	TurnRate = 90.0f;
+
+	AimTraceTypeQuery = ETraceTypeQuery::TraceTypeQuery4;
 	AimRange = 2000.0f;
 	AimSphereRadius = 100.0f;
 }
@@ -49,7 +57,7 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 	UWorld* World = GetWorld();
 	if (!World) return;
 
-	FVector TraceStart = GetActorLocation() + GetActorForwardVector() * AimSphereRadius;
+	FVector TraceStart = GetActorLocation() + GetActorForwardVector() * AimSphereRadius * 2.0f;
 	FVector TraceEnd = GetActorLocation() + GetActorForwardVector() * AimRange;
 
 	const TArray<AActor *> ActorsToIgnore;
@@ -61,7 +69,7 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 		TraceStart,
 		TraceEnd,
 		AimSphereRadius,
-		ETraceTypeQuery::TraceTypeQuery4, // 'Enemy' trace channel
+		AimTraceTypeQuery, // 'Enemy' trace channel
 		false,
 		ActorsToIgnore,
 		EDrawDebugTrace::None,
@@ -83,18 +91,11 @@ void AArmyMenCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &AArmyMenCharacter::Turn);
-
 	PlayerInputComponent->BindAxis(FName("MoveForward"), this, &AArmyMenCharacter::MoveForward);
+	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &AArmyMenCharacter::TurnRight);
 
 	PlayerInputComponent->BindAction(FName("Jump"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::Fire);
 	PlayerInputComponent->BindAction(FName("Fire"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::Fire);
-}
-
-void AArmyMenCharacter::Turn(float Value)
-{
-	// calculate delta for this frame from the rate information
-	AddControllerYawInput(Value * TurnRate * GetWorld()->GetDeltaSeconds());
 }
 
 void AArmyMenCharacter::MoveForward(float Value)
@@ -104,6 +105,18 @@ void AArmyMenCharacter::MoveForward(float Value)
 		// get forward vector
 		const FVector Direction = GetActorForwardVector();
 		AddMovementInput(Direction, Value);
+	}
+}
+
+void AArmyMenCharacter::TurnRight(float Value)
+{
+	if (Value != 0.0f)
+	{
+		float YawInput = Value * TurnRate * GetWorld()->GetDeltaSeconds();
+
+		// calculate delta for this frame from the rate information
+		FRotator Rotator(0.0f, YawInput, 0.0f);
+		AddActorLocalRotation(Rotator);
 	}
 }
 

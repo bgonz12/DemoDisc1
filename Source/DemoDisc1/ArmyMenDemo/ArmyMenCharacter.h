@@ -32,8 +32,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* CharacterCamera;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	TSubclassOf<class AArmyMenProjectile> ProjectileClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	TEnumAsByte<ETraceTypeQuery> AimTraceTypeQuery;
 
 	AActor* AimTarget;
 
@@ -47,6 +50,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	float AimSphereRadius;
 
+public:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
@@ -54,10 +58,11 @@ protected:
 	 * Called via input to turn at a given rate.
 	 * @param Value	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	 */
-	void Turn(float Value);
+	void TurnRight(float Value);
 
 	void Fire();
 
+protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };
