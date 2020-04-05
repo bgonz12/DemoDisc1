@@ -29,4 +29,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UProjectileMovementComponent* ProjectileMovement;
+
+	UFUNCTION()
+	void ActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 };

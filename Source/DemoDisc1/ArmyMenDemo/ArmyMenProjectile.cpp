@@ -12,9 +12,10 @@ AArmyMenProjectile::AArmyMenProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-	StaticMesh->SetupAttachment(GetRootComponent());
+	SetRootComponent(StaticMesh);
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
+	ProjectileMovement->ProjectileGravityScale = 0.0f;
 }
 
 // Called when the game starts or when spawned
@@ -22,6 +23,13 @@ void AArmyMenProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	AActor* MyOwner = GetOwner();
+	if (MyOwner)
+	{
+		StaticMesh->IgnoreActorWhenMoving(MyOwner, true);
+	}
+
+	OnActorHit.AddDynamic(this, &AArmyMenProjectile::ActorHit);
 }
 
 // Called every frame
@@ -29,5 +37,10 @@ void AArmyMenProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AArmyMenProjectile::ActorHit(AActor * SelfActor, AActor * OtherActor, FVector NormalImpulse, const FHitResult & Hit)
+{
+	Destroy();
 }
 

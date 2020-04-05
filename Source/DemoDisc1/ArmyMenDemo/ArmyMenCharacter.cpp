@@ -3,9 +3,11 @@
 
 #include "ArmyMenCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Engine/World.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 #include "ArmyMenProjectile.h"
 
@@ -13,7 +15,7 @@
 AArmyMenCharacter::AArmyMenCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -40,6 +42,36 @@ void AArmyMenCharacter::BeginPlay()
 void AArmyMenCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+	ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery1);
+	
+	const TArray<AActor *> ActorsToIgnore;
+
+	FHitResult OutHit;
+
+	if (UKismetSystemLibrary::SphereTraceSingle(
+		World,
+		GetActorLocation(),
+		GetActorLocation() + GetActorForwardVector() * 1000.0f,
+		100.0f,
+		ETraceTypeQuery::TraceTypeQuery4, // 'Enemy' trace channel
+		false,
+		ActorsToIgnore,
+		EDrawDebugTrace::ForOneFrame,
+		OutHit,
+		true)
+	)
+	{
+		AimTarget = OutHit.Actor.Get();
+	}
+	else
+	{
+		AimTarget = nullptr;
+	}
 
 }
 
@@ -75,25 +107,33 @@ void AArmyMenCharacter::MoveForward(float Value)
 
 void AArmyMenCharacter::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("TEST 1"));
-
 	if (ProjectileClass == nullptr) return;
-
-	UE_LOG(LogTemp, Warning, TEXT("TEST 2"));
 
 	UWorld* World = GetWorld();
 	if (!World) return;
 
-	UE_LOG(LogTemp, Warning, TEXT("TEST 3"));
-
 	FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.0f;
-	FRotator SpawnRotation = GetActorRotation();
+	FRotator SpawnRotation;
+
+	if (AimTarget)
+	{
+		SpawnRotation = (AimTarget->GetActorLocation()).Rotation();
+	}
+	else
+	{
+		SpawnRotation = GetActorRotation();
+	}
+
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Instigator = this;
 	SpawnParams.Owner = this;
 
-	World->SpawnActor<AArmyMenProjectile>(ProjectileClass->StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
-
-	UE_LOG(LogTemp, Warning, TEXT("TEST 4"));
+	AArmyMenProjectile* Projectile = World->SpawnActor<AArmyMenProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
+	
+	UCapsuleComponent* MyCapsuleComponent = GetCapsuleComponent();
+	if (Projectile && MyCapsuleComponent)
+	{
+		MyCapsuleComponent->IgnoreActorWhenMoving(Projectile, true);
+	}
 }
