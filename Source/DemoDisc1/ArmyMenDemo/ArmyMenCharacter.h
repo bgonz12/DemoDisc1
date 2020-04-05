@@ -41,9 +41,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseTurnRate;
 
-	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
-	float BaseLookUpRate;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	float AimRange;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	float AimSphereRadius;
 
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);

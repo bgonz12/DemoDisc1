@@ -29,6 +29,9 @@ AArmyMenCharacter::AArmyMenCharacter()
 	CharacterCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	BaseTurnRate = 40.0f;
+
+	AimRange = 2000.0f;
+	AimSphereRadius = 100.0f;
 }
 
 // Called when the game starts or when spawned
@@ -56,8 +59,8 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 	if (UKismetSystemLibrary::SphereTraceSingle(
 		World,
 		GetActorLocation(),
-		GetActorLocation() + GetActorForwardVector() * 1000.0f,
-		100.0f,
+		GetActorLocation() + GetActorForwardVector() * AimRange,
+		AimSphereRadius,
 		ETraceTypeQuery::TraceTypeQuery4, // 'Enemy' trace channel
 		false,
 		ActorsToIgnore,
@@ -117,7 +120,7 @@ void AArmyMenCharacter::Fire()
 
 	if (AimTarget)
 	{
-		SpawnRotation = (AimTarget->GetActorLocation()).Rotation();
+		SpawnRotation = (AimTarget->GetActorLocation() - SpawnLocation).Rotation();
 	}
 	else
 	{
