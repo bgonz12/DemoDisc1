@@ -37,6 +37,8 @@ AArmyMenCharacter::AArmyMenCharacter()
 	// Class defaults
 	TurnRate = 90.0f;
 
+	FireRate = 1.0f;
+
 	AimTraceTypeQuery = ETraceTypeQuery::TraceTypeQuery4;
 	AimRange = 2000.0f;
 	AimSphereRadius = 100.0f;
@@ -53,6 +55,11 @@ void AArmyMenCharacter::BeginPlay()
 void AArmyMenCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (FireTimer > 0.0f)
+	{
+		FireTimer -= DeltaTime;
+	}
 
 	UWorld* World = GetWorld();
 	if (!World) return;
@@ -122,6 +129,8 @@ void AArmyMenCharacter::TurnRight(float Value)
 
 void AArmyMenCharacter::Fire()
 {
+	if (FireTimer > 0.0f) return;
+
 	if (ProjectileClass == nullptr) return;
 
 	UWorld* World = GetWorld();
@@ -139,7 +148,6 @@ void AArmyMenCharacter::Fire()
 		SpawnRotation = GetActorRotation();
 	}
 
-
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Instigator = this;
 	SpawnParams.Owner = this;
@@ -151,4 +159,6 @@ void AArmyMenCharacter::Fire()
 	{
 		MyCapsuleComponent->IgnoreActorWhenMoving(Projectile, true);
 	}
+
+	FireTimer = 1.0f / FireRate;
 }

@@ -29,9 +29,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TEnumAsByte<EArmyMenEnemyState> CurrentState;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Senses)
-	float VisionDistance;
-
 	void TickAttacking();
 
 	void TickIdle();

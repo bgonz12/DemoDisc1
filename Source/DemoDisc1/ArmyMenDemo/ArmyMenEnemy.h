@@ -26,4 +26,10 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Senses)
+	float VisionDistance;
+
+public:
+	FORCEINLINE float GetVisionDistance() { return VisionDistance; }
 };

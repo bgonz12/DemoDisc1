@@ -10,6 +10,8 @@ AArmyMenEnemy::AArmyMenEnemy()
 	PrimaryActorTick.bCanEverTick = true;
 
 	AimTraceTypeQuery = ETraceTypeQuery::TraceTypeQuery3; // Player
+
+	VisionDistance = 1000.0f;
 }
 
 // Called when the game starts or when spawned

@@ -45,6 +45,11 @@ protected:
 	float TurnRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	float FireRate;
+
+	float FireTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	float AimRange;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
