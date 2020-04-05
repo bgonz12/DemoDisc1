@@ -38,8 +38,8 @@ protected:
 	AActor* AimTarget;
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
-	float BaseTurnRate;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
+	float TurnRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	float AimRange;
@@ -52,9 +52,9 @@ protected:
 
 	/**
 	 * Called via input to turn at a given rate.
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
+	 * @param Value	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	 */
-	void TurnAtRate(float Rate);
+	void Turn(float Value);
 
 	void Fire();
 

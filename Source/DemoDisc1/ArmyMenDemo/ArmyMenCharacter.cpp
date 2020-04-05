@@ -28,7 +28,7 @@ AArmyMenCharacter::AArmyMenCharacter()
 	CharacterCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	CharacterCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	BaseTurnRate = 40.0f;
+	TurnRate = 40.0f;
 
 	AimRange = 2000.0f;
 	AimSphereRadius = 100.0f;
@@ -49,22 +49,22 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 	UWorld* World = GetWorld();
 	if (!World) return;
 
-	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-	ObjectTypes.Add(EObjectTypeQuery::ObjectTypeQuery1);
-	
+	FVector TraceStart = GetActorLocation() + GetActorForwardVector() * AimSphereRadius;
+	FVector TraceEnd = GetActorLocation() + GetActorForwardVector() * AimRange;
+
 	const TArray<AActor *> ActorsToIgnore;
 
 	FHitResult OutHit;
 
 	if (UKismetSystemLibrary::SphereTraceSingle(
 		World,
-		GetActorLocation(),
-		GetActorLocation() + GetActorForwardVector() * AimRange,
+		TraceStart,
+		TraceEnd,
 		AimSphereRadius,
 		ETraceTypeQuery::TraceTypeQuery4, // 'Enemy' trace channel
 		false,
 		ActorsToIgnore,
-		EDrawDebugTrace::ForOneFrame,
+		EDrawDebugTrace::None,
 		OutHit,
 		true)
 	)
@@ -83,7 +83,7 @@ void AArmyMenCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &AArmyMenCharacter::TurnAtRate);
+	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &AArmyMenCharacter::Turn);
 
 	PlayerInputComponent->BindAxis(FName("MoveForward"), this, &AArmyMenCharacter::MoveForward);
 
@@ -91,11 +91,10 @@ void AArmyMenCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction(FName("Fire"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::Fire);
 }
 
-void AArmyMenCharacter::TurnAtRate(float Rate)
+void AArmyMenCharacter::Turn(float Value)
 {
-
 	// calculate delta for this frame from the rate information
-	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+	AddControllerYawInput(Value * TurnRate * GetWorld()->GetDeltaSeconds());
 }
 
 void AArmyMenCharacter::MoveForward(float Value)
