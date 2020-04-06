@@ -4,7 +4,6 @@
 #include "PlatformerChaser.h"
 #include "Components/SplineComponent.h"
 #include "Components/StaticMeshComponent.h"
-#include "Components/SkeletalMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -25,11 +24,11 @@ APlatformerChaser::APlatformerChaser()
 	ChaserContainer = CreateDefaultSubobject<USceneComponent>(TEXT("StaticMeshContainer"));
 	ChaserContainer->SetupAttachment(RootComponent);
 
-	BoulderStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BoulderStaticMesh"));
-	BoulderStaticMesh->SetupAttachment(ChaserContainer);
+	BoulderMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BoulderMesh"));
+	BoulderMesh->SetupAttachment(ChaserContainer);
 
-	SpookyLadySkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SpookyLadySkeletalMesh"));
-	SpookyLadySkeletalMesh->SetupAttachment(ChaserContainer);
+	SpookyLadyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SpookyLadyMesh"));
+	SpookyLadyMesh->SetupAttachment(ChaserContainer);
 
 	KillSphere = CreateDefaultSubobject<USphereComponent>(TEXT("BoulderKillSphere"));
 	KillSphere->SetupAttachment(ChaserContainer);
@@ -57,8 +56,8 @@ void APlatformerChaser::BeginPlay()
 
 	bIsChasing = false;
 
-	SpookySwapComponent->AddNormalComponent(BoulderStaticMesh);
-	SpookySwapComponent->AddSpookyComponent(SpookyLadySkeletalMesh);
+	SpookySwapComponent->AddNormalComponent(BoulderMesh);
+	SpookySwapComponent->AddSpookyComponent(SpookyLadyMesh);
 	SpookySwapComponent->Initialize();
 
 	DisableChaser();
@@ -86,7 +85,7 @@ void APlatformerChaser::Tick(float DeltaTime)
 		FTransform FinalTransform = SplineComponent->FindTransformClosestToWorldLocation(TargetLocation, ESplineCoordinateSpace::World);
 		ChaserContainer->SetWorldTransform(FinalTransform);
 
-		BoulderStaticMesh->AddLocalRotation(FRotator(-BoulderRotateSpeed * DeltaTime, 0.0f, 0.0f));
+		BoulderMesh->AddLocalRotation(FRotator(-BoulderRotateSpeed * DeltaTime, 0.0f, 0.0f));
 
 		if (FVector::Dist(ChaserContainer->GetComponentLocation(), EndLocation) <= MoveSpeed * DeltaTime * 2.0f)
 		{
@@ -109,13 +108,13 @@ void APlatformerChaser::EnableChaser()
 {
 	if (!SpookySwapComponent->GetIsSpooky())
 	{
-		BoulderStaticMesh->SetVisibility(true);
-		BoulderStaticMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		BoulderMesh->SetVisibility(true);
+		BoulderMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	}
 	else
 	{
-		SpookyLadySkeletalMesh->SetVisibility(true);
-		SpookyLadySkeletalMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		SpookyLadyMesh->SetVisibility(true);
+		SpookyLadyMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	}
 }
 
@@ -123,13 +122,13 @@ void APlatformerChaser::DisableChaser()
 {
 	if (!SpookySwapComponent->GetIsSpooky())
 	{
-		BoulderStaticMesh->SetVisibility(false);
-		BoulderStaticMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		BoulderMesh->SetVisibility(false);
+		BoulderMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 	else
 	{
-		SpookyLadySkeletalMesh->SetVisibility(false);
-		SpookyLadySkeletalMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		SpookyLadyMesh->SetVisibility(false);
+		SpookyLadyMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 }
 

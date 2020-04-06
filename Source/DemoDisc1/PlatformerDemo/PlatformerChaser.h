@@ -42,10 +42,10 @@ protected:
 	class USceneComponent* ChaserContainer;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class UStaticMeshComponent* BoulderStaticMesh;
+	class UStaticMeshComponent* BoulderMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class USkeletalMeshComponent* SpookyLadySkeletalMesh;
+	class UStaticMeshComponent* SpookyLadyMesh;
 
 	UPROPERTY(VisibleAnywhere)
 	class USplineComponent* SplineComponent;
