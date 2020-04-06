@@ -26,6 +26,8 @@ public:
 protected:
 	class APawn* PlayerPawn;
 
+	class AArmyMenEnemy* ArmyMenEnemyCharacter;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TEnumAsByte<EArmyMenEnemyState> CurrentState;
 

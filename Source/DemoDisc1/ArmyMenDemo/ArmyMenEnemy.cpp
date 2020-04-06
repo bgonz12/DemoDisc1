@@ -13,7 +13,9 @@ AArmyMenEnemy::AArmyMenEnemy()
 
 	AimTraceTypeQuery = ETraceTypeQuery::TraceTypeQuery3; // Player
 
-	VisionDistance = 1000.0f;
+	AimSphereRadius = 200.0f;
+
+	VisionDistance = 2000.0f;
 }
 
 // Called when the game starts or when spawned

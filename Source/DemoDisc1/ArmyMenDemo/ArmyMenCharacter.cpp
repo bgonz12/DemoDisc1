@@ -7,6 +7,7 @@
 #include "Components/InputComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/World.h"
+#include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -38,33 +39,35 @@ AArmyMenCharacter::AArmyMenCharacter()
 	// Class defaults
 	bIsDead = false;
 
-	StartingHealth = 10;
 	MaxHealth = 10;
-	CurrentHealth = 10;
+	CurrentHealth = 0;
 
 	TurnRate = 90.0f;
 
 	FireRate = 1.0f;
 
 	AimTraceTypeQuery = ETraceTypeQuery::TraceTypeQuery4;
-	AimRange = 2000.0f;
-	AimSphereRadius = 100.0f;
+	AimRange = 3000.0f;
+	AimSphereRadius = 200.0f;
+	AimAccuracy = 1.0f;
 }
 
 // Called when the game starts or when spawned
 void AArmyMenCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	bIsDead = false;
 
-	CurrentHealth = StartingHealth;
+	CurrentHealth = MaxHealth;
+
+	bIsDead = false;
 }
 
 // Called every frame
 void AArmyMenCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (bIsDead) return;
 
 	if (FireTimer > 0.0f)
 	{
@@ -106,6 +109,8 @@ void AArmyMenCharacter::Reset()
 {
 	// We do not call reset on parent class because doing so Destroys the actor 
 	//Super::Reset();
+
+	CurrentHealth = MaxHealth;
 
 	bIsDead = false;
 
@@ -175,7 +180,11 @@ void AArmyMenCharacter::Fire()
 
 	if (AimTarget)
 	{
-		SpawnRotation = (AimTarget->GetActorLocation() - SpawnLocation).Rotation();
+		float AccuracyX = FMath::FRandRange(-1.0f, 1.0f) * 90.0f * (1.0f - AimAccuracy);
+		float AccuracyY = FMath::FRandRange(-1.0f, 1.0f) * 90.0f * (1.0f - AimAccuracy);
+
+		FRotator AccuracyModifier(AccuracyX, AccuracyY, 0.0f);
+		SpawnRotation = (AimTarget->GetActorLocation() - SpawnLocation).Rotation() + AccuracyModifier;
 	}
 	else
 	{

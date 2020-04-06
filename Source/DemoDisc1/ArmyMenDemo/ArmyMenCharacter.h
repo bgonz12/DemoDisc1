@@ -35,9 +35,6 @@ protected:
 	class UCameraComponent* CharacterCamera;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
-	int StartingHealth;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	int MaxHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
@@ -66,6 +63,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	float AimSphereRadius;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	float AimAccuracy;
+
 	bool bIsDead;
 
 	virtual void Kill();
@@ -92,6 +92,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	FORCEINLINE AActor* GetAimTarget() { return AimTarget; }
 
 	FORCEINLINE bool GetIsDead() { return bIsDead; }
 };

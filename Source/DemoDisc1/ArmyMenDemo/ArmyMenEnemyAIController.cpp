@@ -14,6 +14,12 @@ void AArmyMenEnemyAIController::BeginPlay()
 
 	ChangeState(EArmyMenEnemyState::IDLE);
 
+	// Get Controlled pawn as ArmyMenEnemy
+	APawn* MyPawn = GetPawn();
+	if (!MyPawn) return;
+
+	ArmyMenEnemyCharacter = Cast<AArmyMenEnemy>(MyPawn);
+
 	UWorld* World = GetWorld();
 	if (!World) return;
 
@@ -44,55 +50,47 @@ void AArmyMenEnemyAIController::Tick(float DeltaTime)
 
 void AArmyMenEnemyAIController::TickAttacking()
 {
-	if (!PlayerPawn) return;
+	if(!ArmyMenEnemyCharacter || !PlayerPawn) return;
 
-	APawn* MyPawn = GetPawn();
-	if (!MyPawn) return;
-
-	AArmyMenEnemy* MyCharacter = Cast<AArmyMenEnemy>(MyPawn);
-	if (!MyCharacter) return;
-
-	if (MyCharacter->GetIsDead())
+	if (ArmyMenEnemyCharacter->GetIsDead())
 	{
 		ChangeState(EArmyMenEnemyState::DEAD);
 	}
 
-	FVector PlayerDirection = (PlayerPawn->GetActorLocation() - MyCharacter->GetActorLocation()).GetSafeNormal();
-	float RightDotPlayer = FVector::DotProduct(MyCharacter->GetActorRightVector(), PlayerDirection);
+	FVector PlayerDirection = (PlayerPawn->GetActorLocation() - ArmyMenEnemyCharacter->GetActorLocation()).GetSafeNormal();
+	float RightDotPlayer = FVector::DotProduct(ArmyMenEnemyCharacter->GetActorRightVector(), PlayerDirection);
 
-	MyCharacter->TurnRight(RightDotPlayer);
-	MyCharacter->Fire();
+	ArmyMenEnemyCharacter->TurnRight(RightDotPlayer);
+
+	if (ArmyMenEnemyCharacter->GetAimTarget())
+	{
+		ArmyMenEnemyCharacter->Fire();
+	}
 }
 
 void AArmyMenEnemyAIController::TickIdle()
 {
-	if (!PlayerPawn) return;
+	if (!ArmyMenEnemyCharacter || !PlayerPawn) return;
 
-	APawn* MyPawn = GetPawn();
-	if (!MyPawn) return;
-
-	AArmyMenEnemy* MyCharacter = Cast<AArmyMenEnemy>(MyPawn);
-	if (!MyCharacter) return;
-
-	if (MyCharacter->GetIsDead())
+	if (ArmyMenEnemyCharacter->GetIsDead())
 	{
 		ChangeState(EArmyMenEnemyState::DEAD);
 	}
 
-	float PlayerDistance = FVector::Dist(MyCharacter->GetActorLocation(), PlayerPawn->GetActorLocation());
+	float PlayerDistance = FVector::Dist(ArmyMenEnemyCharacter->GetActorLocation(), PlayerPawn->GetActorLocation());
 
-	if (PlayerDistance <= MyCharacter->GetVisionDistance())
+	if (PlayerDistance <= ArmyMenEnemyCharacter->GetVisionDistance())
 	{
 		UWorld* World = GetWorld();
 		if (!World) return;
 
-		FVector TraceStart = MyCharacter->GetActorLocation();
+		FVector TraceStart = ArmyMenEnemyCharacter->GetActorLocation();
 		FVector TraceEnd = PlayerPawn->GetActorLocation();
 
 		ETraceTypeQuery VisibleQuery = ETraceTypeQuery::TraceTypeQuery1;
 
 		TArray<AActor *> ActorsToIgnore;
-		ActorsToIgnore.Add(MyCharacter);
+		ActorsToIgnore.Add(ArmyMenEnemyCharacter);
 
 		FHitResult OutHit;
 
@@ -101,7 +99,7 @@ void AArmyMenEnemyAIController::TickIdle()
 			TraceEnd,
 			VisibleQuery,
 			false, ActorsToIgnore,
-			EDrawDebugTrace::ForOneFrame,
+			EDrawDebugTrace::None,
 			OutHit,
 			true)
 		)
@@ -158,5 +156,4 @@ void AArmyMenEnemyAIController::NotifyKill()
 		ChangeState(EArmyMenEnemyState::DEAD);
 		break;
 	}
-
 }
