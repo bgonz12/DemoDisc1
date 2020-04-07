@@ -6,7 +6,9 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
+#include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 #include "PlatformerCharacter.h"
 #include "PlatformerGameModeBase.h"
@@ -27,8 +29,11 @@ APlatformerChaser::APlatformerChaser()
 	BoulderMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BoulderMesh"));
 	BoulderMesh->SetupAttachment(ChaserContainer);
 
+	SpookyLadyContainer = CreateDefaultSubobject<USceneComponent>(TEXT("SpookyLadyContainer"));
+	SpookyLadyContainer->SetupAttachment(ChaserContainer);
+
 	SpookyLadyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SpookyLadyMesh"));
-	SpookyLadyMesh->SetupAttachment(ChaserContainer);
+	SpookyLadyMesh->SetupAttachment(SpookyLadyContainer);
 
 	KillSphere = CreateDefaultSubobject<USphereComponent>(TEXT("BoulderKillSphere"));
 	KillSphere->SetupAttachment(ChaserContainer);
@@ -66,6 +71,18 @@ void APlatformerChaser::BeginPlay()
 
 	KillSphere->OnComponentBeginOverlap.AddDynamic(this, &APlatformerChaser::BeginBoulderOverlap);
 
+	UWorld* World = GetWorld();
+	
+	if (World)
+	{
+		APlayerController* Controller = World->GetFirstPlayerController();
+
+		if (Controller)
+		{
+			PlayerActor = Controller->GetPawn();
+		}
+	}
+
 	StartLocation = ChaserContainer->GetComponentLocation();
 	EndLocation = SplineComponent->GetWorldLocationAtTime(SplineComponent->Duration);
 
@@ -85,12 +102,22 @@ void APlatformerChaser::Tick(float DeltaTime)
 		FTransform FinalTransform = SplineComponent->FindTransformClosestToWorldLocation(TargetLocation, ESplineCoordinateSpace::World);
 		ChaserContainer->SetWorldTransform(FinalTransform);
 
+		// Boulder rolling animation
 		BoulderMesh->AddLocalRotation(FRotator(-BoulderRotateSpeed * DeltaTime, 0.0f, 0.0f));
 
 		if (FVector::Dist(ChaserContainer->GetComponentLocation(), EndLocation) <= MoveSpeed * DeltaTime * 2.0f)
 		{
 			StopChasing();
 		}
+	}
+
+	if (PlayerActor)
+	{
+		FVector LookAtStart = SpookyLadyContainer->GetComponentLocation();
+		FVector LookAtEnd = PlayerActor->GetActorLocation();
+		FRotator SpookyLadyRotation = UKismetMathLibrary::FindLookAtRotation(LookAtStart, LookAtEnd);
+
+		SpookyLadyContainer->SetWorldRotation(SpookyLadyRotation);
 	}
 }
 

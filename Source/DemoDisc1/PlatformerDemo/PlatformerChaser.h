@@ -45,6 +45,9 @@ protected:
 	class UStaticMeshComponent* BoulderMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class USceneComponent* SpookyLadyContainer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* SpookyLadyMesh;
 
 	UPROPERTY(VisibleAnywhere)
@@ -58,6 +61,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class USpookySwapComponent* SpookySwapComponent;
+
+	AActor* PlayerActor;
 
 	FVector StartLocation;
 
