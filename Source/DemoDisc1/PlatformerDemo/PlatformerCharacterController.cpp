@@ -15,6 +15,9 @@ void APlatformerCharacterController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	SetInputMode(FInputModeGameAndUI());
+	bShowMouseCursor = false;
+
 	if (PlatformerUIClass)
 	{
 		PlatformerUI = CreateWidget<UPlatformerUI>(this, PlatformerUIClass);

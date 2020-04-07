@@ -3,3 +3,11 @@
 
 #include "ArmyMenPlayerController.h"
 
+
+void AArmyMenPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SetInputMode(FInputModeGameAndUI());
+	bShowMouseCursor = false;
+}
