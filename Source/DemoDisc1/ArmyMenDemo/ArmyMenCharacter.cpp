@@ -22,7 +22,7 @@ AArmyMenCharacter::AArmyMenCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 500.0f; // The camera follows at this distance behind the character
+	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character
 	CameraBoom->bUsePawnControlRotation = false;
 	CameraBoom->bAbsoluteRotation = false;
 	CameraBoom->bInheritPitch = false;
@@ -47,8 +47,8 @@ AArmyMenCharacter::AArmyMenCharacter()
 	FireRate = 1.0f;
 
 	AimTraceTypeQuery = ETraceTypeQuery::TraceTypeQuery4;
-	AimRange = 3000.0f;
-	AimSphereRadius = 200.0f;
+	AimRange = 5000.0f;
+	AimSphereRadius = 250.0f;
 	AimAccuracy = 1.0f;
 }
 
@@ -178,17 +178,18 @@ void AArmyMenCharacter::Fire()
 	FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.0f;
 	FRotator SpawnRotation;
 
+	float AccuracyX = FMath::FRandRange(-1.0f, 1.0f) * 90.0f * (1.0f - AimAccuracy);
+	float AccuracyY = FMath::FRandRange(-1.0f, 1.0f) * 90.0f * (1.0f - AimAccuracy);
+
+	FRotator AccuracyModifier(AccuracyX, AccuracyY, 0.0f);
+
 	if (AimTarget)
 	{
-		float AccuracyX = FMath::FRandRange(-1.0f, 1.0f) * 90.0f * (1.0f - AimAccuracy);
-		float AccuracyY = FMath::FRandRange(-1.0f, 1.0f) * 90.0f * (1.0f - AimAccuracy);
-
-		FRotator AccuracyModifier(AccuracyX, AccuracyY, 0.0f);
 		SpawnRotation = (AimTarget->GetActorLocation() - SpawnLocation).Rotation() + AccuracyModifier;
 	}
 	else
 	{
-		SpawnRotation = GetActorRotation();
+		SpawnRotation = GetActorRotation() + AccuracyModifier;
 	}
 
 	FActorSpawnParameters SpawnParams;
