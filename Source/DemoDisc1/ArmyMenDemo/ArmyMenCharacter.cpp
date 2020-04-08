@@ -80,7 +80,8 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 	FVector TraceStart = GetActorLocation() + GetActorForwardVector() * AimSphereRadius * 2.0f;
 	FVector TraceEnd = GetActorLocation() + GetActorForwardVector() * AimRange;
 
-	const TArray<AActor *> ActorsToIgnore;
+	TArray<AActor *> ActorsToIgnore;
+	ActorsToIgnore.Add(this);
 
 	FHitResult OutHit;
 
