@@ -90,7 +90,7 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 		TraceStart,
 		TraceEnd,
 		AimSphereRadius,
-		AimTraceTypeQuery, // 'Enemy' trace channel
+		AimTraceTypeQuery,
 		false,
 		ActorsToIgnore,
 		EDrawDebugTrace::None,

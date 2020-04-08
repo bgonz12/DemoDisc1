@@ -14,12 +14,6 @@ void AArmyMenEnemyAIController::BeginPlay()
 
 	ChangeState(EArmyMenEnemyState::IDLE);
 
-	// Get Controlled pawn as ArmyMenEnemy
-	APawn* MyPawn = GetPawn();
-	if (!MyPawn) return;
-
-	ArmyMenEnemyCharacter = Cast<AArmyMenEnemy>(MyPawn);
-
 	UWorld* World = GetWorld();
 	if (!World) return;
 
@@ -50,67 +44,10 @@ void AArmyMenEnemyAIController::Tick(float DeltaTime)
 
 void AArmyMenEnemyAIController::TickAttacking()
 {
-	if(!ArmyMenEnemyCharacter || !PlayerPawn) return;
-
-	if (ArmyMenEnemyCharacter->GetIsDead())
-	{
-		ChangeState(EArmyMenEnemyState::DEAD);
-	}
-
-	FVector PlayerDirection = (PlayerPawn->GetActorLocation() - ArmyMenEnemyCharacter->GetActorLocation()).GetSafeNormal();
-	float RightDotPlayer = FVector::DotProduct(ArmyMenEnemyCharacter->GetActorRightVector(), PlayerDirection);
-
-	ArmyMenEnemyCharacter->TurnRight(RightDotPlayer);
-
-	if (ArmyMenEnemyCharacter->GetAimTarget())
-	{
-		ArmyMenEnemyCharacter->Fire();
-	}
 }
 
 void AArmyMenEnemyAIController::TickIdle()
 {
-	if (!ArmyMenEnemyCharacter || !PlayerPawn) return;
-
-	if (ArmyMenEnemyCharacter->GetIsDead())
-	{
-		ChangeState(EArmyMenEnemyState::DEAD);
-	}
-
-	float PlayerDistance = FVector::Dist(ArmyMenEnemyCharacter->GetActorLocation(), PlayerPawn->GetActorLocation());
-
-	if (PlayerDistance <= ArmyMenEnemyCharacter->GetVisionDistance())
-	{
-		UWorld* World = GetWorld();
-		if (!World) return;
-
-		FVector TraceStart = ArmyMenEnemyCharacter->GetActorLocation();
-		FVector TraceEnd = PlayerPawn->GetActorLocation();
-
-		ETraceTypeQuery VisibleQuery = ETraceTypeQuery::TraceTypeQuery1;
-
-		TArray<AActor *> ActorsToIgnore;
-		ActorsToIgnore.Add(ArmyMenEnemyCharacter);
-
-		FHitResult OutHit;
-
-		if (UKismetSystemLibrary::LineTraceSingle(World,
-			TraceStart,
-			TraceEnd,
-			VisibleQuery,
-			false, ActorsToIgnore,
-			EDrawDebugTrace::None,
-			OutHit,
-			true)
-		)
-		{
-			if (OutHit.GetActor() == PlayerPawn)
-			{
-				ChangeState(EArmyMenEnemyState::ATTACKING);
-			}
-		}
-	}
-
 }
 
 void AArmyMenEnemyAIController::ChangeState(EArmyMenEnemyState NewState)

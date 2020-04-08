@@ -26,19 +26,17 @@ public:
 protected:
 	class APawn* PlayerPawn;
 
-	class AArmyMenEnemy* ArmyMenEnemyCharacter;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TEnumAsByte<EArmyMenEnemyState> CurrentState;
 
-	void TickAttacking();
+	virtual void TickAttacking();
 
-	void TickIdle();
+	virtual void TickIdle();
 
-	void ChangeState(EArmyMenEnemyState NewState);
+	virtual void ChangeState(EArmyMenEnemyState NewState);
 
 public:
-	void NotifyTakeDamage();
+	virtual void NotifyTakeDamage();
 
-	void NotifyKill();
+	virtual void NotifyKill();
 };

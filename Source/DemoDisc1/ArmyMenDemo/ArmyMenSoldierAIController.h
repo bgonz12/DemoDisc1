@@ -4,26 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "ArmyMenEnemyAIController.h"
-#include "ArmyMenCrawlerAIController.generated.h"
+#include "ArmyMenSoldierAIController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class DEMODISC1_API AArmyMenCrawlerAIController : public AArmyMenEnemyAIController
+class DEMODISC1_API AArmyMenSoldierAIController : public AArmyMenEnemyAIController
 {
 	GENERATED_BODY()
-
+	
 protected:
 	virtual void BeginPlay() override;
 
 protected:
-	class AArmyMenCrawlerCharacter* ArmyMenCrawlerCharacter;
+	class AArmyMenEnemy* ArmyMenEnemyCharacter;
 
 	virtual void TickAttacking() override;
 
 	virtual void TickIdle() override;
-
-public:
-	virtual void NotifyTakeDamage() override;
 };

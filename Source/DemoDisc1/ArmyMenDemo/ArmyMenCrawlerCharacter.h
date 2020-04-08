@@ -45,6 +45,17 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 	bool bIsDead;
 
+	/** Movement Properties **/
+
+	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
+	float TurnRate;
+
+	/** Senses Properties **/
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Senses)
+	float VisionDistance;
+
 	/** Attack Properties **/
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Attack)
@@ -60,12 +71,6 @@ protected:
 	float AttackRate;
 
 	float AttackTimer;
-
-	/** Movement Properties **/
-
-	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
-	float TurnRate;
 
 	virtual void Kill();
 
@@ -91,4 +96,10 @@ public:
 	void TurnRight(float Value);
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	FORCEINLINE bool GetIsDead() { return bIsDead; }
+
+	FORCEINLINE float GetAttackRange() { return AttackRange; }
+
+	FORCEINLINE float GetVisionDistance() { return VisionDistance; }
 };

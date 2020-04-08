@@ -44,6 +44,8 @@ AArmyMenCrawlerCharacter::AArmyMenCrawlerCharacter()
 	AttackRange = 100.0f;
 	AttackWidth = 100.0f;
 
+	VisionDistance = 2000.0f;
+
 	TurnRate = 90.0f;
 }
 
@@ -51,7 +53,11 @@ AArmyMenCrawlerCharacter::AArmyMenCrawlerCharacter()
 void AArmyMenCrawlerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	CurrentHealth = MaxHealth;
+
+
+	bIsDead = false;
 }
 
 // Called every frame
