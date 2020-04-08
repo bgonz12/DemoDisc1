@@ -124,11 +124,13 @@ void APlatformerChaser::Tick(float DeltaTime)
 void APlatformerChaser::StartChasing()
 {
 	bIsChasing = true;
+	this->PlayStartAnimation();
 }
 
 void APlatformerChaser::StopChasing()
 {
 	bIsChasing = false;
+	this->PlayEndAnimation();
 }
 
 void APlatformerChaser::EnableChaser()
@@ -176,7 +178,6 @@ void APlatformerChaser::BeginChaseTriggerOverlap(UPrimitiveComponent * Overlappe
 	{
 		EnableChaser();
 		StartChasing();
-		this->PlayStartAnimation();
 	}
 }
 

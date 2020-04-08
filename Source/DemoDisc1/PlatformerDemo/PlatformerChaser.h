@@ -71,6 +71,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayStartAnimation();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayEndAnimation();
+
 	UFUNCTION(BlueprintCallable)
 	void StartChasing();
 
