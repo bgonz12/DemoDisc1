@@ -75,59 +75,39 @@ void USpookySwapComponent::AddSpookyComponent(UPrimitiveComponent* Component)
 
 void USpookySwapComponent::DisplayNormal()
 {
-	if (NormalComponents.Num() <= 0) return;
-
 	bIsSpooky = false;
 
-	// Set collisions
-	for (UPrimitiveComponent* SpookyComponent : SpookyComponents)
+	// Disable spooky components
+	for (UPrimitiveComponent* Component : SpookyComponents)
 	{
-		SpookyComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		Component->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		Component->SetVisibility(false);
 	}
 
-	for (UPrimitiveComponent* NormalComponent : NormalComponents)
+	// Enable normal components
+	for (UPrimitiveComponent* Component : NormalComponents)
 	{
-		NormalComponent->SetCollisionEnabled(EnabledNormalCollision);
-	}
-
-	// Set visibility
-	for (UPrimitiveComponent* SpookyComponent : SpookyComponents)
-	{
-		SpookyComponent->SetVisibility(false);
-	}
-
-	for (UPrimitiveComponent* NormalComponent : NormalComponents)
-	{
-		NormalComponent->SetVisibility(true);
+		Component->SetCollisionEnabled(EnabledNormalCollision);
+		Component->SetVisibility(true);
 	}
 }
 
 void USpookySwapComponent::DisplaySpooky()
 {
-	if (SpookyComponents.Num() <= 0) return;
-
 	bIsSpooky = true;
 
-	// Set collisions
-	for (UPrimitiveComponent* NormalComponent : NormalComponents)
+	// Disable normal components
+	for (UPrimitiveComponent* Component : NormalComponents)
 	{
-		NormalComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		Component->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		Component->SetVisibility(false);
 	}
 
-	for (UPrimitiveComponent* SpookyComponent : SpookyComponents)
+	// Enable spooky components
+	for (UPrimitiveComponent* Component : SpookyComponents)
 	{
-		SpookyComponent->SetCollisionEnabled(EnabledSpookyCollision);
-	}
-
-	// Set visibility
-	for (UPrimitiveComponent* NormalComponent : NormalComponents)
-	{
-		NormalComponent->SetVisibility(false);
-	}
-
-	for (UPrimitiveComponent* SpookyComponent : SpookyComponents)
-	{
-		SpookyComponent->SetVisibility(true);
+		Component->SetCollisionEnabled(EnabledSpookyCollision);
+		Component->SetVisibility(true);
 	}
 }
 
