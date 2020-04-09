@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "DemoDisc1/ReloadableActor.h"
 #include "ArmyMenCharacter.generated.h"
 
 UCLASS()
-class DEMODISC1_API AArmyMenCharacter : public ACharacter
+class DEMODISC1_API AArmyMenCharacter : public ACharacter, public IReloadableActor
 {
 	GENERATED_BODY()
 
@@ -99,4 +100,6 @@ public:
 	FORCEINLINE AActor* GetAimTarget() { return AimTarget; }
 
 	FORCEINLINE bool GetIsDead() { return bIsDead; }
+
+	FORCEINLINE void SetRespawnTransform(FTransform NewRespawnTransform) { RespawnTransform = NewRespawnTransform; }
 };

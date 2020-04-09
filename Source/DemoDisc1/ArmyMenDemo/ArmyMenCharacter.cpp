@@ -113,6 +113,8 @@ void AArmyMenCharacter::Reset()
 	// We do not call reset on parent class because doing so Destroys the actor 
 	//Super::Reset();
 
+	if (!GetIsReloadable()) return;
+
 	CurrentHealth = MaxHealth;
 
 	bIsDead = false;

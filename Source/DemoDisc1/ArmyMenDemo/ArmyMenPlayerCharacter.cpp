@@ -22,6 +22,8 @@ void AArmyMenPlayerCharacter::Reset()
 {
 	Super::Reset();
 
+	if (!GetIsReloadable()) return;
+
 	if (PlayerController)
 	{
 		PlayerController->Possess(this);
