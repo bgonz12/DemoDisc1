@@ -64,7 +64,7 @@ void APlatformerCharacter::BeginPlay()
 		PlayerController = Cast<APlatformerCharacterController>(Controller);
 	}
 
-	RespawnLocation = GetActorLocation();
+	RespawnTransform = GetActorTransform();
 
 	bIsPlayerDead = false;
 }
@@ -130,7 +130,7 @@ void APlatformerCharacter::KillPlayer(DeathAnimationType AnimType)
 	APlatformerGameModeBase* PlatformerGameMode = Cast<APlatformerGameModeBase>(GameMode);
 	if (!PlatformerGameMode) return;
 
-	PlatformerGameMode->TriggerLoadLastCheckpoint();
+	PlatformerGameMode->TriggerLoadLastCheckpoint(3.0f);
 }
 
 void APlatformerCharacter::Reset()
@@ -138,7 +138,7 @@ void APlatformerCharacter::Reset()
 	// We do not call reset on parent class because doing so Destroys the actor 
 	//Super::Reset();
 
-	SetActorLocation(RespawnLocation);
+	SetActorTransform(RespawnTransform);
 
 	bIsPlayerDead = false;
 

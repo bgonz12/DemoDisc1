@@ -4,8 +4,6 @@
 #include "PlatformerGameModeBase.h"
 #include "Engine/World.h"
 
-#include "PlatformerChaser.h"
-#include "PlatformerCharacter.h"
 #include "PlatformerCheckpoint.h"
 
 void APlatformerGameModeBase::StartPlay()
@@ -15,20 +13,9 @@ void APlatformerGameModeBase::StartPlay()
 	SetCollectibleCount(0);
 
 	bLoadingCheckpoint = false;
-
-	UWorld* World = GetWorld();
-	if (!World) return;
-
-	APlayerController* PlayerController = World->GetFirstPlayerController();
-	if (!PlayerController) return;
-
-	APawn* PlayerPawn = PlayerController->GetPawn();
-	if (!PlayerPawn) return;
-
-	PlayerCharacter = Cast<APlatformerCharacter>(PlayerPawn);
 }
 
-void APlatformerGameModeBase::TriggerLoadLastCheckpoint()
+void APlatformerGameModeBase::TriggerLoadLastCheckpoint(float Delay)
 {
 	if (bLoadingCheckpoint) return;
 
@@ -39,7 +26,7 @@ void APlatformerGameModeBase::TriggerLoadLastCheckpoint()
 
 	World->GetTimerManager().ClearTimer(LoadCheckpointTimerHandle);
 
-	World->GetTimerManager().SetTimer(LoadCheckpointTimerHandle, this, &APlatformerGameModeBase::LoadLastCheckpoint, 3.0f, false);
+	World->GetTimerManager().SetTimer(LoadCheckpointTimerHandle, this, &APlatformerGameModeBase::LoadLastCheckpoint, Delay, false);
 }
 
 void APlatformerGameModeBase::LoadLastCheckpoint()
@@ -50,11 +37,6 @@ void APlatformerGameModeBase::LoadLastCheckpoint()
 	if (World) World->GetTimerManager().ClearTimer(LoadCheckpointTimerHandle);
 
 	ResetLevel();
-}
-
-void APlatformerGameModeBase::SetCurrentCheckpoint(APlatformerCheckpoint* NewCheckpoint)
-{
-	LastCheckpoint = NewCheckpoint;
 }
 
 void APlatformerGameModeBase::SetCollectibleCount(int Value)

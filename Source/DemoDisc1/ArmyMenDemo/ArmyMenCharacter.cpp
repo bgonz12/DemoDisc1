@@ -60,6 +60,8 @@ void AArmyMenCharacter::BeginPlay()
 	CurrentHealth = MaxHealth;
 
 	bIsDead = false;
+
+	RespawnTransform = GetActorTransform();
 }
 
 // Called every frame
@@ -117,8 +119,9 @@ void AArmyMenCharacter::Reset()
 
 	ResetDeathAnimation();
 
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-	GetCapsuleComponent()->SetSimulatePhysics(true);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	SetActorTransform(RespawnTransform);
 }
 
 // Called to bind functionality to input
@@ -142,7 +145,6 @@ void AArmyMenCharacter::Kill()
 	PlayDeathAnimation();
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetSimulatePhysics(false);
 }
 
 void AArmyMenCharacter::MoveForward(float Value)

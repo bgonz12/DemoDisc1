@@ -55,6 +55,8 @@ protected:
 
 	AActor* AimTarget;
 
+	FTransform RespawnTransform;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	float FireRate;
 

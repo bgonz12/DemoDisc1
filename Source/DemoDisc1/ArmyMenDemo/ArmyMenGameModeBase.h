@@ -14,4 +14,19 @@ class DEMODISC1_API AArmyMenGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual void StartPlay() override;
+
+protected:
+	FTimerHandle LoadCheckpointTimerHandle;
+
+	bool bLoadingCheckpoint;
+
+	int CollectibleCount;
+
+	UFUNCTION()
+	void LoadLastCheckpoint();
+
+public:
+	void TriggerLoadLastCheckpoint(float Delay = 0.0f);
 };

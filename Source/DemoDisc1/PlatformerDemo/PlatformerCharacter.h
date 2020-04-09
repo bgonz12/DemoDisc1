@@ -67,7 +67,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	bool bIsPlayerDead;
 
-	FVector RespawnLocation;
+	FTransform RespawnTransform;
 
 	/** Class Member Functions **/
 
@@ -116,5 +116,5 @@ public:
 
 	/** SETTERS **/
 
-	FORCEINLINE void SetRespawnLocation(FVector NewRespawnLocation) { RespawnLocation = NewRespawnLocation;  }
+	FORCEINLINE void SetRespawnTransform(FTransform NewRespawnTransform) { RespawnTransform = NewRespawnTransform;  }
 };

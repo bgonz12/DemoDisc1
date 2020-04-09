@@ -42,6 +42,13 @@ void AArmyMenEnemyAIController::Tick(float DeltaTime)
 	}
 }
 
+void AArmyMenEnemyAIController::Reset()
+{
+	Super::Reset();
+
+	ChangeState(EArmyMenEnemyState::IDLE);
+}
+
 void AArmyMenEnemyAIController::TickAttacking()
 {
 }

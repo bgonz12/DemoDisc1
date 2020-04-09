@@ -2,19 +2,32 @@
 
 
 #include "ArmyMenPlayerCharacter.h"
+#include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "ArmyMenPlayerController.h"
+#include "ArmyMenGameModeBase.h"
+
+void AArmyMenPlayerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	AController* MyController = GetController();
+	if (!MyController) return;
+
+	PlayerController = Cast<AArmyMenPlayerController>(MyController);
+}
 
 void AArmyMenPlayerCharacter::Reset()
 {
 	Super::Reset();
 
-	AController* MyController = GetController();
-	if (!MyController) return;
+	if (PlayerController)
+	{
+		PlayerController->Possess(this);
 
-	AArmyMenPlayerController* PlayerController = Cast<AArmyMenPlayerController>(MyController);
-
-	EnableInput(PlayerController);
+		EnableInput(PlayerController);
+	}
 }
 
 void AArmyMenPlayerCharacter::Kill()
@@ -23,10 +36,26 @@ void AArmyMenPlayerCharacter::Kill()
 
 	Super::Kill();
 
-	AController* MyController = GetController();
-	if (!MyController) return;
+	if (PlayerController)
+	{
+		DisableInput(PlayerController);
 
-	AArmyMenPlayerController* PlayerController = Cast<AArmyMenPlayerController>(MyController);
+		/*UPlatformerUI* PlatformerUI = PlayerController->GetPlatformerUI();
 
-	DisableInput(PlayerController);
+		if (PlatformerUI)
+		{
+			PlatformerUI->PlayCurtainFadeOut();
+		}*/
+	}
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	AGameModeBase* GameMode = UGameplayStatics::GetGameMode(World);
+	if (!GameMode) return;
+
+	AArmyMenGameModeBase* PlatformerGameMode = Cast<AArmyMenGameModeBase>(GameMode);
+	if (!PlatformerGameMode) return;
+
+	PlatformerGameMode->TriggerLoadLastCheckpoint(3.0f);
 }

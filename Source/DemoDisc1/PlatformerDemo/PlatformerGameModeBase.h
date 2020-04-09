@@ -23,10 +23,6 @@ public:
 	FCollectibleCountUpdatedSignature OnCollectibleCountUpdated;
 
 protected:
-	class APlatformerCheckpoint* LastCheckpoint;
-
-	class APlatformerCharacter* PlayerCharacter;
-
 	FTimerHandle LoadCheckpointTimerHandle;
 
 	bool bLoadingCheckpoint;
@@ -37,9 +33,7 @@ protected:
 	void LoadLastCheckpoint();
 
 public:
-	void TriggerLoadLastCheckpoint();
-
-	void SetCurrentCheckpoint(class APlatformerCheckpoint* NewCheckpoint);
+	void TriggerLoadLastCheckpoint(float DelayTimer = 0.0f);
 
 	void SetCollectibleCount(int Value);
 

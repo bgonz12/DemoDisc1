@@ -14,10 +14,15 @@ class DEMODISC1_API AArmyMenPlayerCharacter : public AArmyMenCharacter
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	virtual void Reset() override;
 
 protected:
+	class AArmyMenPlayerController* PlayerController;
+
 	virtual void Kill() override;
 
 };
