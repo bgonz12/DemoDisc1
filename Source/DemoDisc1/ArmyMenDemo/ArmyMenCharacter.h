@@ -44,6 +44,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 	bool bIsDead;
 
+	FTransform RespawnTransform;
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 	float TurnRate;
@@ -55,8 +57,6 @@ protected:
 	TEnumAsByte<ETraceTypeQuery> AimTraceTypeQuery;
 
 	AActor* AimTarget;
-
-	FTransform RespawnTransform;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	float FireRate;

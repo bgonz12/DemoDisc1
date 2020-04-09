@@ -17,6 +17,9 @@ class DEMODISC1_API AArmyMenCrawlerAIController : public AArmyMenEnemyAIControll
 protected:
 	virtual void BeginPlay() override;
 
+public:
+	virtual void Tick(float DeltaTime) override;
+
 protected:
 	class AArmyMenCrawlerCharacter* ArmyMenCrawlerCharacter;
 

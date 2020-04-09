@@ -20,6 +20,21 @@ void AArmyMenCrawlerAIController::BeginPlay()
 	ArmyMenCrawlerCharacter = Cast<AArmyMenCrawlerCharacter>(MyPawn);
 }
 
+void AArmyMenCrawlerAIController::Tick(float DeltaTime)
+{
+	if (!ArmyMenCrawlerCharacter)
+	{
+		// Get Controlled pawn as ArmyMenCrawlerCharacter
+		APawn* MyPawn = GetPawn();
+		if (!MyPawn) return;
+
+		ArmyMenCrawlerCharacter = Cast<AArmyMenCrawlerCharacter>(MyPawn);
+	}
+
+	Super::Tick(DeltaTime);
+}
+
+
 void AArmyMenCrawlerAIController::TickAttacking()
 {
 	Super::TickAttacking();
@@ -83,7 +98,7 @@ void AArmyMenCrawlerAIController::TickIdle()
 			TraceEnd,
 			VisibleQuery,
 			false, ActorsToIgnore,
-			EDrawDebugTrace::None,
+			EDrawDebugTrace::ForOneFrame,
 			OutHit,
 			true)
 			)

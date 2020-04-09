@@ -36,6 +36,8 @@ AArmyMenCrawlerCharacter::AArmyMenCrawlerCharacter()
 	// Class defaults
 	bIsDead = false;
 
+	bDestroyOnReset = false;
+
 	MaxHealth = 10;
 	CurrentHealth = 0;
 
@@ -56,8 +58,9 @@ void AArmyMenCrawlerCharacter::BeginPlay()
 
 	CurrentHealth = MaxHealth;
 
-
 	bIsDead = false;
+
+	RespawnTransform = GetActorTransform();
 }
 
 // Called every frame
@@ -71,6 +74,26 @@ void AArmyMenCrawlerCharacter::Tick(float DeltaTime)
 	{
 		AttackTimer -= DeltaTime;
 	}
+}
+
+void AArmyMenCrawlerCharacter::Reset()
+{
+	// We do not call reset on parent class because doing so Destroys the actor 
+	//Super::Reset();
+
+	if (bDestroyOnReset) Destroy();
+
+	if (!GetIsReloadable()) return;
+
+	CurrentHealth = MaxHealth;
+
+	bIsDead = false;
+
+	ResetDeathAnimation();
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	SetActorTransform(RespawnTransform);
 }
 
 void AArmyMenCrawlerCharacter::Kill()

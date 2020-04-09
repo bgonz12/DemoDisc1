@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "DemoDisc1/ReloadableActor.h"
 #include "ArmyMenCrawlerCharacter.generated.h"
 
 UCLASS()
-class DEMODISC1_API AArmyMenCrawlerCharacter : public ACharacter
+class DEMODISC1_API AArmyMenCrawlerCharacter : public ACharacter, public IReloadableActor
 {
 	GENERATED_BODY()
 
@@ -22,6 +23,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void Reset() override;
 
 protected:
 	/** Component References **/
@@ -44,6 +47,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 	bool bIsDead;
+
+	bool bDestroyOnReset;
+
+	FTransform RespawnTransform;
 
 	/** Movement Properties **/
 
@@ -102,4 +109,6 @@ public:
 	FORCEINLINE float GetAttackRange() { return AttackRange; }
 
 	FORCEINLINE float GetVisionDistance() { return VisionDistance; }
+
+	FORCEINLINE void SetDestroyOnReset(bool DestroyOnReset) { bDestroyOnReset = DestroyOnReset; }
 };
