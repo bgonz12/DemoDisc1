@@ -20,7 +20,9 @@ AArmyMenExplosiveBarrel::AArmyMenExplosiveBarrel()
 	CurrentHealth = 0;
 
 	ExplosionDamage = 5;
-	ExplosionRadius = 400.0f;
+	ExplosionRadius = 300.0f;
+
+	bDebugDrawRadius = false;
 }
 
 // Called when the game starts or when spawned
@@ -72,7 +74,7 @@ void AArmyMenExplosiveBarrel::Kill()
 
 	UGameplayStatics::SpawnEmitterAtLocation(World, ExplosionParticle, GetActorTransform());
 
-	if (false)
+	if (bDebugDrawRadius)
 	{
 		UKismetSystemLibrary::DrawDebugSphere
 		(

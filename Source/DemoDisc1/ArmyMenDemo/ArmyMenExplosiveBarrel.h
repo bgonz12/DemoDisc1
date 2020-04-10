@@ -26,9 +26,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* StaticMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UParticleSystem* ExplosionParticle;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	int MaxHealth;
 
@@ -39,10 +36,16 @@ protected:
 	bool bIsDead;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Explosion)
+	class UParticleSystem* ExplosionParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Explosion)
 	int ExplosionDamage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Explosion)
 	int ExplosionRadius;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Explosion)
+	bool bDebugDrawRadius;
 
 	void Kill();
 
