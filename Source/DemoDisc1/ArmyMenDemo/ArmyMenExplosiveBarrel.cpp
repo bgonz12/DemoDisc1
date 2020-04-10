@@ -67,11 +67,13 @@ void AArmyMenExplosiveBarrel::Kill()
 		IgnoreActors,
 		this);
 
-	if (true)
-	{
-		UWorld* World = GetWorld();
-		if (!World) return;
+	UWorld* World = GetWorld();
+	if (!World) return;
 
+	UGameplayStatics::SpawnEmitterAtLocation(World, ExplosionParticle, GetActorTransform());
+
+	if (false)
+	{
 		UKismetSystemLibrary::DrawDebugSphere
 		(
 			World,
