@@ -98,7 +98,7 @@ void AArmyMenCrawlerAIController::TickIdle()
 			TraceEnd,
 			VisibleQuery,
 			false, ActorsToIgnore,
-			EDrawDebugTrace::ForOneFrame,
+			EDrawDebugTrace::None,
 			OutHit,
 			true)
 			)
