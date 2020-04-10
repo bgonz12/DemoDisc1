@@ -33,7 +33,7 @@ protected:
 
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* CharacterCamera;
+	class UDutchAngleCameraComponent* CharacterCamera;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	int MaxHealth;

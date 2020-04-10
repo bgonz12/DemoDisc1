@@ -33,13 +33,16 @@ protected:
 	class APlayerController* PlayerController;
 
 	UPROPERTY(VisibleAnywhere)
-	class USceneComponent* CameraContainer;
+	class USceneComponent* CameraBoomContainer;
 
-	UPROPERTY(VisibleAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 	class USpringArmComponent* CameraBoom;
 
-	UPROPERTY(VisibleAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* Camera;
+	UPROPERTY(VisibleAnywhere)
+	class USceneComponent* CameraContainer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+	class UDutchAngleCameraComponent* Camera;
 
 	UPROPERTY(VisibleAnywhere)
 	class USplineComponent* SplineComponent;

@@ -2,7 +2,6 @@
 
 
 #include "ArmyMenCharacter.h"
-#include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -12,6 +11,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 
 #include "ArmyMenProjectile.h"
+#include "DemoDisc1/DutchAngleCameraComponent.h"
 
 // Sets default values
 AArmyMenCharacter::AArmyMenCharacter()
@@ -29,7 +29,7 @@ AArmyMenCharacter::AArmyMenCharacter()
 	CameraBoom->bInheritYaw = true;
 
 	// Create a follow camera
-	CharacterCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CharacterCamera"));
+	CharacterCamera = CreateDefaultSubobject<UDutchAngleCameraComponent>(TEXT("CharacterCamera"));
 	CharacterCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	CharacterCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
