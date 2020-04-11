@@ -13,8 +13,11 @@ AArmyMenExplosiveBarrel::AArmyMenExplosiveBarrel()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	MeshContainer = CreateDefaultSubobject<USceneComponent>(TEXT("MeshContainer"));
+	SetRootComponent(MeshContainer);
+
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-	SetRootComponent(StaticMesh);
+	StaticMesh->SetupAttachment(MeshContainer);
 
 	MaxHealth = 2;
 	CurrentHealth = 0;

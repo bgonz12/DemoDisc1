@@ -5,6 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Engine/SkeletalMeshSocket.h"
 #include "Engine/World.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -22,7 +23,7 @@ AArmyMenCharacter::AArmyMenCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character
+	CameraBoom->TargetArmLength = 5.0f; // The camera follows at this distance behind the character
 	CameraBoom->bUsePawnControlRotation = false;
 	CameraBoom->bAbsoluteRotation = false;
 	CameraBoom->bInheritPitch = false;
@@ -32,6 +33,12 @@ AArmyMenCharacter::AArmyMenCharacter()
 	CharacterCamera = CreateDefaultSubobject<UDutchAngleCameraComponent>(TEXT("CharacterCamera"));
 	CharacterCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	CharacterCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	GunMeshContainer = CreateDefaultSubobject<USceneComponent>(TEXT("GunMeshContainer"));
+	GunMeshContainer->SetupAttachment(GetMesh(), FName("RightHand"));
+
+	GunMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunMesh"));
+	GunMesh->SetupAttachment(GunMeshContainer);
 
 	// Pawn defaults
 	bUseControllerRotationYaw = false;
@@ -47,8 +54,8 @@ AArmyMenCharacter::AArmyMenCharacter()
 	FireRate = 1.0f;
 
 	AimTraceTypeQuery = ETraceTypeQuery::TraceTypeQuery4;
-	AimRange = 5000.0f;
-	AimSphereRadius = 250.0f;
+	AimRange = 3000.0f;
+	AimSphereRadius = 300.0f;
 	AimAccuracy = 1.0f;
 }
 
@@ -79,28 +86,36 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 	UWorld* World = GetWorld();
 	if (!World) return;
 
-	FVector TraceStart = GetActorLocation() + GetActorForwardVector() * AimSphereRadius * 2.0f;
+	FVector TraceStart = GetActorLocation() + GetActorForwardVector() * (AimSphereRadius + 100.0f);
 	FVector TraceEnd = GetActorLocation() + GetActorForwardVector() * AimRange;
 
 	TArray<AActor *> ActorsToIgnore;
 	ActorsToIgnore.Add(this);
 
-	FHitResult OutHit;
+	FHitResult OutHitSphere;
 
-	if (UKismetSystemLibrary::SphereTraceSingle(
-		World,
-		TraceStart,
-		TraceEnd,
-		AimSphereRadius,
-		AimTraceTypeQuery,
-		false,
-		ActorsToIgnore,
-		EDrawDebugTrace::None,
-		OutHit,
-		true)
+	if (UKismetSystemLibrary::SphereTraceSingle(World, TraceStart, TraceEnd, AimSphereRadius, 
+												AimTraceTypeQuery, false, ActorsToIgnore, EDrawDebugTrace::None,
+												OutHitSphere, true)
 	)
 	{
-		AimTarget = OutHit.Actor.Get();
+		FHitResult OutHitLine;
+
+		if (UKismetSystemLibrary::LineTraceSingle(World, CharacterCamera->GetComponentLocation(),
+												  OutHitSphere.GetActor()->GetActorLocation(),
+												  ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore,
+												  EDrawDebugTrace::None, OutHitLine, true)
+		)
+		{
+			if (OutHitLine.GetActor() == OutHitSphere.GetActor())
+			{
+				AimTarget = OutHitLine.GetActor();
+			}
+		}
+		else
+		{
+			AimTarget = nullptr;
+		}
 	}
 	else
 	{
@@ -180,14 +195,25 @@ void AArmyMenCharacter::Fire()
 	UWorld* World = GetWorld();
 	if (!World) return;
 
-	FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.0f;
-	FRotator SpawnRotation;
+	/** Spawn Bullet **/
+
+	FVector SpawnLocation;
+
+	const USkeletalMeshSocket* GunNozzle = GunMesh->GetSocketByName(FName("Nozzle"));
+	if (GunNozzle)
+	{
+		SpawnLocation = GunNozzle->GetSocketLocation(GunMesh);
+	}
+	else
+	{
+		SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.0f;
+	}
 
 	float AccuracyX = FMath::FRandRange(-1.0f, 1.0f) * 90.0f * (1.0f - AimAccuracy);
 	float AccuracyY = FMath::FRandRange(-1.0f, 1.0f) * 90.0f * (1.0f - AimAccuracy);
-
 	FRotator AccuracyModifier(AccuracyX, AccuracyY, 0.0f);
 
+	FRotator SpawnRotation;
 	if (AimTarget)
 	{
 		SpawnRotation = (AimTarget->GetActorLocation() - SpawnLocation).Rotation() + AccuracyModifier;
@@ -208,6 +234,8 @@ void AArmyMenCharacter::Fire()
 	{
 		MyCapsuleComponent->IgnoreActorWhenMoving(Projectile, true);
 	}
+
+	PlayFireAnimation();
 
 	FireTimer = 1.0f / FireRate;
 }

@@ -2,8 +2,10 @@
 
 
 #include "ArmyMenPlayerCharacter.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 #include "ArmyMenPlayerController.h"
 #include "ArmyMenGameModeBase.h"
@@ -16,6 +18,29 @@ void AArmyMenPlayerCharacter::BeginPlay()
 	if (!MyController) return;
 
 	PlayerController = Cast<AArmyMenPlayerController>(MyController);
+}
+
+void AArmyMenPlayerCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	FRotator TargetRotation;
+
+	if (AimTarget)
+	{
+		FVector LookAtStart = GunMeshContainer->GetComponentLocation();
+		FVector LookAtEnd = AimTarget->GetActorLocation();
+		TargetRotation = UKismetMathLibrary::FindLookAtRotation(LookAtStart, LookAtEnd);
+
+	}
+	else
+	{
+		TargetRotation = GetActorRotation();
+	}
+
+	FRotator GunRotation = FMath::Lerp(GunMeshContainer->GetComponentRotation(), TargetRotation, 8.0f * DeltaTime);
+
+	GunMeshContainer->SetWorldRotation(GunRotation);
 }
 
 void AArmyMenPlayerCharacter::Reset()

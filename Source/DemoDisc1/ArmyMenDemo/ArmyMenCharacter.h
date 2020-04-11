@@ -35,6 +35,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UDutchAngleCameraComponent* CharacterCamera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class USceneComponent* GunMeshContainer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class USkeletalMeshComponent* GunMesh;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	int MaxHealth;
 
@@ -51,6 +57,12 @@ protected:
 	float TurnRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	UAnimMontage* CharacterShootMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	UAnimMontage* GunShootMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	TSubclassOf<class AArmyMenProjectile> ProjectileClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
@@ -63,16 +75,19 @@ protected:
 
 	float FireTimer;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
 	float AimRange;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
 	float AimSphereRadius;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
 	float AimAccuracy;
 
 	virtual void Kill();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayFireAnimation();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayDeathAnimation();

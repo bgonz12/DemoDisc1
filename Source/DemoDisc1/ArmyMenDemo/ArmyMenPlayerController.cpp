@@ -3,7 +3,6 @@
 
 #include "ArmyMenPlayerController.h"
 
-
 void AArmyMenPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
