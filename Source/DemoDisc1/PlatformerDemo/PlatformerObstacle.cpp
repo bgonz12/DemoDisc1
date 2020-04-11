@@ -5,6 +5,7 @@
 #include "Components/StaticMeshComponent.h"
 
 #include "PlatformerChaser.h"
+#include "DemoDisc1/SpookySwapStaticMeshComponent.h"
 
 // Sets default values
 APlatformerObstacle::APlatformerObstacle()
@@ -17,12 +18,6 @@ APlatformerObstacle::APlatformerObstacle()
 
 	MeshContainer = CreateDefaultSubobject<USceneComponent>(TEXT("MeshContainer"));
 	MeshContainer->SetupAttachment(RootComponent);
-
-	NormalMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NormalMesh"));
-	NormalMesh->SetupAttachment(MeshContainer);
-
-	SpookyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SpookyMesh"));
-	SpookyMesh->SetupAttachment(MeshContainer);
 
 	bHasFallenOver = false;
 }

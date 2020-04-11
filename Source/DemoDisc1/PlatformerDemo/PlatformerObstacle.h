@@ -29,12 +29,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class USceneComponent* MeshContainer;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class UStaticMeshComponent* NormalMesh;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class UStaticMeshComponent* SpookyMesh;
-
 	bool bHasFallenOver;
 
 	UFUNCTION(BlueprintImplementableEvent)

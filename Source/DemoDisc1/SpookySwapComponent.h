@@ -7,7 +7,7 @@
 #include "SpookySwapComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class DEMODISC1_API USpookySwapComponent : public UActorComponent
 {
 	GENERATED_BODY()
