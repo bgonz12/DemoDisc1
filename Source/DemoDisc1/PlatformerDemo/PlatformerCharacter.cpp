@@ -66,7 +66,7 @@ void APlatformerCharacter::BeginPlay()
 
 	RespawnTransform = GetActorTransform();
 
-	bIsPlayerDead = false;
+	bIsDead = false;
 }
 
 // Called every frame
@@ -103,9 +103,9 @@ void APlatformerCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 
 void APlatformerCharacter::KillPlayer(DeathAnimationType AnimType)
 {
-	if (bIsPlayerDead) return;
+	if (bIsDead) return;
 
-	bIsPlayerDead = true;
+	bIsDead = true;
 
 	if (PlayerController)
 	{
@@ -140,7 +140,7 @@ void APlatformerCharacter::Reset()
 
 	SetActorTransform(RespawnTransform);
 
-	bIsPlayerDead = false;
+	bIsDead = false;
 
 	ResetPlayerDeathAnimation();
 

@@ -19,6 +19,9 @@ public:
 
 protected:
 	UPROPERTY(meta = (BindWidget))
+	class UImage* PreviewImage;
+
+	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* TitleText;
 
 	UPROPERTY(meta = (BindWidget))
@@ -26,6 +29,18 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Demo2Button;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMaterialInterface* DefaultPreviewMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMaterialInterface* Demo1PreviewMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMaterialInterface* Demo2PreviewMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMaterialInterface* Demo3PreviewMaterial;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText DefaultTitle;

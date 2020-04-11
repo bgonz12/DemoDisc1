@@ -109,15 +109,22 @@ void APlatformerChaser::Tick(float DeltaTime)
 		{
 			StopChasing();
 		}
-	}
 
-	if (PlayerActor)
-	{
-		FVector LookAtStart = SpookyLadyContainer->GetComponentLocation();
-		FVector LookAtEnd = PlayerActor->GetActorLocation();
-		FRotator SpookyLadyRotation = UKismetMathLibrary::FindLookAtRotation(LookAtStart, LookAtEnd);
+		if (PlayerActor && SpookySwapComponent->GetIsSpooky())
+		{
+			FVector LookAtStart = SpookyLadyContainer->GetComponentLocation();
+			FVector LookAtEnd = PlayerActor->GetActorLocation();
+			FRotator SpookyLadyRotation = UKismetMathLibrary::FindLookAtRotation(LookAtStart, LookAtEnd);
 
-		SpookyLadyContainer->SetWorldRotation(SpookyLadyRotation);
+			SpookyLadyContainer->SetWorldRotation(SpookyLadyRotation);
+
+			APlatformerCharacter* PlatformerCharacter = Cast<APlatformerCharacter>(PlayerActor);
+
+			if (PlatformerCharacter && PlatformerCharacter->GetIsDead())
+			{
+				StopChasing();
+			}
+		}
 	}
 }
 

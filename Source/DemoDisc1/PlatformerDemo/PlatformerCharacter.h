@@ -65,7 +65,7 @@ protected:
 	float FallGravity;
 
 	UPROPERTY(BlueprintReadWrite)
-	bool bIsPlayerDead;
+	bool bIsDead;
 
 	FTransform RespawnTransform;
 
@@ -113,6 +113,8 @@ public:
 
 	/** Returns FollowCamera subobject */
 	FORCEINLINE class UCameraComponent* GetCharacterCamera() const { return CharacterCamera; }
+
+	FORCEINLINE bool GetIsDead() const { return bIsDead; }
 
 	/** SETTERS **/
 

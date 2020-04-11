@@ -4,11 +4,14 @@
 #include "MainMenuUI.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
+#include "Components/Image.h"
 #include "Kismet/GameplayStatics.h"
 
 bool UMainMenuUI::Initialize()
 {
 	if (!Super::Initialize()) return false;
+
+	PreviewImage->SetBrushFromMaterial(DefaultPreviewMaterial);
 
 	Demo1Button->OnPressed.AddDynamic(this, &UMainMenuUI::Demo1ButtonPressed);
 	Demo1Button->OnHovered.AddDynamic(this, &UMainMenuUI::Demo1ButtonHovered);
@@ -31,11 +34,13 @@ void UMainMenuUI::Demo1ButtonPressed()
 
 void UMainMenuUI::Demo1ButtonHovered()
 {
+	PreviewImage->SetBrushFromMaterial(Demo1PreviewMaterial);
 	TitleText->SetText(Demo1Title);
 }
 
 void UMainMenuUI::Demo1ButtonUnhovered()
 {
+	PreviewImage->SetBrushFromMaterial(DefaultPreviewMaterial);
 	TitleText->SetText(DefaultTitle);
 }
 
@@ -49,10 +54,12 @@ void UMainMenuUI::Demo2ButtonPressed()
 
 void UMainMenuUI::Demo2ButtonHovered()
 {
+	PreviewImage->SetBrushFromMaterial(Demo2PreviewMaterial);
 	TitleText->SetText(Demo2Title);
 }
 
 void UMainMenuUI::Demo2ButtonUnhovered()
 {
+	PreviewImage->SetBrushFromMaterial(DefaultPreviewMaterial);
 	TitleText->SetText(DefaultTitle);
 }
