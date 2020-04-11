@@ -176,12 +176,14 @@ void AArmyMenCharacter::MoveForward(float Value)
 
 void AArmyMenCharacter::TurnRight(float Value)
 {
+	TurnInput = Value;
+
 	if (Value != 0.0f)
 	{
-		float YawInput = Value * TurnRate * GetWorld()->GetDeltaSeconds();
+		float TurnAmount = TurnInput * TurnRate * GetWorld()->GetDeltaSeconds();
 
 		// calculate delta for this frame from the rate information
-		FRotator Rotator(0.0f, YawInput, 0.0f);
+		FRotator Rotator(0.0f, TurnAmount, 0.0f);
 		AddActorLocalRotation(Rotator);
 	}
 }

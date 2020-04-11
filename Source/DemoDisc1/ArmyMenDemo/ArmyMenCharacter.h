@@ -56,6 +56,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 	float TurnRate;
 
+	float TurnInput;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	UAnimMontage* CharacterShootMontage;
 

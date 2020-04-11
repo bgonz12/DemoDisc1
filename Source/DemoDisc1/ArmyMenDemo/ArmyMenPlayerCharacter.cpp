@@ -2,6 +2,7 @@
 
 
 #include "ArmyMenPlayerCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
@@ -24,7 +25,8 @@ void AArmyMenPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FRotator TargetRotation;
+	FRotator TargetRotation = GetActorRotation();
+	;
 
 	if (AimTarget)
 	{
@@ -35,7 +37,7 @@ void AArmyMenPlayerCharacter::Tick(float DeltaTime)
 	}
 	else
 	{
-		TargetRotation = GetActorRotation();
+		TargetRotation = GetActorRotation() + FRotator(0.0f, TurnInput * 15.0f, 0.0f);
 	}
 
 	FRotator GunRotation = FMath::Lerp(GunMeshContainer->GetComponentRotation(), TargetRotation, 8.0f * DeltaTime);
