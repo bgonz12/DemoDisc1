@@ -29,6 +29,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UMaterialInterface* DeathCurtainMaterial;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UDemoDisc1GameInstance* DemoDisc1GameInstance;
+
 	bool bCharacterIsDead;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -36,6 +39,12 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayTakeDamageAnimation();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayFadeInAnimation(float Delay);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayFadeOutAnimation(float Delay);
 
 public:
 	UFUNCTION()

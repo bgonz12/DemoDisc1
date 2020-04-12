@@ -26,7 +26,6 @@ void AArmyMenPlayerCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	FRotator TargetRotation = GetActorRotation();
-	;
 
 	if (AimTarget)
 	{
@@ -90,5 +89,5 @@ void AArmyMenPlayerCharacter::Kill()
 	AArmyMenGameModeBase* PlatformerGameMode = Cast<AArmyMenGameModeBase>(GameMode);
 	if (!PlatformerGameMode) return;
 
-	PlatformerGameMode->TriggerLoadLastCheckpoint(3.0f);
+	PlatformerGameMode->TriggerLoadLastCheckpoint(4.0f);
 }

@@ -4,7 +4,10 @@
 #include "ArmyMenUI.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
+#include "Kismet/GameplayStatics.h"
 #include "Materials/MaterialInstanceDynamic.h"
+
+#include "DemoDisc1/DemoDisc1GameInstance.h"
 
 bool UArmyMenUI::Initialize()
 {
@@ -14,6 +17,17 @@ bool UArmyMenUI::Initialize()
 
 	DeathCurtain->GetDynamicMaterial()->SetScalarParameterValue(FName("Cutoff"), 0.0f);
 
+	PlayFadeInAnimation(0.0f);
+
+	UWorld* World = GetWorld();
+	if (!World) return false;
+
+	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(World);
+	if (!GameInstance) return false;
+
+	DemoDisc1GameInstance = Cast<UDemoDisc1GameInstance>(GameInstance);
+	if (!DemoDisc1GameInstance) return false;
+
 	return true;
 }
 
@@ -21,7 +35,7 @@ void UArmyMenUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
-	if (bCharacterIsDead)
+	if (bCharacterIsDead && !DemoDisc1GameInstance->GetHasSpookyTransitioned())
 	{
 		float DeathCurtainCutoff;
 		DeathCurtain->GetDynamicMaterial()->GetScalarParameterValue(FName("Cutoff"), DeathCurtainCutoff);
@@ -32,15 +46,33 @@ void UArmyMenUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 void UArmyMenUI::SetHealthBarPercent(float Value)
 {
-	if (Value <= 0.0f)
+	if (bCharacterIsDead)
 	{
-		bCharacterIsDead = true;
-	}
-	else if(bCharacterIsDead)
-	{
-		bCharacterIsDead = false;
+		// Check if health update makes character alive
+		if (Value > 0.0f)
+		{
+			PlayFadeInAnimation(0.0f);
 
-		DeathCurtain->GetDynamicMaterial()->SetScalarParameterValue(FName("Cutoff"), 0.0f);
+			bCharacterIsDead = false;
+
+			DeathCurtain->GetDynamicMaterial()->SetScalarParameterValue(FName("Cutoff"), 0.0f);
+		}
+	}
+	else
+	{
+		if (Value <= 0.0f)
+		{
+			if (!DemoDisc1GameInstance->GetHasSpookyTransitioned())
+			{
+				PlayFadeOutAnimation(2.5f);
+			}
+			else
+			{
+				PlayFadeOutAnimation(0.0f);
+			}
+
+			bCharacterIsDead = true;
+		}
 	}
 
 	if (HealthBar->Percent > Value)
