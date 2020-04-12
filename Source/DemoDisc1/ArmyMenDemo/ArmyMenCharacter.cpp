@@ -92,19 +92,31 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 	TArray<AActor *> ActorsToIgnore;
 	ActorsToIgnore.Add(this);
 
+	EDrawDebugTrace::Type DrawDebugSphereTrace = EDrawDebugTrace::None;
+	if (bDrawDebugAimSphere)
+	{
+		 DrawDebugSphereTrace = EDrawDebugTrace::ForOneFrame;
+	}
+
 	FHitResult OutHitSphere;
 
 	if (UKismetSystemLibrary::SphereTraceSingle(World, TraceStart, TraceEnd, AimSphereRadius, 
-												AimTraceTypeQuery, false, ActorsToIgnore, EDrawDebugTrace::None,
-												OutHitSphere, true)
+												AimTraceTypeQuery, false, ActorsToIgnore,
+												DrawDebugSphereTrace, OutHitSphere, true)
 	)
 	{
+		EDrawDebugTrace::Type DrawDebugLineTrace = EDrawDebugTrace::None;
+		if (bDrawDebugAimLine)
+		{
+			DrawDebugLineTrace = EDrawDebugTrace::ForOneFrame;
+		}
+
 		FHitResult OutHitLine;
 
 		if (UKismetSystemLibrary::LineTraceSingle(World, CharacterCamera->GetComponentLocation(),
 												  OutHitSphere.GetActor()->GetActorLocation(),
 												  ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore,
-												  EDrawDebugTrace::None, OutHitLine, true)
+												  DrawDebugLineTrace, OutHitLine, true)
 		)
 		{
 			if (OutHitLine.GetActor() == OutHitSphere.GetActor())

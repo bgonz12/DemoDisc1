@@ -86,6 +86,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
 	float AimAccuracy;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
+	bool bDrawDebugAimSphere;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
+	bool bDrawDebugAimLine;
+
 	virtual void Kill();
 
 	UFUNCTION(BlueprintImplementableEvent)
