@@ -105,6 +105,12 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 												DrawDebugSphereTrace, OutHitSphere, true)
 	)
 	{
+		if(OutHitSphere.GetActor() != AimTarget)
+		{
+			// Switch potential target
+			AimTarget = nullptr;
+		}
+
 		EDrawDebugTrace::Type DrawDebugLineTrace = EDrawDebugTrace::None;
 		if (bDrawDebugAimLine)
 		{
