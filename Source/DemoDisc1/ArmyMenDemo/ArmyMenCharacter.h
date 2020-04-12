@@ -7,6 +7,8 @@
 #include "DemoDisc1/ReloadableActor.h"
 #include "ArmyMenCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE(FNotifyHealthChange, AArmyMenCharacter, OnNotifyHealthChange);
+
 UCLASS()
 class DEMODISC1_API AArmyMenCharacter : public ACharacter, public IReloadableActor
 {
@@ -15,6 +17,8 @@ class DEMODISC1_API AArmyMenCharacter : public ACharacter, public IReloadableAct
 public:
 	// Sets default values for this character's properties
 	AArmyMenCharacter();
+
+	FNotifyHealthChange OnNotifyHealthChange;
 
 protected:
 	// Called when the game starts or when spawned
@@ -121,6 +125,10 @@ public:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	FORCEINLINE AActor* GetAimTarget() { return AimTarget; }
+
+	FORCEINLINE int GetMaxHealth() { return MaxHealth; }
+
+	FORCEINLINE int GetCurrentHealth() { return CurrentHealth; }
 
 	FORCEINLINE bool GetIsDead() { return bIsDead; }
 

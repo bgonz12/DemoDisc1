@@ -47,8 +47,6 @@ void AArmyMenPlayerCharacter::Tick(float DeltaTime)
 
 void AArmyMenPlayerCharacter::Reset()
 {
-	Super::Reset();
-
 	if (!GetIsReloadable()) return;
 
 	if (PlayerController)
@@ -57,6 +55,8 @@ void AArmyMenPlayerCharacter::Reset()
 
 		EnableInput(PlayerController);
 	}
+
+	Super::Reset();
 }
 
 void AArmyMenPlayerCharacter::Kill()

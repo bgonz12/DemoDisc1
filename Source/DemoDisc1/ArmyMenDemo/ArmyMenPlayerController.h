@@ -17,4 +17,15 @@ class DEMODISC1_API AArmyMenPlayerController : public APlayerController
 
 protected:
 	virtual void BeginPlay() override;
+
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class UUserWidget> ArmyMenUIClass;
+
+	class UArmyMenUI* ArmyMenUI;
+
+public:
+	UFUNCTION()
+	void OnPawnNotifyHealthChange();
 };

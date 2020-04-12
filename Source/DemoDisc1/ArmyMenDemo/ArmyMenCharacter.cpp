@@ -149,6 +149,7 @@ void AArmyMenCharacter::Reset()
 	if (!GetIsReloadable()) return;
 
 	CurrentHealth = MaxHealth;
+	OnNotifyHealthChange.Broadcast();
 
 	bIsDead = false;
 
@@ -275,6 +276,8 @@ float AArmyMenCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dam
 
 		Kill();
 	}
+
+	OnNotifyHealthChange.Broadcast();
 
 	return DamageAmount;
 }
