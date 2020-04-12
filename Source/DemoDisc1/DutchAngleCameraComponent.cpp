@@ -69,6 +69,4 @@ void UDutchAngleCameraComponent::SetNormal()
 void UDutchAngleCameraComponent::SetSpooky()
 {
 	bIsSpooky = true;
-
-	UE_LOG(LogTemp, Warning, TEXT("REEE"));
 }

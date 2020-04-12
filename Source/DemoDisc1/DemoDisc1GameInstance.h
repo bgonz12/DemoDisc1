@@ -19,12 +19,11 @@ class DEMODISC1_API UDemoDisc1GameInstance : public UGameInstance
 public:
 	UDemoDisc1GameInstance();
 
-public:
 	FSpookyTransitionSignature OnSpookyTransition;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UMaterialParameterCollection* GlobalMaterialParameterCollection;
+	class UMaterialParameterCollection* GlobalMaterialParamCollection;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int SpookyLevel;
@@ -40,5 +39,6 @@ public:
 
 	void TriggerSpookyTransition();
 
+	UFUNCTION(BlueprintCallable)
 	bool GetHasSpookyTransitioned();
 };

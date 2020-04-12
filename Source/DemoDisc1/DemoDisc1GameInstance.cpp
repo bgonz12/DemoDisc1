@@ -21,13 +21,15 @@ void UDemoDisc1GameInstance::TriggerSpookyTransition()
 {
 	OnSpookyTransition.Broadcast();
 
-	if (!GlobalMaterialParameterCollection) return;
+	bHasSpookyTransitioned = true;
+
+	if (!GlobalMaterialParamCollection) return;
 	
 	UWorld* World = GetWorld();
 	if (!World) return;
 
 	UMaterialParameterCollectionInstance* inst;
-	inst = World->GetParameterCollectionInstance(GlobalMaterialParameterCollection);
+	inst = World->GetParameterCollectionInstance(GlobalMaterialParamCollection);
 	if (!inst) return;
 
 	inst->SetScalarParameterValue(FName("SpookyLerp"), 1.0f);
