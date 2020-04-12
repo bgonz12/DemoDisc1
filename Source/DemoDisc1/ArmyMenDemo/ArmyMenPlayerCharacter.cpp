@@ -56,6 +56,8 @@ void AArmyMenPlayerCharacter::Reset()
 		EnableInput(PlayerController);
 	}
 
+	GunMesh->SetVisibility(true);
+
 	Super::Reset();
 }
 
@@ -76,6 +78,8 @@ void AArmyMenPlayerCharacter::Kill()
 			PlatformerUI->PlayCurtainFadeOut();
 		}*/
 	}
+
+	GunMesh->SetVisibility(false);
 
 	UWorld* World = GetWorld();
 	if (!World) return;
