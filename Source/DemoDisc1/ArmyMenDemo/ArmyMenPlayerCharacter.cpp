@@ -29,7 +29,7 @@ void AArmyMenPlayerCharacter::Tick(float DeltaTime)
 
 	if (AimTarget)
 	{
-		FVector LookAtStart = GunMeshContainer->GetComponentLocation();
+		FVector LookAtStart = MeshContainer->GetComponentLocation();
 		FVector LookAtEnd = AimTarget->GetActorLocation();
 		TargetRotation = UKismetMathLibrary::FindLookAtRotation(LookAtStart, LookAtEnd);
 
@@ -39,9 +39,9 @@ void AArmyMenPlayerCharacter::Tick(float DeltaTime)
 		TargetRotation = GetActorRotation() + FRotator(0.0f, TurnInput * 15.0f, 0.0f);
 	}
 
-	FRotator GunRotation = FMath::Lerp(GunMeshContainer->GetComponentRotation(), TargetRotation, 8.0f * DeltaTime);
+	FRotator GunRotation = FMath::Lerp(MeshContainer->GetComponentRotation(), TargetRotation, 8.0f * DeltaTime);
 
-	GunMeshContainer->SetWorldRotation(GunRotation);
+	MeshContainer->SetWorldRotation(GunRotation);
 }
 
 void AArmyMenPlayerCharacter::Reset()
@@ -55,7 +55,7 @@ void AArmyMenPlayerCharacter::Reset()
 		EnableInput(PlayerController);
 	}
 
-	GunMesh->SetVisibility(true);
+	GetMesh()->SetVisibility(true);
 
 	Super::Reset();
 }
@@ -78,7 +78,7 @@ void AArmyMenPlayerCharacter::Kill()
 		}*/
 	}
 
-	GunMesh->SetVisibility(false);
+	GetMesh()->SetVisibility(false);
 
 	UWorld* World = GetWorld();
 	if (!World) return;

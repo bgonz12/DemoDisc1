@@ -34,11 +34,9 @@ AArmyMenCharacter::AArmyMenCharacter()
 	CharacterCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	CharacterCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	GunMeshContainer = CreateDefaultSubobject<USceneComponent>(TEXT("GunMeshContainer"));
-	GunMeshContainer->SetupAttachment(GetMesh(), FName("RightHand"));
-
-	GunMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunMesh"));
-	GunMesh->SetupAttachment(GunMeshContainer);
+	MeshContainer = CreateDefaultSubobject<USceneComponent>(TEXT("MeshContainer"));
+	MeshContainer->SetupAttachment(GetCapsuleComponent());
+	GetMesh()->SetupAttachment(MeshContainer);
 
 	// Pawn defaults
 	bUseControllerRotationYaw = false;
@@ -220,10 +218,10 @@ void AArmyMenCharacter::Fire()
 
 	FVector SpawnLocation;
 
-	const USkeletalMeshSocket* GunNozzle = GunMesh->GetSocketByName(FName("Nozzle"));
+	const USkeletalMeshSocket* GunNozzle = GetMesh()->GetSocketByName(FName("Muzzle"));
 	if (GunNozzle)
 	{
-		SpawnLocation = GunNozzle->GetSocketLocation(GunMesh);
+		SpawnLocation = GunNozzle->GetSocketLocation(GetMesh());
 	}
 	else
 	{
@@ -280,4 +278,9 @@ float AArmyMenCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dam
 	OnNotifyHealthChange.Broadcast();
 
 	return DamageAmount;
+}
+
+AActor* AArmyMenCharacter::GetAimTarget()
+{
+	return AimTarget;
 }

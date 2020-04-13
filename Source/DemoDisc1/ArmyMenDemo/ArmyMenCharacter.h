@@ -40,10 +40,7 @@ protected:
 	class UDutchAngleCameraComponent* CharacterCamera;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class USceneComponent* GunMeshContainer;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class USkeletalMeshComponent* GunMesh;
+	class USceneComponent* MeshContainer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	int MaxHealth;
@@ -124,7 +121,8 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-	FORCEINLINE AActor* GetAimTarget() { return AimTarget; }
+	UFUNCTION(BlueprintCallable)
+	AActor* GetAimTarget();
 
 	FORCEINLINE int GetMaxHealth() { return MaxHealth; }
 
