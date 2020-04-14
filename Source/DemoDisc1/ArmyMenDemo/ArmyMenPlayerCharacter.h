@@ -14,6 +14,9 @@ class DEMODISC1_API AArmyMenPlayerCharacter : public AArmyMenCharacter
 {
 	GENERATED_BODY()
 
+public:
+	AArmyMenPlayerCharacter();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -23,6 +26,9 @@ public:
 	virtual void Reset() override;
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UStaticMeshComponent* SilencerMesh;
+
 	class AArmyMenPlayerController* PlayerController;
 
 	virtual void Kill() override;

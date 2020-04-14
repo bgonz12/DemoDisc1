@@ -4,28 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "PlatformerCharacterController.generated.h"
+#include "EndGamePlayerCharacterController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class DEMODISC1_API APlatformerCharacterController : public APlayerController
+class DEMODISC1_API AEndGamePlayerCharacterController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
 public:
-	APlatformerCharacterController();
+	AEndGamePlayerCharacterController();
 
 protected:
 	virtual void BeginPlay() override;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class UUserWidget> PlatformerUIClass;
+	TSubclassOf<class UUserWidget> EndGameUIClass;
 
-	class UPlatformerUI* PlatformerUI;
+	class UEndGameUI* EndGameUI;
 
 public:
-	class UPlatformerUI* GetPlatformerUI();
+	class UEndGameUI* GetEndGameUI();
 };

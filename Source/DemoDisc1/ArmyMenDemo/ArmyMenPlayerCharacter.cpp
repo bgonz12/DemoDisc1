@@ -4,12 +4,19 @@
 #include "ArmyMenPlayerCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
 #include "ArmyMenPlayerController.h"
 #include "ArmyMenGameModeBase.h"
+
+AArmyMenPlayerCharacter::AArmyMenPlayerCharacter()
+{
+	SilencerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SilencerMesh"));
+	SilencerMesh->SetupAttachment(GetMesh(), FName("AttachmentSocket"));
+}
 
 void AArmyMenPlayerCharacter::BeginPlay()
 {
