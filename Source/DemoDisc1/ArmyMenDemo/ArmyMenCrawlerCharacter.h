@@ -79,6 +79,16 @@ protected:
 
 	float AttackTimer;
 
+	FTimerHandle ToggleCanMoveTimerHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	float MoveToggleRate;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Movement)
+	bool bCanMove;
+
+	void ToggleCanMove();
+
 	virtual void Kill();
 
 	UFUNCTION(BlueprintImplementableEvent)

@@ -23,6 +23,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class AArmyMenCrawlerCharacter> CrawlerClass;
 
+	UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
+	FVector CrawlerSpawnLocation;
+
 	virtual void Kill() override;
 	
 	UFUNCTION()

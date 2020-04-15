@@ -37,7 +37,7 @@ void AArmyMenZombieSoldier::SpawnCrawler()
 
 	if (!CrawlerClass) return;
 
-	FVector SpawnLocation = GetActorLocation();
+	FVector SpawnLocation = GetActorLocation() + CrawlerSpawnLocation;
 	FRotator SpawnRotation = GetActorRotation();
 
 	FActorSpawnParameters SpawnParams;

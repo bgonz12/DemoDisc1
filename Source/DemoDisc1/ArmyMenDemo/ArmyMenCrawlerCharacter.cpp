@@ -46,7 +46,11 @@ AArmyMenCrawlerCharacter::AArmyMenCrawlerCharacter()
 	AttackRange = 100.0f;
 	AttackWidth = 100.0f;
 
-	VisionDistance = 2000.0f;
+	bCanMove = false;
+
+	MoveToggleRate = 0.4f;
+
+	VisionDistance = 500.0f;
 
 	TurnRate = 90.0f;
 }
@@ -61,6 +65,15 @@ void AArmyMenCrawlerCharacter::BeginPlay()
 	bIsDead = false;
 
 	RespawnTransform = GetActorTransform();
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	World->GetTimerManager().ClearTimer(ToggleCanMoveTimerHandle);
+
+	bCanMove = true;
+	//World->GetTimerManager().SetTimer(ToggleCanMoveTimerHandle, this, &AArmyMenCrawlerCharacter::ToggleCanMove, MoveToggleRate, true);
+
 }
 
 // Called every frame
@@ -96,6 +109,12 @@ void AArmyMenCrawlerCharacter::Reset()
 	SetActorTransform(RespawnTransform);
 }
 
+void AArmyMenCrawlerCharacter::ToggleCanMove()
+{
+	bCanMove = !bCanMove;
+}
+
+
 void AArmyMenCrawlerCharacter::Kill()
 {
 	if (bIsDead) return;
@@ -121,7 +140,7 @@ void AArmyMenCrawlerCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 void AArmyMenCrawlerCharacter::MoveForward(float Value)
 {
-	if (Value != 0.0f)
+	if (Value != 0.0f && bCanMove)
 	{
 		// get forward vector
 		const FVector Direction = GetActorForwardVector();
@@ -131,7 +150,7 @@ void AArmyMenCrawlerCharacter::MoveForward(float Value)
 
 void AArmyMenCrawlerCharacter::TurnRight(float Value)
 {
-	if (Value != 0.0f)
+	if (Value != 0.0f && bCanMove)
 	{
 		float YawInput = Value * TurnRate * GetWorld()->GetDeltaSeconds();
 
