@@ -4,23 +4,25 @@
 #include "ArmyMenPlayerCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
 #include "ArmyMenPlayerController.h"
 #include "ArmyMenGameModeBase.h"
+#include "DemoDisc1/SpookySwapStaticMeshComponent.h"
 
 AArmyMenPlayerCharacter::AArmyMenPlayerCharacter()
 {
-	SilencerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SilencerMesh"));
-	SilencerMesh->SetupAttachment(GetMesh(), FName("AttachmentSocket"));
+	SilencerMesh = CreateDefaultSubobject<USpookySwapStaticMeshComponent>(TEXT("SilencerMesh"));
+	SilencerMesh->SetupAttachment(GetMesh(), FName("SilencerSocket"));
 }
 
 void AArmyMenPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SilencerMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("SilencerSocket"));
 
 	AController* MyController = GetController();
 	if (!MyController) return;

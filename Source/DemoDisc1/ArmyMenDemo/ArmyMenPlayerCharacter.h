@@ -27,7 +27,7 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class UStaticMeshComponent* SilencerMesh;
+	class USpookySwapStaticMeshComponent* SilencerMesh;
 
 	class AArmyMenPlayerController* PlayerController;
 
