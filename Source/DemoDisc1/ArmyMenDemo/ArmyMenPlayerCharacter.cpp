@@ -78,13 +78,6 @@ void AArmyMenPlayerCharacter::Kill()
 	if (PlayerController)
 	{
 		DisableInput(PlayerController);
-
-		/*UPlatformerUI* PlatformerUI = PlayerController->GetPlatformerUI();
-
-		if (PlatformerUI)
-		{
-			PlatformerUI->PlayCurtainFadeOut();
-		}*/
 	}
 
 	GetMesh()->SetVisibility(false);

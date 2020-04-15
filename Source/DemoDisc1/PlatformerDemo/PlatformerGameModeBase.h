@@ -8,6 +8,8 @@
 
 DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(FCollectibleCountUpdatedSignature, APlatformerGameModeBase, OnCollectibleCountUpdated, int, Value);
 
+DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE(FPlayerDeathSignature, APlatformerGameModeBase, OnPlayerDeath);
+
 /**
  * 
  */
@@ -21,6 +23,8 @@ protected:
 
 public:
 	FCollectibleCountUpdatedSignature OnCollectibleCountUpdated;
+
+	FPlayerDeathSignature OnPlayerDeath;
 
 protected:
 	FTimerHandle LoadCheckpointTimerHandle;

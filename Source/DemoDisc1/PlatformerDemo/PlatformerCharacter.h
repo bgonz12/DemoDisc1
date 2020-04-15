@@ -7,7 +7,7 @@
 #include "PlatformerCharacter.generated.h"
 
 UENUM(BlueprintType)
-enum class DeathAnimationType : uint8 {
+enum class EDeathAnimationType : uint8 {
 	DROWN UMETA(DisplayName = "Drown"),
 	FALL UMETA(DisaplayName = "Fall"),
 	SPOOKY_LADY UMETA(DisaplayName = "Spooky Lady"),
@@ -72,7 +72,7 @@ protected:
 	/** Class Member Functions **/
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void PlayPlayerDeathAnimation(DeathAnimationType AnimType);
+	void PlayPlayerDeathAnimation(EDeathAnimationType AnimType);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ResetPlayerDeathAnimation();
@@ -104,7 +104,7 @@ protected:
 	// End of APawn interface
 
 public:
-	void KillPlayer(DeathAnimationType AnimType);
+	void KillPlayer(EDeathAnimationType AnimType);
 
 	/** GETTERS **/
 

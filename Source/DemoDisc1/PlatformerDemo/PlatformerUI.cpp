@@ -12,7 +12,7 @@ bool UPlatformerUI::Initialize()
 {
 	if(!Super::Initialize()) return false;
 
-	PlayCurtainFadeIn();
+	PlayCurtainFadeIn(0.0f);
 
 	PlayShowCollectables();
 

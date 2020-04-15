@@ -26,10 +26,10 @@ protected:
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-	void PlayCurtainFadeIn();
+	void PlayCurtainFadeIn(float Delay);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void PlayCurtainFadeOut();
+	void PlayCurtainFadeOut(float Delay);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayShowCollectables();

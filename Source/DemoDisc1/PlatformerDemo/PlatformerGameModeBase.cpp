@@ -21,6 +21,8 @@ void APlatformerGameModeBase::TriggerLoadLastCheckpoint(float Delay)
 
 	bLoadingCheckpoint = true;
 
+	OnPlayerDeath.Broadcast();
+
 	UWorld* World = GetWorld();
 	if (!World) return;
 

@@ -4,8 +4,6 @@
 #include "PlatformerKillBox.h"
 #include "Components/BoxComponent.h"
 
-#include "PlatformerCharacter.h"
-
 // Sets default values
 APlatformerKillBox::APlatformerKillBox()
 {
@@ -14,6 +12,8 @@ APlatformerKillBox::APlatformerKillBox()
 
 	KillBoxTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("KillBoxTrigger"));
 	SetRootComponent(KillBoxTrigger);
+
+	DeathAnimationType = EDeathAnimationType::FALL;
 }
 
 // Called when the game starts or when spawned
@@ -30,7 +30,7 @@ void APlatformerKillBox::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent
 
 	if (PlayerCharacter)
 	{
-		PlayerCharacter->KillPlayer(DeathAnimationType::FALL);
+		PlayerCharacter->KillPlayer(DeathAnimationType);
 	}
 }
 

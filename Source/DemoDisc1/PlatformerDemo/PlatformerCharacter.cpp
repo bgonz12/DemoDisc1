@@ -99,7 +99,7 @@ void APlatformerCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAxis("LookUp", this, &APlatformerCharacter::LookUp);
 }
 
-void APlatformerCharacter::KillPlayer(DeathAnimationType AnimType)
+void APlatformerCharacter::KillPlayer(EDeathAnimationType AnimType)
 {
 	if (bIsDead) return;
 
@@ -113,7 +113,7 @@ void APlatformerCharacter::KillPlayer(DeathAnimationType AnimType)
 
 		if (PlatformerUI)
 		{
-			PlatformerUI->PlayCurtainFadeOut();
+			PlatformerUI->PlayCurtainFadeOut(2.0f);
 		}
 	}
 
@@ -152,7 +152,7 @@ void APlatformerCharacter::Reset()
 
 		if (PlatformerUI)
 		{
-			PlatformerUI->PlayCurtainFadeIn();
+			PlatformerUI->PlayCurtainFadeIn(1.0f);
 		}
 	}
 }

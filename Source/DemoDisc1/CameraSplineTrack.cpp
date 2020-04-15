@@ -7,8 +7,10 @@
 #include "GameFramework/PlayerController.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "DutchAngleCameraComponent.h"
+#include "PlatformerDemo/PlatformerGameModeBase.h"
 
 // Sets default values
 ACameraSplineTrack::ACameraSplineTrack()
@@ -30,14 +32,24 @@ ACameraSplineTrack::ACameraSplineTrack()
 	CameraContainer = CreateDefaultSubobject<USceneComponent>(TEXT("CameraContainer"));
 	CameraContainer->SetupAttachment(CameraBoom);
 
-	Camera = CreateDefaultSubobject<UDutchAngleCameraComponent>(TEXT("CameraFollow"));
+	Camera = CreateDefaultSubobject<UDutchAngleCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(CameraContainer);
+
+	SpookyHeadMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SpookyHeadMesh"));
+	SpookyHeadMesh->SetupAttachment(Camera);
+	SpookyHeadMesh->SetHiddenInGame(true);
+
+	JumpScareBlockScreen = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("JumpScareBlockScreen"));
+	JumpScareBlockScreen->SetupAttachment(Camera);
+	JumpScareBlockScreen->SetHiddenInGame(true);
 }
 
 // Called when the game starts or when spawned
 void ACameraSplineTrack::BeginPlay()
 {
 	Super::BeginPlay();
+
+	bHasPlayedJumpScare = false;
 
 	UWorld* World = GetWorld();
 	if (!World) return;
@@ -51,6 +63,14 @@ void ACameraSplineTrack::BeginPlay()
 	{
 		TargetActor = PlayerController->GetPawn();
 	}
+
+	AGameModeBase* GameMode = UGameplayStatics::GetGameMode(World);
+	if (!GameMode) return;
+
+	APlatformerGameModeBase* PlatformerGameMode = Cast<APlatformerGameModeBase>(GameMode);
+	if (!PlatformerGameMode) return;
+
+	PlatformerGameMode->OnPlayerDeath.AddDynamic(this, &ACameraSplineTrack::PlayJumpScareAnimation);
 }
 
 // Called every frame
@@ -70,9 +90,10 @@ void ACameraSplineTrack::Reset()
 {
 	Super::Reset();
 
+	SpookyHeadMesh->SetHiddenInGame(true);
+
 	if (PlayerController && PlayerController->GetViewTarget() != this)
 	{
 		PlayerController->SetViewTarget(this);
 	}
 }
-

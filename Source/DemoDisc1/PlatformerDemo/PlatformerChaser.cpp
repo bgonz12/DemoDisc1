@@ -198,11 +198,11 @@ void APlatformerChaser::BeginBoulderOverlap(UPrimitiveComponent * OverlappedComp
 	{
 		if (!SpookySwapComponent->GetIsSpooky())
 		{
-			Player->KillPlayer(DeathAnimationType::SQUISH);
+			Player->KillPlayer(EDeathAnimationType::SQUISH);
 		}
 		else
 		{
-			Player->KillPlayer(DeathAnimationType::SPOOKY_LADY);
+			Player->KillPlayer(EDeathAnimationType::SPOOKY_LADY);
 			bIsChasing = false;
 		}
 	}

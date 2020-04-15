@@ -44,6 +44,19 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 	class UDutchAngleCameraComponent* Camera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UStaticMeshComponent* SpookyHeadMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UStaticMeshComponent* JumpScareBlockScreen;
+
 	UPROPERTY(VisibleAnywhere)
 	class USplineComponent* SplineComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bHasPlayedJumpScare;
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayJumpScareAnimation();
 };
