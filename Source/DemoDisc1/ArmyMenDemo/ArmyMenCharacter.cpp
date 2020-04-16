@@ -9,7 +9,9 @@
 #include "Engine/World.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Sound/SoundCue.h"
 
 #include "ArmyMenProjectile.h"
 #include "DemoDisc1/DutchAngleCameraComponent.h"
@@ -254,7 +256,13 @@ void AArmyMenCharacter::Fire()
 		MyCapsuleComponent->IgnoreActorWhenMoving(Projectile, true);
 	}
 
+	// Animation and Effects
 	PlayFireAnimation();
+
+	if (NormalShootSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(World, NormalShootSound, SpawnLocation);
+	}
 
 	FireTimer = 1.0f / FireRate;
 }

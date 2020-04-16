@@ -63,7 +63,7 @@ protected:
 	UAnimMontage* CharacterShootMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
-	UAnimMontage* GunShootMontage;
+	class USoundCue* NormalShootSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	TSubclassOf<class AArmyMenProjectile> ProjectileClass;
