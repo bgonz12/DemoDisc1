@@ -56,11 +56,6 @@ void AArmyMenCrawlerAIController::TickAttacking()
 	if (PlayerDistance > ArmyMenCrawlerCharacter->GetAttackRange())
 	{
 		ArmyMenCrawlerCharacter->MoveForward(1.0f);
-
-	}
-	else
-	{
-		ArmyMenCrawlerCharacter->Attack();
 	}
 }
 
@@ -106,6 +101,7 @@ void AArmyMenCrawlerAIController::TickIdle()
 			if (OutHit.GetActor() == PlayerPawn)
 			{
 				ChangeState(EArmyMenEnemyState::ATTACKING);
+				ArmyMenCrawlerCharacter->StartChase();
 			}
 		}
 	}
@@ -122,6 +118,7 @@ void AArmyMenCrawlerAIController::NotifyTakeDamage()
 		break;
 	case EArmyMenEnemyState::IDLE:
 		ChangeState(EArmyMenEnemyState::ATTACKING);
+		ArmyMenCrawlerCharacter->StartChase();
 		break;
 	default:
 		break;

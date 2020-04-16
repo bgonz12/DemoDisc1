@@ -79,6 +79,9 @@ protected:
 
 	float AttackTimer;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bIsChasing;
+
 	FTimerHandle ToggleCanMoveTimerHandle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
@@ -98,19 +101,21 @@ protected:
 	void ResetDeathAnimation();
 
 public:
+	void StartChase();
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
-	void Attack();
-
 	/**
 	 * Called via input to turn at a given rate.
 	 * @param Value	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	 */
 	void TurnRight(float Value);
+
+	void Attack();
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 

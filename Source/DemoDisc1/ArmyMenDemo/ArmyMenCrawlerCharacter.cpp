@@ -43,12 +43,13 @@ AArmyMenCrawlerCharacter::AArmyMenCrawlerCharacter()
 
 	AttackDamage = 3;
 	AttackRate = 2.0f;
-	AttackRange = 100.0f;
-	AttackWidth = 100.0f;
+	AttackRange = 150.0f;
+	AttackWidth = 125.0f;
 
+	bIsChasing = false;
+
+	MoveToggleRate = 0.5f;
 	bCanMove = false;
-
-	MoveToggleRate = 0.4f;
 
 	VisionDistance = 500.0f;
 
@@ -70,10 +71,6 @@ void AArmyMenCrawlerCharacter::BeginPlay()
 	if (!World) return;
 
 	World->GetTimerManager().ClearTimer(ToggleCanMoveTimerHandle);
-
-	bCanMove = true;
-	//World->GetTimerManager().SetTimer(ToggleCanMoveTimerHandle, this, &AArmyMenCrawlerCharacter::ToggleCanMove, MoveToggleRate, true);
-
 }
 
 // Called every frame
@@ -112,6 +109,11 @@ void AArmyMenCrawlerCharacter::Reset()
 void AArmyMenCrawlerCharacter::ToggleCanMove()
 {
 	bCanMove = !bCanMove;
+
+	if (!bCanMove)
+	{
+		Attack();
+	}
 }
 
 
@@ -121,10 +123,26 @@ void AArmyMenCrawlerCharacter::Kill()
 
 	bIsDead = true;
 
+	bIsChasing = false;
+
 	PlayDeathAnimation();
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCapsuleComponent()->SetSimulatePhysics(false);
+}
+
+void AArmyMenCrawlerCharacter::StartChase()
+{
+
+	bIsChasing = true;
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	World->GetTimerManager().ClearTimer(ToggleCanMoveTimerHandle);
+
+	World->GetTimerManager().SetTimer(ToggleCanMoveTimerHandle, this, &AArmyMenCrawlerCharacter::ToggleCanMove, MoveToggleRate, true);
+
 }
 
 // Called to bind functionality to input
@@ -187,7 +205,7 @@ void AArmyMenCrawlerCharacter::Attack()
 		TraceChannel,
 		false,
 		ActorsToIgnore,
-		EDrawDebugTrace::ForDuration,
+		EDrawDebugTrace::None,
 		OutHit,
 		false)
 	)
