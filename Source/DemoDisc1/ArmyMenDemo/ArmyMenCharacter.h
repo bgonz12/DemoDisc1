@@ -82,13 +82,16 @@ protected:
 	float AimRange;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
-	float AimSphereRadius;
+	float AimBoxWidth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
+	float AimBoxHeight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
 	float AimAccuracy;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
-	bool bDrawDebugAimSphere;
+	bool bDrawDebugAimBox;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
 	bool bDrawDebugAimLine;

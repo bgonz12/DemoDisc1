@@ -55,7 +55,8 @@ AArmyMenCharacter::AArmyMenCharacter()
 
 	AimTraceTypeQuery = ETraceTypeQuery::TraceTypeQuery4;
 	AimRange = 3000.0f;
-	AimSphereRadius = 300.0f;
+	AimBoxWidth = 500.0f;
+	AimBoxHeight = 500.0f;
 	AimAccuracy = 1.0f;
 }
 
@@ -86,26 +87,37 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 	UWorld* World = GetWorld();
 	if (!World) return;
 
-	FVector TraceStart = GetActorLocation() + GetActorForwardVector() * (AimSphereRadius + 100.0f);
-	FVector TraceEnd = GetActorLocation() + GetActorForwardVector() * AimRange;
+	FVector StartPosition = GetActorLocation() + GetActorForwardVector() * 100.0f;
+	FVector EndPosition = GetActorLocation() + GetActorForwardVector() * AimRange;
+	FVector BoxExtents = FVector(100.0f / 2.0f, AimBoxWidth, AimBoxHeight) / 2.0f;
+	FRotator Orientation = GetActorRotation();
+
+	EDrawDebugTrace::Type DrawDebugBoxTrace = EDrawDebugTrace::None;
+	if (bDrawDebugAimBox)
+	{
+		DrawDebugBoxTrace = EDrawDebugTrace::ForOneFrame;
+	}
 
 	TArray<AActor *> ActorsToIgnore;
 	ActorsToIgnore.Add(this);
 
-	EDrawDebugTrace::Type DrawDebugSphereTrace = EDrawDebugTrace::None;
-	if (bDrawDebugAimSphere)
-	{
-		 DrawDebugSphereTrace = EDrawDebugTrace::ForOneFrame;
-	}
+	FHitResult OutHitBox;
 
-	FHitResult OutHitSphere;
-
-	if (UKismetSystemLibrary::SphereTraceSingle(World, TraceStart, TraceEnd, AimSphereRadius, 
-												AimTraceTypeQuery, false, ActorsToIgnore,
-												DrawDebugSphereTrace, OutHitSphere, true)
+	if (UKismetSystemLibrary::BoxTraceSingle(
+		World,
+		StartPosition,
+		EndPosition,
+		BoxExtents,
+		Orientation,
+		AimTraceTypeQuery,
+		false,
+		ActorsToIgnore,
+		DrawDebugBoxTrace,
+		OutHitBox,
+		false)
 	)
 	{
-		if(OutHitSphere.GetActor() != AimTarget)
+		if(OutHitBox.GetActor() != AimTarget)
 		{
 			// Switch potential target
 			AimTarget = nullptr;
@@ -120,12 +132,12 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 		FHitResult OutHitLine;
 
 		if (UKismetSystemLibrary::LineTraceSingle(World, CharacterCamera->GetComponentLocation(),
-												  OutHitSphere.GetActor()->GetActorLocation(),
+												  OutHitBox.GetActor()->GetActorLocation(),
 												  ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore,
 												  DrawDebugLineTrace, OutHitLine, true)
 		)
 		{
-			if (OutHitLine.GetActor() == OutHitSphere.GetActor())
+			if (OutHitLine.GetActor() == OutHitBox.GetActor())
 			{
 				AimTarget = OutHitLine.GetActor();
 			}

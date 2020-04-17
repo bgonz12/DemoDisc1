@@ -13,7 +13,8 @@ AArmyMenEnemy::AArmyMenEnemy()
 
 	AimTraceTypeQuery = ETraceTypeQuery::TraceTypeQuery3; // Player
 
-	AimSphereRadius = 200.0f;
+	AimBoxWidth = 200.0f;
+	AimBoxHeight = 500.0f;
 
 	VisionDistance = 2000.0f;
 }

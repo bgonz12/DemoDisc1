@@ -64,8 +64,6 @@ void AArmyMenPlayerCharacter::Reset()
 		EnableInput(PlayerController);
 	}
 
-	GetMesh()->SetVisibility(true);
-
 	Super::Reset();
 }
 
@@ -79,8 +77,6 @@ void AArmyMenPlayerCharacter::Kill()
 	{
 		DisableInput(PlayerController);
 	}
-
-	GetMesh()->SetVisibility(false);
 
 	UWorld* World = GetWorld();
 	if (!World) return;
