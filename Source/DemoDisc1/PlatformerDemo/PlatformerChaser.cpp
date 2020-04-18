@@ -130,6 +130,8 @@ void APlatformerChaser::Tick(float DeltaTime)
 
 void APlatformerChaser::StartChasing()
 {
+	OnChaseStart.Broadcast();
+
 	bIsChasing = true;
 	this->PlayStartAnimation();
 }

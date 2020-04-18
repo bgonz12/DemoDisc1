@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "PlatformerChaser.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE(FChaseStartSignature, APlatformerChaser, OnChaseStart);
+
+
 UCLASS()
 class DEMODISC1_API APlatformerChaser : public AActor
 {
@@ -14,6 +17,8 @@ class DEMODISC1_API APlatformerChaser : public AActor
 public:	
 	// Sets default values for this actor's properties
 	APlatformerChaser();
+
+	FChaseStartSignature OnChaseStart;
 
 protected:
 	// Called when the game starts or when spawned
