@@ -15,7 +15,7 @@ void APlatformerCharacterController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetInputMode(FInputModeGameAndUI());
+	SetInputMode(FInputModeGameOnly());
 	bShowMouseCursor = false;
 
 	if (PlatformerUIClass)

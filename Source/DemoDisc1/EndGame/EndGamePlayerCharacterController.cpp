@@ -14,7 +14,9 @@ void AEndGamePlayerCharacterController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetInputMode(FInputModeGameAndUI());
+	FInputModeGameOnly InputMode;
+	SetInputMode(InputMode);
+
 	bShowMouseCursor = false;
 
 	if (EndGameUIClass)

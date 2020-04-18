@@ -28,9 +28,6 @@ AEndGamePlayerCharacter::AEndGamePlayerCharacter()
 void AEndGamePlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UE_LOG(LogTemp, Warning, TEXT("FUCK"));
-	
 }
 
 // Called to bind functionality to input

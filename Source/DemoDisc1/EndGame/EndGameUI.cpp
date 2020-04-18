@@ -5,9 +5,9 @@
 
 bool UEndGameUI::Initialize()
 {
-	if(!Super::Initialize()) return false;
+	if (!Super::Initialize()) return false;
 
-	PlayFadeInAnimation(0.0f);
+	PlayCurtainFadeIn(0.0f);
 
 	return true;
 }
