@@ -54,5 +54,11 @@ void AEndGameGameModeBase::EndGame()
 {
 	OnEndGame.Broadcast();
 
-	FGenericPlatformMisc::RequestExit(false);
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	APlayerController* FirstPlayerController = World->GetFirstPlayerController();
+	if (!FirstPlayerController) return;
+
+	UKismetSystemLibrary::QuitGame(World, FirstPlayerController, EQuitPreference::Quit, false);
 }
