@@ -28,6 +28,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FirstPersonCameraComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UAudioComponent* PTSDAudio;
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseTurnRate;
@@ -43,4 +46,16 @@ protected:
 	void Turn(float Rate);
 
 	void LookUp(float Rate);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PhaseOneAttack();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PhaseTwoAttack();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PhaseThreeAttack();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void EndGame();
 };

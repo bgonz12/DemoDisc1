@@ -3,10 +3,14 @@
 
 #include "EndGamePlayerCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/AudioComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+
+#include "EndGameGameModeBase.h"
 
 // Sets default values
 AEndGamePlayerCharacter::AEndGamePlayerCharacter()
@@ -22,12 +26,29 @@ AEndGamePlayerCharacter::AEndGamePlayerCharacter()
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+
+	PTSDAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("PTSDAudio"));
+	PTSDAudio->SetupAttachment(GetCapsuleComponent());
 }
 
 // Called when the game starts or when spawned
 void AEndGamePlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	AGameModeBase* GameMode = UGameplayStatics::GetGameMode(World);
+	if (!GameMode) return;
+
+	AEndGameGameModeBase* EndGameGameMode = Cast<AEndGameGameModeBase>(GameMode);
+	if (!EndGameGameMode) return;
+
+	EndGameGameMode->OnPhaseOneAttack.AddDynamic(this, &AEndGamePlayerCharacter::PhaseOneAttack);
+	EndGameGameMode->OnPhaseTwoAttack.AddDynamic(this, &AEndGamePlayerCharacter::PhaseTwoAttack);
+	EndGameGameMode->OnPhaseThreeAttack.AddDynamic(this, &AEndGamePlayerCharacter::PhaseThreeAttack);
+	EndGameGameMode->OnEndGame.AddDynamic(this, &AEndGamePlayerCharacter::EndGame);
 }
 
 // Called to bind functionality to input

@@ -17,6 +17,10 @@ class DEMODISC1_API UEndGameUI : public UUserWidget
 public:
 	virtual bool Initialize() override;
 
+protected:
+	UFUNCTION()
+	void PhaseThreeAttack();
+
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayCurtainFadeIn(float Delay);
