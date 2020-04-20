@@ -276,6 +276,11 @@ void AArmyMenCharacter::Fire()
 		UGameplayStatics::PlaySoundAtLocation(World, NormalShootSound, SpawnLocation);
 	}
 
+	if (SpookyShootSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(World, SpookyShootSound, SpawnLocation);
+	}
+
 	FireTimer = 1.0f / FireRate;
 }
 

@@ -66,6 +66,9 @@ protected:
 	class USoundCue* NormalShootSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	class USoundCue* SpookyShootSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	TSubclassOf<class AArmyMenProjectile> ProjectileClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)

@@ -31,7 +31,7 @@ void UDemoDisc1GameInstance::TriggerSpookyTransition()
 
 	if (SpookySoundMix)
 	{
-		UGameplayStatics::PushSoundMixModifier(World, SpookySoundMix);
+		UGameplayStatics::SetBaseSoundMix(World, SpookySoundMix);
 	}
 
 	UMaterialParameterCollectionInstance* inst;
