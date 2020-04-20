@@ -2,6 +2,7 @@
 
 
 #include "PlatformerChaser.h"
+#include "Components/AudioComponent.h"
 #include "Components/SplineComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
@@ -28,6 +29,9 @@ APlatformerChaser::APlatformerChaser()
 
 	BoulderMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BoulderMesh"));
 	BoulderMesh->SetupAttachment(ChaserContainer);
+
+	BoulderAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("BoulderAudio"));
+	BoulderAudio->SetupAttachment(BoulderMesh);
 
 	SpookyLadyContainer = CreateDefaultSubobject<USceneComponent>(TEXT("SpookyLadyContainer"));
 	SpookyLadyContainer->SetupAttachment(ChaserContainer);

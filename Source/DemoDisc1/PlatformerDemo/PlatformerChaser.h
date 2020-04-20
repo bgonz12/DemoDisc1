@@ -50,6 +50,9 @@ protected:
 	class UStaticMeshComponent* BoulderMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UAudioComponent* BoulderAudio;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class USceneComponent* SpookyLadyContainer;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
