@@ -4,25 +4,42 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "MainMenuGameModeInterface.h"
 #include "MainMenuGameModeBase.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE(FChangeLevelSignature, AMainMenuGameModeBase, OnChangeLevel);
 
 /**
  * 
  */
 UCLASS()
-class DEMODISC1_API AMainMenuGameModeBase : public AGameModeBase
+class DEMODISC1_API AMainMenuGameModeBase : public AGameModeBase, public IMainMenuGameModeInterface
 {
 	GENERATED_BODY()
 	
 protected:
 	virtual void StartPlay() override;
 
-protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundMix* SilenceFadeSlow;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class UUserWidget> MainMenuUIClass;
 
 	class UMainMenuUI* MainMenuUI;
 
+	FTimerHandle OpenLevelTimerHandle;
+
+	FName LevelToOpen;
+
+	void OpenLevel();
+
 public:
+	FChangeLevelSignature OnChangeLevel;
+
+	void ChangeLevel(FName LevelName) override;
+
+	void QuitGame() override;
+
 	class UMainMenuUI* GetMainMenuUI();
 };

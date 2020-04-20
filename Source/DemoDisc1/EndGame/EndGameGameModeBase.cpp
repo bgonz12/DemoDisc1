@@ -4,6 +4,7 @@
 #include "EndGameGameModeBase.h"
 #include "Engine/World.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 void AEndGameGameModeBase::StartPlay()
 {
@@ -45,6 +46,11 @@ void AEndGameGameModeBase::PhaseThreeAttack()
 
 	UWorld* World = GetWorld();
 	if (!World) return;
+
+	if (SilenceFadeSoundMix)
+	{
+		UGameplayStatics::PushSoundMixModifier(World, SilenceFadeSoundMix);
+	}
 
 	World->GetTimerManager().ClearTimer(EndGameTimerHandle);
 	World->GetTimerManager().SetTimer(EndGameTimerHandle, this, &AEndGameGameModeBase::EndGame, EndGameTriggerTime, false);

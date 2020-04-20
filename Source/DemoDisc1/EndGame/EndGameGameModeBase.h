@@ -36,6 +36,9 @@ protected:
 	FTimerHandle EndGameTimerHandle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundMix* SilenceFadeSoundMix;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float PhaseOneAttackTriggerTime = 15.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

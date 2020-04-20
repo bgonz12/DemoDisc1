@@ -18,6 +18,8 @@ public:
 	virtual bool Initialize() override;
 
 protected:
+	class IMainMenuGameModeInterface* MainMenuGameModeInterface;
+
 	UPROPERTY(meta = (BindWidget))
 	class UImage* PreviewImage;
 
@@ -68,5 +70,8 @@ protected:
 
 	UFUNCTION()
 	void Demo2ButtonUnhovered();
+
+public:
+	FORCEINLINE void SetMainMenuGameModeInterface(class IMainMenuGameModeInterface* NewMainMenuGameModeInterface) { MainMenuGameModeInterface = NewMainMenuGameModeInterface; }
 
 };

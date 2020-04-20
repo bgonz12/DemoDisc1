@@ -7,6 +7,8 @@
 #include "Components/Image.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "MainMenuGameModeInterface.h"
+
 bool UMainMenuUI::Initialize()
 {
 	if (!Super::Initialize()) return false;
@@ -26,10 +28,9 @@ bool UMainMenuUI::Initialize()
 
 void UMainMenuUI::Demo1ButtonPressed()
 {
-	UWorld* World = GetWorld();
-	if (!World) return;
+	if (!MainMenuGameModeInterface) return;
 
-	UGameplayStatics::OpenLevel(World, FName("PlatformerDemoLevel"));
+	MainMenuGameModeInterface->ChangeLevel(FName("PlatformerDemoLevel"));
 }
 
 void UMainMenuUI::Demo1ButtonHovered()
@@ -46,10 +47,9 @@ void UMainMenuUI::Demo1ButtonUnhovered()
 
 void UMainMenuUI::Demo2ButtonPressed()
 {
-	UWorld* World = GetWorld();
-	if (!World) return;
+	if (!MainMenuGameModeInterface) return;
 
-	UGameplayStatics::OpenLevel(World, FName("ArmyMenDemoLevel"));
+	MainMenuGameModeInterface->ChangeLevel(FName("ArmyMenDemoLevel"));
 }
 
 void UMainMenuUI::Demo2ButtonHovered()

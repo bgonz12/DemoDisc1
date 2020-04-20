@@ -3,6 +3,7 @@
 
 #include "DemoDisc1GameInstance.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 #include "Materials/MaterialParameterCollectionInstance.h"
 
 UDemoDisc1GameInstance::UDemoDisc1GameInstance()
@@ -27,6 +28,11 @@ void UDemoDisc1GameInstance::TriggerSpookyTransition()
 	
 	UWorld* World = GetWorld();
 	if (!World) return;
+
+	if (SpookySoundMix)
+	{
+		UGameplayStatics::PushSoundMixModifier(World, SpookySoundMix);
+	}
 
 	UMaterialParameterCollectionInstance* inst;
 	inst = World->GetParameterCollectionInstance(GlobalMaterialParamCollection);
