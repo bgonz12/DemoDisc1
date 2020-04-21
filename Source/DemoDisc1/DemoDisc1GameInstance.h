@@ -21,7 +21,12 @@ public:
 
 	FSpookyTransitionSignature OnSpookyTransition;
 
+	virtual void Init() override;
+
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundMix* NormalSoundMix;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USoundMix* SpookySoundMix;
 

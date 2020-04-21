@@ -13,6 +13,32 @@ UDemoDisc1GameInstance::UDemoDisc1GameInstance()
 	bHasSpookyTransitioned = false;
 }
 
+void UDemoDisc1GameInstance::Init()
+{
+	Super::Init();
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	if (bHasSpookyTransitioned)
+	{
+		if (SpookySoundMix)
+		{
+			UGameplayStatics::ClearSoundMixModifiers(World);
+			UGameplayStatics::PushSoundMixModifier(World, SpookySoundMix);
+		}
+	}
+	else
+	{
+		if (NormalSoundMix)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("REEEE"));
+			UGameplayStatics::ClearSoundMixModifiers(World);
+			UGameplayStatics::PushSoundMixModifier(World, NormalSoundMix);
+		}
+	}
+}
+
 bool UDemoDisc1GameInstance::GetIsTransitionTime()
 {
 	return !bHasSpookyTransitioned && SpookyLevel >= SpookyLevelToTransition;
@@ -31,7 +57,8 @@ void UDemoDisc1GameInstance::TriggerSpookyTransition()
 
 	if (SpookySoundMix)
 	{
-		UGameplayStatics::SetBaseSoundMix(World, SpookySoundMix);
+		UGameplayStatics::ClearSoundMixModifiers(World);
+		UGameplayStatics::PushSoundMixModifier(World, SpookySoundMix);
 	}
 
 	UMaterialParameterCollectionInstance* inst;
