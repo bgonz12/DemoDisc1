@@ -70,7 +70,7 @@ void ACameraSplineTrack::BeginPlay()
 	APlatformerGameModeBase* PlatformerGameMode = Cast<APlatformerGameModeBase>(GameMode);
 	if (!PlatformerGameMode) return;
 
-	PlatformerGameMode->OnPlayerDeath.AddDynamic(this, &ACameraSplineTrack::PlayJumpScareAnimation);
+	PlatformerGameMode->OnLoadCheckpointTriggered.AddDynamic(this, &ACameraSplineTrack::PlayJumpScareAnimation);
 }
 
 // Called every frame

@@ -45,6 +45,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* CharacterCamera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UStaticMeshComponent* DropShadowMesh;
+
 	UPROPERTY()
 	class APlatformerCharacterController* PlayerController;
 

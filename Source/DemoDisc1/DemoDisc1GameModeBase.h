@@ -6,7 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "DemoDisc1GameModeBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE(FPlayerDeathSignature, ADemoDisc1GameModeBase, OnPlayerDeath);
+DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE(FLoadCheckpointTriggeredSignature, ADemoDisc1GameModeBase, OnLoadCheckpointTriggered);
 
 /**
  * 
@@ -21,7 +21,7 @@ protected:
 	virtual void StartPlay() override;
 
 public:
-	FPlayerDeathSignature OnPlayerDeath;
+	FLoadCheckpointTriggeredSignature OnLoadCheckpointTriggered;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -35,8 +35,8 @@ protected:
 	bool bLoadingCheckpoint;
 
 	UFUNCTION()
-	void LoadLastCheckpoint();
+	void LoadCheckpoint();
 
 public:
-	void TriggerLoadLastCheckpoint(float Delay = 0.0f);
+	void TriggerLoadCheckpoint(float Delay = 0.0f);
 };

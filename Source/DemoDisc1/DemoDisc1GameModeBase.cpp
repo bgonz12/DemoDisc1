@@ -40,23 +40,7 @@ void ADemoDisc1GameModeBase::StartPlay()
 	}
 }
 
-void ADemoDisc1GameModeBase::TriggerLoadLastCheckpoint(float Delay)
-{
-	if (bLoadingCheckpoint) return;
-
-	bLoadingCheckpoint = true;
-
-	OnPlayerDeath.Broadcast();
-
-	UWorld* World = GetWorld();
-	if (!World) return;
-
-	World->GetTimerManager().ClearTimer(LoadCheckpointTimerHandle);
-
-	World->GetTimerManager().SetTimer(LoadCheckpointTimerHandle, this, &ADemoDisc1GameModeBase::LoadLastCheckpoint, Delay, false);
-}
-
-void ADemoDisc1GameModeBase::LoadLastCheckpoint()
+void ADemoDisc1GameModeBase::LoadCheckpoint()
 {
 	bLoadingCheckpoint = false;
 
@@ -64,4 +48,20 @@ void ADemoDisc1GameModeBase::LoadLastCheckpoint()
 	if (World) World->GetTimerManager().ClearTimer(LoadCheckpointTimerHandle);
 
 	ResetLevel();
+}
+
+void ADemoDisc1GameModeBase::TriggerLoadCheckpoint(float Delay)
+{
+	if (bLoadingCheckpoint) return;
+
+	bLoadingCheckpoint = true;
+
+	OnLoadCheckpointTriggered.Broadcast();
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	World->GetTimerManager().ClearTimer(LoadCheckpointTimerHandle);
+
+	World->GetTimerManager().SetTimer(LoadCheckpointTimerHandle, this, &ADemoDisc1GameModeBase::LoadCheckpoint, Delay, false);
 }

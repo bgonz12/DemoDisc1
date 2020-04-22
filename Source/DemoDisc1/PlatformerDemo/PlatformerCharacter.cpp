@@ -5,6 +5,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -49,6 +51,10 @@ APlatformerCharacter::APlatformerCharacter()
 	CharacterCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CharacterCamera"));
 	CharacterCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	CharacterCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	DropShadowMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DropShadowMesh"));
+	DropShadowMesh->SetupAttachment(GetMesh());
+	DropShadowMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	JumpGravity = 1.0f;
 	FallGravity = 2.5f;
@@ -128,7 +134,7 @@ void APlatformerCharacter::KillPlayer(EDeathAnimationType AnimType)
 	APlatformerGameModeBase* PlatformerGameMode = Cast<APlatformerGameModeBase>(GameMode);
 	if (!PlatformerGameMode) return;
 
-	PlatformerGameMode->TriggerLoadLastCheckpoint(3.0f);
+	PlatformerGameMode->TriggerLoadCheckpoint(3.0f);
 }
 
 void APlatformerCharacter::Reset()

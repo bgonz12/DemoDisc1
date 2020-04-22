@@ -87,5 +87,5 @@ void AArmyMenPlayerCharacter::Kill()
 	AArmyMenGameModeBase* PlatformerGameMode = Cast<AArmyMenGameModeBase>(GameMode);
 	if (!PlatformerGameMode) return;
 
-	PlatformerGameMode->TriggerLoadLastCheckpoint(4.0f);
+	PlatformerGameMode->TriggerLoadCheckpoint(4.0f);
 }

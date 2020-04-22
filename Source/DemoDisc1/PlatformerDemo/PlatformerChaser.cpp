@@ -180,7 +180,7 @@ void APlatformerChaser::Reset()
 
 	Super::Reset();
 
-	bIsChasing = false;
+	StopChasing();
 	DisableChaser();
 	ChaserContainer->SetWorldLocation(StartLocation);
 }
