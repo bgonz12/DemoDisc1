@@ -17,25 +17,23 @@ void UDemoDisc1GameInstance::Init()
 {
 	Super::Init();
 
-	UWorld* World = GetWorld();
+	/*UWorld* World = GetWorld();
 	if (!World) return;
 
-	if (bHasSpookyTransitioned)
+	if (!bHasSpookyTransitioned)
 	{
-		if (SpookySoundMix)
+		if (NormalSoundMix)
 		{
-			UGameplayStatics::ClearSoundMixModifiers(World);
-			UGameplayStatics::PushSoundMixModifier(World, SpookySoundMix);
+			UGameplayStatics::SetBaseSoundMix(World, NormalSoundMix);
 		}
 	}
 	else
 	{
-		if (NormalSoundMix)
+		if (SpookySoundMix)
 		{
-			UGameplayStatics::ClearSoundMixModifiers(World);
-			UGameplayStatics::PushSoundMixModifier(World, NormalSoundMix);
+			UGameplayStatics::SetBaseSoundMix(World, SpookySoundMix);
 		}
-	}
+	}*/
 }
 
 bool UDemoDisc1GameInstance::GetIsTransitionTime()
@@ -56,8 +54,7 @@ void UDemoDisc1GameInstance::TriggerSpookyTransition()
 
 	if (SpookySoundMix)
 	{
-		UGameplayStatics::ClearSoundMixModifiers(World);
-		UGameplayStatics::PushSoundMixModifier(World, SpookySoundMix);
+		UGameplayStatics::SetBaseSoundMix(World, SpookySoundMix);
 	}
 
 	UMaterialParameterCollectionInstance* inst;

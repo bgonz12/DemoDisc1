@@ -26,16 +26,14 @@ void ADemoDisc1GameModeBase::StartPlay()
 	{
 		if (NormalSoundMix)
 		{
-			UGameplayStatics::ClearSoundMixModifiers(World);
-			UGameplayStatics::PushSoundMixModifier(World, NormalSoundMix);
+			UGameplayStatics::SetBaseSoundMix(World, NormalSoundMix);
 		}
 	}
 	else
 	{
 		if (SpookySoundMix)
 		{
-			UGameplayStatics::ClearSoundMixModifiers(World);
-			UGameplayStatics::PushSoundMixModifier(World, SpookySoundMix);
+			UGameplayStatics::SetBaseSoundMix(World, SpookySoundMix);
 		}
 	}
 }
