@@ -3,30 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
+#include "DemoDisc1/DemoDisc1GameModeBase.h"
 #include "ArmyMenGameModeBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class DEMODISC1_API AArmyMenGameModeBase : public AGameModeBase
+class DEMODISC1_API AArmyMenGameModeBase : public ADemoDisc1GameModeBase
 {
 	GENERATED_BODY()
-	
-protected:
-	virtual void StartPlay() override;
-
-protected:
-	FTimerHandle LoadCheckpointTimerHandle;
-
-	bool bLoadingCheckpoint;
-
-	int CollectibleCount;
-
-	UFUNCTION()
-	void LoadLastCheckpoint();
-
-public:
-	void TriggerLoadLastCheckpoint(float Delay = 0.0f);
 };

@@ -32,7 +32,6 @@ void UDemoDisc1GameInstance::Init()
 	{
 		if (NormalSoundMix)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("REEEE"));
 			UGameplayStatics::ClearSoundMixModifiers(World);
 			UGameplayStatics::PushSoundMixModifier(World, NormalSoundMix);
 		}

@@ -3,43 +3,31 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
+#include "DemoDisc1/DemoDisc1GameModeBase.h"
 #include "PlatformerGameModeBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(FCollectibleCountUpdatedSignature, APlatformerGameModeBase, OnCollectibleCountUpdated, int, Value);
-
-DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE(FPlayerDeathSignature, APlatformerGameModeBase, OnPlayerDeath);
 
 /**
  * 
  */
 UCLASS()
-class DEMODISC1_API APlatformerGameModeBase : public AGameModeBase
+class DEMODISC1_API APlatformerGameModeBase : public ADemoDisc1GameModeBase
 {
 	GENERATED_BODY()
 
 protected:
 	virtual void StartPlay() override;
 
+	int CollectibleCount;
+
 public:
 	FCollectibleCountUpdatedSignature OnCollectibleCountUpdated;
 
-	FPlayerDeathSignature OnPlayerDeath;
-
-protected:
-	FTimerHandle LoadCheckpointTimerHandle;
-
-	bool bLoadingCheckpoint;
-
-	int CollectibleCount;
-
-	UFUNCTION()
-	void LoadLastCheckpoint();
-
-public:
-	void TriggerLoadLastCheckpoint(float DelayTimer = 0.0f);
-
-	void SetCollectibleCount(int Value);
-
+	
+	/** Getters **/
 	FORCEINLINE int GetCollectibleCount() { return CollectibleCount; };
+
+	/** Setters **/
+	void SetCollectibleCount(int Value);
 };

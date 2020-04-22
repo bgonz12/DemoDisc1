@@ -11,34 +11,6 @@ void APlatformerGameModeBase::StartPlay()
 	Super::StartPlay();
 
 	SetCollectibleCount(0);
-
-	bLoadingCheckpoint = false;
-}
-
-void APlatformerGameModeBase::TriggerLoadLastCheckpoint(float Delay)
-{
-	if (bLoadingCheckpoint) return;
-
-	bLoadingCheckpoint = true;
-
-	OnPlayerDeath.Broadcast();
-
-	UWorld* World = GetWorld();
-	if (!World) return;
-
-	World->GetTimerManager().ClearTimer(LoadCheckpointTimerHandle);
-
-	World->GetTimerManager().SetTimer(LoadCheckpointTimerHandle, this, &APlatformerGameModeBase::LoadLastCheckpoint, Delay, false);
-}
-
-void APlatformerGameModeBase::LoadLastCheckpoint()
-{
-	bLoadingCheckpoint = false;
-
-	UWorld* World = GetWorld();
-	if (World) World->GetTimerManager().ClearTimer(LoadCheckpointTimerHandle);
-
-	ResetLevel();
 }
 
 void APlatformerGameModeBase::SetCollectibleCount(int Value)
