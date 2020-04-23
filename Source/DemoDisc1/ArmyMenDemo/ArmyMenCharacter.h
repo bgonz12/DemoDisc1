@@ -39,6 +39,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UDutchAngleCameraComponent* CharacterCamera;
 
+	UPROPERTY(VisibleAnywhere, blueprintReadWrite)
+	class UArmyMenTargetComponent* TargetComponent;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class USceneComponent* MeshContainer;
 

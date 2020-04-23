@@ -26,6 +26,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class USceneComponent* MeshContainer;
 
+	UPROPERTY(VisibleAnywhere, blueprintReadWrite)
+	class UArmyMenTargetComponent* TargetComponent;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* StaticMesh;
 

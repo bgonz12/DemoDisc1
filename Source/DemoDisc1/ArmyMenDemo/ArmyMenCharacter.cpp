@@ -14,6 +14,7 @@
 #include "Sound/SoundCue.h"
 
 #include "ArmyMenProjectile.h"
+#include "ArmyMenTargetComponent.h"
 #include "DemoDisc1/DutchAngleCameraComponent.h"
 
 // Sets default values
@@ -35,6 +36,9 @@ AArmyMenCharacter::AArmyMenCharacter()
 	CharacterCamera = CreateDefaultSubobject<UDutchAngleCameraComponent>(TEXT("CharacterCamera"));
 	CharacterCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	CharacterCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	TargetComponent = CreateDefaultSubobject<UArmyMenTargetComponent>(TEXT("TargetComponent"));
+	TargetComponent->SetupAttachment(RootComponent);
 
 	MeshContainer = CreateDefaultSubobject<USceneComponent>(TEXT("MeshContainer"));
 	MeshContainer->SetupAttachment(GetCapsuleComponent());
@@ -123,6 +127,14 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 			AimTarget = nullptr;
 		}
 
+		FVector PotentialTargetLocation = OutHitBox.GetActor()->GetActorLocation();
+
+		UArmyMenTargetComponent* AimTargetComponent = Cast<UArmyMenTargetComponent>(OutHitBox.GetActor()->GetComponentByClass(UArmyMenTargetComponent::StaticClass()));
+		if (AimTargetComponent)
+		{
+			PotentialTargetLocation = AimTargetComponent->GetComponentLocation();
+		}
+
 		EDrawDebugTrace::Type DrawDebugLineTrace = EDrawDebugTrace::None;
 		if (bDrawDebugAimLine)
 		{
@@ -132,7 +144,7 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 		FHitResult OutHitLine;
 
 		if (UKismetSystemLibrary::LineTraceSingle(World, CharacterCamera->GetComponentLocation(),
-												  OutHitBox.GetActor()->GetActorLocation(),
+												  PotentialTargetLocation,
 												  ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore,
 												  DrawDebugLineTrace, OutHitLine, true)
 		)
@@ -140,6 +152,10 @@ void AArmyMenCharacter::Tick(float DeltaTime)
 			if (OutHitLine.GetActor() == OutHitBox.GetActor())
 			{
 				AimTarget = OutHitLine.GetActor();
+			}
+			else
+			{
+				AimTarget = nullptr;
 			}
 		}
 		else
@@ -249,7 +265,15 @@ void AArmyMenCharacter::Fire()
 	FRotator SpawnRotation;
 	if (AimTarget)
 	{
-		SpawnRotation = (AimTarget->GetActorLocation() - SpawnLocation).Rotation() + AccuracyModifier;
+		FVector AimTargetLocation = AimTarget->GetActorLocation();
+
+		UArmyMenTargetComponent* AimTargetComponent = Cast<UArmyMenTargetComponent>(AimTarget->GetComponentByClass(UArmyMenTargetComponent::StaticClass()));
+		if (AimTargetComponent)
+		{
+			AimTargetLocation = AimTargetComponent->GetComponentLocation();
+		}
+
+		SpawnRotation = (AimTargetLocation - SpawnLocation).Rotation() + AccuracyModifier;
 	}
 	else
 	{

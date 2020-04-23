@@ -7,6 +7,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+#include "ArmyMenTargetComponent.h"
+
 // Sets default values
 AArmyMenExplosiveBarrel::AArmyMenExplosiveBarrel()
 {
@@ -15,6 +17,9 @@ AArmyMenExplosiveBarrel::AArmyMenExplosiveBarrel()
 
 	MeshContainer = CreateDefaultSubobject<USceneComponent>(TEXT("MeshContainer"));
 	SetRootComponent(MeshContainer);
+
+	TargetComponent = CreateDefaultSubobject<UArmyMenTargetComponent>(TEXT("TargetComponent"));
+	TargetComponent->SetupAttachment(RootComponent);
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	StaticMesh->SetupAttachment(MeshContainer);
