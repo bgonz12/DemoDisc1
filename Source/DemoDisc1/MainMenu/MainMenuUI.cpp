@@ -7,7 +7,7 @@
 #include "Components/Image.h"
 #include "Kismet/GameplayStatics.h"
 
-#include "MainMenuGameModeInterface.h"
+#include "DemoDisc1/LevelTransitioner.h"
 
 bool UMainMenuUI::Initialize()
 {
@@ -28,9 +28,9 @@ bool UMainMenuUI::Initialize()
 
 void UMainMenuUI::Demo1ButtonPressed()
 {
-	if (!MainMenuGameModeInterface) return;
+	if (!MainMenuLevelTransitioner) return;
 
-	MainMenuGameModeInterface->ChangeLevel(FName("PlatformerDemoLevel"));
+	MainMenuLevelTransitioner->TransitionToLevel(FName("PlatformerDemoLevel"));
 }
 
 void UMainMenuUI::Demo1ButtonHovered()
@@ -47,9 +47,9 @@ void UMainMenuUI::Demo1ButtonUnhovered()
 
 void UMainMenuUI::Demo2ButtonPressed()
 {
-	if (!MainMenuGameModeInterface) return;
+	if (!MainMenuLevelTransitioner) return;
 
-	MainMenuGameModeInterface->ChangeLevel(FName("ArmyMenDemoLevel"));
+	MainMenuLevelTransitioner->TransitionToLevel(FName("ArmyMenDemoLevel"));
 }
 
 void UMainMenuUI::Demo2ButtonHovered()

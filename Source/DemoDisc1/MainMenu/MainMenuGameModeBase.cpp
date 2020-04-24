@@ -28,8 +28,10 @@ void AMainMenuGameModeBase::StartPlay()
 
 		if (MainMenuUI)
 		{
-			MainMenuUI->SetMainMenuGameModeInterface(this);
+			MainMenuUI->SetMainMenuLevelTransitioner(this);
 			MainMenuUI->AddToViewport();
+
+			MainMenuUI->PlayCurtainFadeIn(0.0f);
 		}
 	}
 }
@@ -44,11 +46,16 @@ void AMainMenuGameModeBase::OpenLevel()
 	UGameplayStatics::OpenLevel(World, LevelToOpen);
 }
 
-void AMainMenuGameModeBase::ChangeLevel(FName LevelName)
+void AMainMenuGameModeBase::TransitionToLevel(FName LevelName)
 {
 	LevelToOpen = LevelName;
 
 	OnChangeLevel.Broadcast();
+
+	if (MainMenuUI)
+	{
+		MainMenuUI->PlayCurtainFadeOut(0.0f);
+	}
 
 	UWorld* World = GetWorld();
 	if (!World) return;
@@ -61,7 +68,7 @@ void AMainMenuGameModeBase::ChangeLevel(FName LevelName)
 	World->GetTimerManager().SetTimer(OpenLevelTimerHandle, this, &AMainMenuGameModeBase::OpenLevel, 1.0f, false);
 }
 
-void AMainMenuGameModeBase::QuitGame()
+void AMainMenuGameModeBase::QuitLevel()
 {
 	// Check if game is in spooky mode
 	UWorld* World = GetWorld();

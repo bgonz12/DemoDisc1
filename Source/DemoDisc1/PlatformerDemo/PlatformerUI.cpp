@@ -26,6 +26,7 @@ bool UPlatformerUI::Initialize()
 	if (!PlatformerGameMode) return false;
 
 	PlatformerGameMode->OnCollectibleCountUpdated.AddDynamic(this, &UPlatformerUI::SetCollectibleCounter);
+	PlatformerGameMode->OnTransitionToLevel.AddDynamic(this, &UPlatformerUI::PlayEndLevelCurtainFadeOut);
 
 	return true;
 }

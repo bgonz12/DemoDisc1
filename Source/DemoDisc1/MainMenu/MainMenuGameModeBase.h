@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DemoDisc1/DemoDisc1GameModeBase.h"
-#include "MainMenuGameModeInterface.h"
+#include "DemoDisc1/LevelTransitioner.h"
 #include "MainMenuGameModeBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE(FChangeLevelSignature, AMainMenuGameModeBase, OnChangeLevel);
@@ -13,7 +13,7 @@ DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE(FChangeLevelSignature, AMainMenuGameMo
  * 
  */
 UCLASS()
-class DEMODISC1_API AMainMenuGameModeBase : public ADemoDisc1GameModeBase, public IMainMenuGameModeInterface
+class DEMODISC1_API AMainMenuGameModeBase : public ADemoDisc1GameModeBase, public ILevelTransitioner
 {
 	GENERATED_BODY()
 	
@@ -37,9 +37,9 @@ protected:
 public:
 	FChangeLevelSignature OnChangeLevel;
 
-	void ChangeLevel(FName LevelName) override;
+	void TransitionToLevel(FName LevelName) override;
 
-	void QuitGame() override;
+	void QuitLevel() override;
 
 	class UMainMenuUI* GetMainMenuUI();
 };

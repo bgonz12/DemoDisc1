@@ -18,7 +18,7 @@ public:
 	virtual bool Initialize() override;
 
 protected:
-	class IMainMenuGameModeInterface* MainMenuGameModeInterface;
+	class ILevelTransitioner* MainMenuLevelTransitioner;
 
 	UPROPERTY(meta = (BindWidget))
 	class UImage* PreviewImage;
@@ -72,6 +72,12 @@ protected:
 	void Demo2ButtonUnhovered();
 
 public:
-	FORCEINLINE void SetMainMenuGameModeInterface(class IMainMenuGameModeInterface* NewMainMenuGameModeInterface) { MainMenuGameModeInterface = NewMainMenuGameModeInterface; }
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayCurtainFadeIn(float Delay);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayCurtainFadeOut(float Delay);
+
+	FORCEINLINE void SetMainMenuLevelTransitioner(class ILevelTransitioner* NewMainMenuLevelTransitioner) { MainMenuLevelTransitioner = NewMainMenuLevelTransitioner; }
 
 };

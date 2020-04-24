@@ -13,29 +13,6 @@ UDemoDisc1GameInstance::UDemoDisc1GameInstance()
 	bHasSpookyTransitioned = false;
 }
 
-void UDemoDisc1GameInstance::Init()
-{
-	Super::Init();
-
-	/*UWorld* World = GetWorld();
-	if (!World) return;
-
-	if (!bHasSpookyTransitioned)
-	{
-		if (NormalSoundMix)
-		{
-			UGameplayStatics::SetBaseSoundMix(World, NormalSoundMix);
-		}
-	}
-	else
-	{
-		if (SpookySoundMix)
-		{
-			UGameplayStatics::SetBaseSoundMix(World, SpookySoundMix);
-		}
-	}*/
-}
-
 bool UDemoDisc1GameInstance::GetIsTransitionTime()
 {
 	return !bHasSpookyTransitioned && SpookyLevel >= SpookyLevelToTransition;

@@ -4,26 +4,26 @@
 
 #include "CoreMinimal.h"
 #include "Engine/TriggerBox.h"
-#include "ArmyMenEndLevelTrigger.generated.h"
+#include "EndLevelTriggerBox.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class DEMODISC1_API AArmyMenEndLevelTrigger : public ATriggerBox
+class DEMODISC1_API AEndLevelTriggerBox : public ATriggerBox
 {
 	GENERATED_BODY()
-
+	
 public:
 	// Sets default values for this actor's properties
-	AArmyMenEndLevelTrigger();
+	AEndLevelTriggerBox();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
-	FName MenuLevelName;
+	FName NextLevelName;
 
 	UFUNCTION()
 	void BeginOverlap(AActor * OverlappedActor, AActor * OtherActor);

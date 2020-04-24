@@ -32,6 +32,9 @@ public:
 	void PlayCurtainFadeOut(float Delay);
 
 	UFUNCTION(BlueprintImplementableEvent)
+	void PlayEndLevelCurtainFadeOut();
+
+	UFUNCTION(BlueprintImplementableEvent)
 	void PlayShowCollectables();
 
 	int GetCollectibleCounter();

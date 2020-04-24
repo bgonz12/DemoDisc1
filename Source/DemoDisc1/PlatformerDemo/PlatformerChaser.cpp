@@ -209,7 +209,7 @@ void APlatformerChaser::BeginBoulderOverlap(UPrimitiveComponent * OverlappedComp
 		else
 		{
 			Player->KillPlayer(EDeathAnimationType::SPOOKY_LADY);
-			bIsChasing = false;
+			StopChasing();
 		}
 	}
 }
