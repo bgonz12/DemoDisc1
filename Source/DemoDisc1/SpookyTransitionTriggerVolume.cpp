@@ -43,6 +43,11 @@ void ASpookyTransitionTriggerVolume::BeginOverlap(AActor * OverlappedActor, AAct
 	if (DD1GameInstance->GetIsTransitionTime())
 	{
 		DD1GameInstance->TriggerSpookyTransition();
+
+		if (TransitionSound)
+		{
+			UGameplayStatics::PlaySound2D(World, TransitionSound);
+		}
 	}
 }
 

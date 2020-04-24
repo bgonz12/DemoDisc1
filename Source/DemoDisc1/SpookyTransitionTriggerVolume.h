@@ -24,6 +24,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USoundBase* TransitionSound;
+
 	UFUNCTION()
 	void BeginOverlap(AActor* OverlappedActor, AActor* OtherActor );
 

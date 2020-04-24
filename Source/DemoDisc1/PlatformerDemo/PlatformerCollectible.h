@@ -30,6 +30,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UMaterialBillboardComponent* MaterialBillboardComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USoundBase* CollectSound;
+
 	UFUNCTION()
 	void BeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 };

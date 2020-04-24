@@ -51,6 +51,11 @@ void APlatformerCollectible::BeginOverlap(AActor* OverlappedActor, AActor* Other
 	APlatformerGameModeBase* PlatformerGameMode = Cast<APlatformerGameModeBase>(GameMode);
 	if (!PlatformerGameMode) return;
 
+	if (CollectSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(World, CollectSound, GetActorLocation());
+	}
+
 	PlatformerGameMode->SetCollectibleCount(PlatformerGameMode->GetCollectibleCount() + 1);
 
 	Destroy();
