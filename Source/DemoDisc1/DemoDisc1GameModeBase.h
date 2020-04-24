@@ -25,6 +25,9 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMaterialParameterCollection* GlobalMaterialParamCollection;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USoundMix* NormalSoundMix;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

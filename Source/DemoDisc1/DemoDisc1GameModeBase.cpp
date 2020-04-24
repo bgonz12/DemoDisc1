@@ -4,6 +4,7 @@
 #include "DemoDisc1GameModeBase.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
+#include "Materials/MaterialParameterCollectionInstance.h"
 
 #include "DemoDisc1GameInstance.h"
 
@@ -24,6 +25,12 @@ void ADemoDisc1GameModeBase::StartPlay()
 
 	if (!DD1GameInstance->GetHasSpookyTransitioned())
 	{
+		if (GlobalMaterialParamCollection)
+		{
+			UMaterialParameterCollectionInstance* Instance = World->GetParameterCollectionInstance(GlobalMaterialParamCollection);
+			Instance->SetScalarParameterValue(FName("SpookyLerp"), 0.0f);
+		}
+
 		if (NormalSoundMix)
 		{
 			UGameplayStatics::SetBaseSoundMix(World, NormalSoundMix);
@@ -31,6 +38,12 @@ void ADemoDisc1GameModeBase::StartPlay()
 	}
 	else
 	{
+		if (GlobalMaterialParamCollection)
+		{
+			UMaterialParameterCollectionInstance* Instance = World->GetParameterCollectionInstance(GlobalMaterialParamCollection);
+			Instance->SetScalarParameterValue(FName("SpookyLerp"), 1.0f);
+		}
+
 		if (SpookySoundMix)
 		{
 			UGameplayStatics::SetBaseSoundMix(World, SpookySoundMix);

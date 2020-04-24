@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
+#include "DemoDisc1/DemoDisc1GameModeBase.h"
 #include "MainMenuGameModeInterface.h"
 #include "MainMenuGameModeBase.generated.h"
 
@@ -13,7 +13,7 @@ DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE(FChangeLevelSignature, AMainMenuGameMo
  * 
  */
 UCLASS()
-class DEMODISC1_API AMainMenuGameModeBase : public AGameModeBase, public IMainMenuGameModeInterface
+class DEMODISC1_API AMainMenuGameModeBase : public ADemoDisc1GameModeBase, public IMainMenuGameModeInterface
 {
 	GENERATED_BODY()
 	
