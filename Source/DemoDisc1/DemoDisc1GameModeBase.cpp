@@ -51,6 +51,37 @@ void ADemoDisc1GameModeBase::StartPlay()
 	}
 }
 
+void ADemoDisc1GameModeBase::OpenLevel()
+{
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	World->GetTimerManager().ClearTimer(OpenLevelTimerHandle);
+
+	UGameplayStatics::OpenLevel(World, LevelToOpen);
+}
+
+void ADemoDisc1GameModeBase::TransitionToLevel(FName LevelName)
+{
+	LevelToOpen = LevelName;
+
+	OnTransitionToLevel.Broadcast();
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	if (LevelFadeOutSoundMix)
+	{
+		UGameplayStatics::PushSoundMixModifier(World, LevelFadeOutSoundMix);
+	}
+
+	World->GetTimerManager().SetTimer(OpenLevelTimerHandle, this, &ADemoDisc1GameModeBase::OpenLevel, LevelTransitionTime, false);
+}
+
+void ADemoDisc1GameModeBase::QuitLevel()
+{
+}
+
 void ADemoDisc1GameModeBase::LoadCheckpoint()
 {
 	bLoadingCheckpoint = false;

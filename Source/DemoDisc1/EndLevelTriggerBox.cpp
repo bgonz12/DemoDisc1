@@ -27,11 +27,18 @@ void AEndLevelTriggerBox::BeginOverlap(AActor * OverlappedActor, AActor * OtherA
 	if (!World) return;
 
 	AGameModeBase* GameMode = UGameplayStatics::GetGameMode(World);
-
-	if (!GameMode) UGameplayStatics::OpenLevel(World, NextLevelName);
+	if (!GameMode)
+	{
+		UGameplayStatics::OpenLevel(World, NextLevelName);
+		return;
+	}
 	
 	ILevelTransitioner* LevelTransitioner = Cast<ILevelTransitioner>(GameMode);
-	if(!LevelTransitioner) UGameplayStatics::OpenLevel(World, NextLevelName);
+	if (!LevelTransitioner)
+	{
+		UGameplayStatics::OpenLevel(World, NextLevelName);
+		return;
+	}
 
 	LevelTransitioner->TransitionToLevel(NextLevelName);
 }

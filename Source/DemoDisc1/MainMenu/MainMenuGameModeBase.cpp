@@ -36,36 +36,14 @@ void AMainMenuGameModeBase::StartPlay()
 	}
 }
 
-void AMainMenuGameModeBase::OpenLevel()
-{
-	UWorld* World = GetWorld();
-	if (!World) return;
-
-	World->GetTimerManager().ClearTimer(OpenLevelTimerHandle);
-
-	UGameplayStatics::OpenLevel(World, LevelToOpen);
-}
-
 void AMainMenuGameModeBase::TransitionToLevel(FName LevelName)
 {
-	LevelToOpen = LevelName;
-
-	OnChangeLevel.Broadcast();
+	Super::TransitionToLevel(LevelName);
 
 	if (MainMenuUI)
 	{
 		MainMenuUI->PlayCurtainFadeOut(0.0f);
 	}
-
-	UWorld* World = GetWorld();
-	if (!World) return;
-
-	if (SilenceFadeSlow)
-	{
-		UGameplayStatics::PushSoundMixModifier(World, SilenceFadeSlow);
-	}
-
-	World->GetTimerManager().SetTimer(OpenLevelTimerHandle, this, &AMainMenuGameModeBase::OpenLevel, 1.0f, false);
 }
 
 void AMainMenuGameModeBase::QuitLevel()

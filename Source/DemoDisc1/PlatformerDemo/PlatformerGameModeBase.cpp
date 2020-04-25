@@ -14,35 +14,9 @@ void APlatformerGameModeBase::StartPlay()
 	SetCollectibleCount(0);
 }
 
-void APlatformerGameModeBase::OpenLevel()
-{
-	UWorld* World = GetWorld();
-	if (!World) return;
-
-	World->GetTimerManager().ClearTimer(OpenLevelTimerHandle);
-
-	UGameplayStatics::OpenLevel(World, LevelToOpen);
-}
-
-void APlatformerGameModeBase::TransitionToLevel(FName LevelName)
-{
-	LevelToOpen = LevelName;
-
-	OnTransitionToLevel.Broadcast();
-
-	UWorld* World = GetWorld();
-	if (!World) return;
-
-	if (SilenceFadeSlow)
-	{
-		UGameplayStatics::PushSoundMixModifier(World, SilenceFadeSlow);
-	}
-
-	World->GetTimerManager().SetTimer(OpenLevelTimerHandle, this, &APlatformerGameModeBase::OpenLevel, 2.0f, false);
-}
-
 void APlatformerGameModeBase::QuitLevel()
 {
+	Super::QuitLevel();
 }
 
 void APlatformerGameModeBase::SetCollectibleCount(int Value)

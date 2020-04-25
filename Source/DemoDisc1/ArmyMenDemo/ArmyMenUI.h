@@ -41,10 +41,13 @@ protected:
 	void PlayTakeDamageAnimation();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void PlayFadeInAnimation(float Delay);
+	void PlayCurtainFadeIn(float Delay);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void PlayFadeOutAnimation(float Delay);
+	void PlayCurtainFadeOut(float Delay);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayEndLevelCurtainFadeOut();
 
 public:
 	UFUNCTION()

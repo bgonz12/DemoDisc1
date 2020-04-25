@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Materials/MaterialInstanceDynamic.h"
 
+#include "ArmyMenGameModeBase.h"
 #include "DemoDisc1/DemoDisc1GameInstance.h"
 
 bool UArmyMenUI::Initialize()
@@ -14,10 +15,11 @@ bool UArmyMenUI::Initialize()
 	if (!Super::Initialize()) return false;
 
 	DeathCurtain->SetBrushFromMaterial(DeathCurtainMaterial);
-
 	DeathCurtain->GetDynamicMaterial()->SetScalarParameterValue(FName("Cutoff"), 0.0f);
 
-	PlayFadeInAnimation(0.0f);
+	PlayCurtainFadeIn(0.0f);
+
+	// Set DemoDisc1GameInstance
 
 	UWorld* World = GetWorld();
 	if (!World) return false;
@@ -27,6 +29,16 @@ bool UArmyMenUI::Initialize()
 
 	DemoDisc1GameInstance = Cast<UDemoDisc1GameInstance>(GameInstance);
 	if (!DemoDisc1GameInstance) return false;
+
+	// Register to DemoDisc1GameModeBase OnTransitionToLevel event
+	
+	AGameModeBase* GameMode = UGameplayStatics::GetGameMode(World);
+	if (!GameMode) return false;
+
+	AArmyMenGameModeBase* ArmyMenGameMode = Cast<AArmyMenGameModeBase>(GameMode);
+	if (!ArmyMenGameMode) return false;
+
+	ArmyMenGameMode->OnTransitionToLevel.AddDynamic(this, &UArmyMenUI::PlayEndLevelCurtainFadeOut);
 
 	return true;
 }
@@ -51,7 +63,7 @@ void UArmyMenUI::SetHealthBarPercent(float Value)
 		// Check if health update makes character alive
 		if (Value > 0.0f)
 		{
-			PlayFadeInAnimation(0.0f);
+			PlayCurtainFadeIn(0.0f);
 
 			bCharacterIsDead = false;
 
@@ -64,11 +76,11 @@ void UArmyMenUI::SetHealthBarPercent(float Value)
 		{
 			if (!DemoDisc1GameInstance->GetHasSpookyTransitioned())
 			{
-				PlayFadeOutAnimation(2.5f);
+				PlayCurtainFadeOut(2.5f);
 			}
 			else
 			{
-				PlayFadeOutAnimation(0.0f);
+				PlayCurtainFadeOut(0.0f);
 			}
 
 			bCharacterIsDead = true;

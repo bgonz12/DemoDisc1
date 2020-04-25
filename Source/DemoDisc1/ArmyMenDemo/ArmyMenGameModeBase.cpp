@@ -6,3 +6,8 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "DemoDisc1/DemoDisc1GameInstance.h"
+
+void AArmyMenGameModeBase::QuitLevel()
+{
+	Super::QuitLevel();
+}
