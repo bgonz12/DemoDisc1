@@ -35,6 +35,8 @@ protected:
 
 	virtual void TickIdle();
 
+	virtual void TickDead();
+
 	virtual void ChangeState(EArmyMenEnemyState NewState);
 
 public:

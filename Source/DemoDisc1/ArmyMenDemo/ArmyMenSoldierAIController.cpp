@@ -5,6 +5,7 @@
 #include "Engine/World.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+#include "ArmyMenTargetComponent.h"
 #include "ArmyMenEnemy.h"
 
 void AArmyMenSoldierAIController::BeginPlay()
@@ -62,6 +63,18 @@ void AArmyMenSoldierAIController::TickIdle()
 
 		FVector TraceStart = ArmyMenEnemyCharacter->GetActorLocation();
 		FVector TraceEnd = PlayerPawn->GetActorLocation();
+
+		UArmyMenTargetComponent* SoldierTargetComponent = Cast<UArmyMenTargetComponent>(ArmyMenEnemyCharacter->GetComponentByClass(UArmyMenTargetComponent::StaticClass()));
+		if (SoldierTargetComponent)
+		{
+			TraceStart = SoldierTargetComponent->GetComponentLocation();
+		}
+
+		UArmyMenTargetComponent* PlayerTargetComponent = Cast<UArmyMenTargetComponent>(PlayerPawn->GetComponentByClass(UArmyMenTargetComponent::StaticClass()));
+		if (PlayerTargetComponent)
+		{
+			TraceEnd = PlayerTargetComponent->GetComponentLocation();
+		}
 
 		ETraceTypeQuery VisibleQuery = ETraceTypeQuery::TraceTypeQuery1;
 

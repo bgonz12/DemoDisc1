@@ -23,11 +23,21 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class AArmyMenCrawlerCharacter> CrawlerClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CrawlerVisionDistance;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bHasCrawlerSpawned;
+
 	UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
 	FVector CrawlerSpawnLocation;
-
-	virtual void Kill() override;
 	
+public:
 	UFUNCTION()
 	void SpawnCrawler();
+
+	/** Getters **/
+	FORCEINLINE float GetCrawlerVisionDistance() { return CrawlerVisionDistance; }
+
+	FORCEINLINE bool GetHasCrawlerSpawned() { return bHasCrawlerSpawned; }
 };

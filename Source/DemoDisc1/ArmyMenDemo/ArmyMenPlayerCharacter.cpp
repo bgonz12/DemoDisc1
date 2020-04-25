@@ -16,6 +16,8 @@ AArmyMenPlayerCharacter::AArmyMenPlayerCharacter()
 {
 	SilencerMesh = CreateDefaultSubobject<USpookySwapStaticMeshComponent>(TEXT("SilencerMesh"));
 	SilencerMesh->SetupAttachment(GetMesh(), FName("SilencerSocket"));
+
+	GunAimLerpSpeed = 5.0f;
 }
 
 void AArmyMenPlayerCharacter::BeginPlay()
@@ -48,7 +50,7 @@ void AArmyMenPlayerCharacter::Tick(float DeltaTime)
 		TargetRotation = GetActorRotation() + FRotator(0.0f, TurnInput * 15.0f, 0.0f);
 	}
 
-	FRotator GunRotation = FMath::Lerp(MeshContainer->GetComponentRotation(), TargetRotation, 8.0f * DeltaTime);
+	FRotator GunRotation = FMath::Lerp(MeshContainer->GetComponentRotation(), TargetRotation, GunAimLerpSpeed * DeltaTime);
 
 	MeshContainer->SetWorldRotation(GunRotation);
 }

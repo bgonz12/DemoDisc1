@@ -8,6 +8,7 @@
 #include "Engine/World.h"
 #include "GameFramework/DamageType.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
@@ -139,10 +140,14 @@ void AArmyMenCrawlerCharacter::StartChase()
 	UWorld* World = GetWorld();
 	if (!World) return;
 
+	if (WakeSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(World, WakeSound, GetActorLocation());
+	}
+
 	World->GetTimerManager().ClearTimer(ToggleCanMoveTimerHandle);
 
 	World->GetTimerManager().SetTimer(ToggleCanMoveTimerHandle, this, &AArmyMenCrawlerCharacter::ToggleCanMove, MoveToggleRate, true);
-
 }
 
 // Called to bind functionality to input

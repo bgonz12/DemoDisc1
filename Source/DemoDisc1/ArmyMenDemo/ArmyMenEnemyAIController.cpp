@@ -33,6 +33,7 @@ void AArmyMenEnemyAIController::Tick(float DeltaTime)
 		TickAttacking();
 		break;
 	case EArmyMenEnemyState::DEAD:
+		TickDead();
 		break;
 	case EArmyMenEnemyState::IDLE:
 		TickIdle();
@@ -54,6 +55,10 @@ void AArmyMenEnemyAIController::TickAttacking()
 }
 
 void AArmyMenEnemyAIController::TickIdle()
+{
+}
+
+void AArmyMenEnemyAIController::TickDead()
 {
 }
 

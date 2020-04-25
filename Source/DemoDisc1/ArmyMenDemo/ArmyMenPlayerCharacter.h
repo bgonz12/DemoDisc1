@@ -31,6 +31,9 @@ protected:
 
 	class AArmyMenPlayerController* PlayerController;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float GunAimLerpSpeed;
+
 	virtual void Kill() override;
 
 };

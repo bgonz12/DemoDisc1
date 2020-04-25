@@ -56,11 +56,30 @@ protected:
 
 	FTransform RespawnTransform;
 
+	/** Movement Properties **/
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
+	float NormalWalkSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
+	float SpookyWalkSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	float NormalBackstepMultiplier;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	float SpookyBackstepMultiplier;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
+	float BackstepMultiplier;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 	float TurnRate;
 
 	float TurnInput;
+
+	/** Shooting Properties **/
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	UAnimMontage* CharacterShootMontage;
@@ -80,11 +99,23 @@ protected:
 	AActor* AimTarget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	float NormalFireRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	float SpookyFireRate;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Shooting)
 	float FireRate;
 
 	float FireTimer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
+	float NormalAimRange;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
+	float SpookyAimRange;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Aiming)
 	float AimRange;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
@@ -103,6 +134,11 @@ protected:
 	bool bDrawDebugAimLine;
 
 	virtual void Kill();
+
+	virtual void SetNormalValues();
+
+	UFUNCTION()
+	virtual void SetSpookyValues();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayFireAnimation();

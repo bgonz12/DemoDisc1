@@ -7,6 +7,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Engine/World.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -15,6 +16,7 @@
 
 #include "ArmyMenProjectile.h"
 #include "ArmyMenTargetComponent.h"
+#include "DemoDisc1/DemoDisc1GameInstance.h"
 #include "DemoDisc1/DutchAngleCameraComponent.h"
 
 // Sets default values
@@ -53,12 +55,27 @@ AArmyMenCharacter::AArmyMenCharacter()
 	MaxHealth = 10;
 	CurrentHealth = 0;
 
+	// Set movement property defaults
+	NormalWalkSpeed = 600.0f;
+	SpookyWalkSpeed = 500.0f;
+	
+	NormalBackstepMultiplier = 0.6f;
+	SpookyBackstepMultiplier = 0.4f;
+	BackstepMultiplier = NormalBackstepMultiplier;
+
 	TurnRate = 90.0f;
 
-	FireRate = 1.0f;
+	NormalFireRate = 5.0f;
+	SpookyFireRate = 3.0f;
+	FireRate = NormalFireRate;
 
+	// Set aiming property defaults
 	AimTraceTypeQuery = ETraceTypeQuery::TraceTypeQuery4;
-	AimRange = 3000.0f;
+
+	NormalAimRange = 3000.0f;
+	SpookyAimRange = 1100.0f;
+	AimRange = NormalAimRange;
+
 	AimBoxWidth = 500.0f;
 	AimBoxHeight = 500.0f;
 	AimAccuracy = 1.0f;
@@ -74,6 +91,25 @@ void AArmyMenCharacter::BeginPlay()
 	bIsDead = false;
 
 	RespawnTransform = GetActorTransform();
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(World);
+	if (!GameInstance) return;
+
+	UDemoDisc1GameInstance* DD1GameInstance = Cast<UDemoDisc1GameInstance>(GameInstance);
+	if (!DD1GameInstance) return;
+
+	if (!DD1GameInstance->GetHasSpookyTransitioned())
+	{
+		SetNormalValues();
+		DD1GameInstance->OnSpookyTransition.AddDynamic(this, &AArmyMenCharacter::SetSpookyValues);
+	}
+	else
+	{
+		SetSpookyValues();
+	}
 }
 
 // Called every frame
@@ -188,17 +224,6 @@ void AArmyMenCharacter::Reset()
 	SetActorTransform(RespawnTransform);
 }
 
-// Called to bind functionality to input
-void AArmyMenCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	PlayerInputComponent->BindAxis(FName("MoveForward"), this, &AArmyMenCharacter::MoveForward);
-	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &AArmyMenCharacter::TurnRight);
-
-	PlayerInputComponent->BindAction(FName("Jump"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::Fire);
-	PlayerInputComponent->BindAction(FName("Fire"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::Fire);
-}
 
 void AArmyMenCharacter::Kill()
 {
@@ -211,13 +236,47 @@ void AArmyMenCharacter::Kill()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
+void AArmyMenCharacter::SetNormalValues()
+{
+	GetCharacterMovement()->MaxWalkSpeed = NormalWalkSpeed;
+	BackstepMultiplier = NormalBackstepMultiplier;
+	AimRange = NormalAimRange;
+	FireRate = NormalFireRate;
+}
+
+void AArmyMenCharacter::SetSpookyValues()
+{
+	GetCharacterMovement()->MaxWalkSpeed = SpookyWalkSpeed;
+	BackstepMultiplier = SpookyBackstepMultiplier;
+	AimRange = SpookyAimRange;
+	FireRate = SpookyFireRate;
+}
+
+// Called to bind functionality to input
+void AArmyMenCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PlayerInputComponent->BindAxis(FName("MoveForward"), this, &AArmyMenCharacter::MoveForward);
+	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &AArmyMenCharacter::TurnRight);
+
+	PlayerInputComponent->BindAction(FName("Jump"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::Fire);
+	PlayerInputComponent->BindAction(FName("Fire"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::Fire);
+}
+
 void AArmyMenCharacter::MoveForward(float Value)
 {
-	if (Value != 0.0f)
+	if (Value > 0.0f)
 	{
 		// get forward vector
 		const FVector Direction = GetActorForwardVector();
 		AddMovementInput(Direction, Value);
+	}
+	else if (Value < 0.0f)
+	{
+		// get forward vector
+		const FVector Direction = GetActorForwardVector();
+		AddMovementInput(Direction, Value * BackstepMultiplier);
 	}
 }
 

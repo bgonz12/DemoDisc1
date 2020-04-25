@@ -12,20 +12,7 @@ void AArmyMenZombieSoldier::Reset()
 	Super::Reset();
 
 	GetMesh()->SetVisibility(true);
-}
-
-void AArmyMenZombieSoldier::Kill()
-{
-	if (bIsDead) return;
-
-	Super::Kill();
-
-	UWorld* World = GetWorld();
-	if (!World) return;
-
-	World->GetTimerManager().ClearTimer(SpawnCrawlerTimerHandle);
-
-	World->GetTimerManager().SetTimer(SpawnCrawlerTimerHandle, this, &AArmyMenZombieSoldier::SpawnCrawler, 1.0f, false);
+	bHasCrawlerSpawned = false;
 }
 
 void AArmyMenZombieSoldier::SpawnCrawler()
@@ -48,4 +35,5 @@ void AArmyMenZombieSoldier::SpawnCrawler()
 	Crawler->SetDestroyOnReset(true);
 
 	GetMesh()->SetVisibility(false);
+	bHasCrawlerSpawned = true;
 }

@@ -60,6 +60,9 @@ protected:
 
 	/** Senses Properties **/
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundBase* WakeSound;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Senses)
 	float VisionDistance;
 
