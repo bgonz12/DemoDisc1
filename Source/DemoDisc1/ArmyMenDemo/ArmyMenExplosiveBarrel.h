@@ -24,6 +24,9 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class USpookyEnableActorComponent* SpookyEnableActorComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class USceneComponent* MeshContainer;
 
 	UPROPERTY(VisibleAnywhere, blueprintReadWrite)
@@ -43,6 +46,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Explosion)
 	class UParticleSystem* ExplosionParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Explosion)
+	class USoundBase* ExplosionSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Explosion)
 	int ExplosionDamage;

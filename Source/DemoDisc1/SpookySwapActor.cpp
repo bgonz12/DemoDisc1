@@ -32,24 +32,40 @@ void ASpookySwapActor::BeginPlay()
 
 	if (!DD1GameInstance->GetHasSpookyTransitioned())
 	{
-		EnableNormal();
+		//EnableNormal();
 
+		World->GetTimerManager().SetTimer(InitializeTickTimerHandle, this, &ASpookySwapActor::EnableNormal, 0.1f, false);
 		DD1GameInstance->OnSpookyTransition.AddDynamic(this, &ASpookySwapActor::EnableSpooky);
 	}
 	else
 	{
-		EnableSpooky();
+		//EnableSpooky();
+
+		World->GetTimerManager().SetTimer(InitializeTickTimerHandle, this, &ASpookySwapActor::EnableSpooky, 0.1f, false);
 	}
 }
 
 void ASpookySwapActor::EnableNormal()
 {
+	bIsSpooky = false;
+
 	// Disable spooky actors
 	for (AActor* Actor : SpookyActors)
 	{
 		Actor->SetActorEnableCollision(false);
 		Actor->SetActorHiddenInGame(true);
 		Actor->SetActorTickEnabled(false);
+
+		APawn* PawnActor = Cast<APawn>(Actor);
+		if (PawnActor)
+		{
+			AController* PawnActorController = PawnActor->GetController();
+
+			if (PawnActorController)
+			{
+				PawnActorController->SetActorTickEnabled(false);
+			}
+		}
 	}
 
 	// Enable normal actors
@@ -58,6 +74,17 @@ void ASpookySwapActor::EnableNormal()
 		Actor->SetActorEnableCollision(true);
 		Actor->SetActorHiddenInGame(false);
 		Actor->SetActorTickEnabled(true);
+
+		APawn* PawnActor = Cast<APawn>(Actor);
+		if (PawnActor)
+		{
+			AController* PawnActorController = PawnActor->GetController();
+
+			if (PawnActorController)
+			{
+				PawnActorController->SetActorTickEnabled(true);
+			}
+		}
 	}
 }
 
@@ -71,6 +98,17 @@ void ASpookySwapActor::EnableSpooky()
 		Actor->SetActorEnableCollision(false);
 		Actor->SetActorHiddenInGame(true);
 		Actor->SetActorTickEnabled(false);
+
+		APawn* PawnActor = Cast<APawn>(Actor);
+		if (PawnActor)
+		{
+			AController* PawnActorController = PawnActor->GetController();
+
+			if (PawnActorController)
+			{
+				PawnActorController->SetActorTickEnabled(false);
+			}
+		}
 	}
 
 	// Enable spooky actors
@@ -79,6 +117,17 @@ void ASpookySwapActor::EnableSpooky()
 		Actor->SetActorEnableCollision(true);
 		Actor->SetActorHiddenInGame(false);
 		Actor->SetActorTickEnabled(true);
+
+		APawn* PawnActor = Cast<APawn>(Actor);
+		if (PawnActor)
+		{
+			AController* PawnActorController = PawnActor->GetController();
+
+			if (PawnActorController)
+			{
+				PawnActorController->SetActorTickEnabled(true);
+			}
+		}
 	}
 }
 

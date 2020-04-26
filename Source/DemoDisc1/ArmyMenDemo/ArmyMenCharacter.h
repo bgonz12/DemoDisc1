@@ -31,6 +31,9 @@ public:
 	virtual void Reset() override;
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class USpookyEnableActorComponent* SpookyEnableActorComponent;
+
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
@@ -125,6 +128,12 @@ protected:
 	float AimBoxHeight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
+	float NormalAimAccuracy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
+	float SpookyAimAccuracy;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Aiming)
 	float AimAccuracy;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)

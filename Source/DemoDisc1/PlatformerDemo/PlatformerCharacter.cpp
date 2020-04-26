@@ -134,7 +134,7 @@ void APlatformerCharacter::KillPlayer(EDeathAnimationType AnimType)
 	APlatformerGameModeBase* PlatformerGameMode = Cast<APlatformerGameModeBase>(GameMode);
 	if (!PlatformerGameMode) return;
 
-	PlatformerGameMode->TriggerLoadCheckpoint(3.0f);
+	PlatformerGameMode->TriggerLoadCheckpoint(4.0f);
 }
 
 void APlatformerCharacter::Reset()

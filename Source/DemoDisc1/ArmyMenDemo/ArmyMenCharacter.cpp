@@ -18,12 +18,15 @@
 #include "ArmyMenTargetComponent.h"
 #include "DemoDisc1/DemoDisc1GameInstance.h"
 #include "DemoDisc1/DutchAngleCameraComponent.h"
+#include "DemoDisc1/SpookyEnableActorComponent.h"
 
 // Sets default values
 AArmyMenCharacter::AArmyMenCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	SpookyEnableActorComponent = CreateDefaultSubobject<USpookyEnableActorComponent>(TEXT("SpookyEnableActorComponent"));
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -60,7 +63,7 @@ AArmyMenCharacter::AArmyMenCharacter()
 	SpookyWalkSpeed = 500.0f;
 	
 	NormalBackstepMultiplier = 0.6f;
-	SpookyBackstepMultiplier = 0.4f;
+	SpookyBackstepMultiplier = 0.6f;
 	BackstepMultiplier = NormalBackstepMultiplier;
 
 	TurnRate = 90.0f;
@@ -78,7 +81,10 @@ AArmyMenCharacter::AArmyMenCharacter()
 
 	AimBoxWidth = 500.0f;
 	AimBoxHeight = 500.0f;
-	AimAccuracy = 1.0f;
+
+	NormalAimAccuracy = 0.985f;
+	SpookyAimAccuracy = 0.985f;
+	AimAccuracy = NormalAimAccuracy;
 }
 
 // Called when the game starts or when spawned
@@ -249,6 +255,7 @@ void AArmyMenCharacter::SetSpookyValues()
 	GetCharacterMovement()->MaxWalkSpeed = SpookyWalkSpeed;
 	BackstepMultiplier = SpookyBackstepMultiplier;
 	AimRange = SpookyAimRange;
+	AimAccuracy = SpookyAimAccuracy;
 	FireRate = SpookyFireRate;
 }
 

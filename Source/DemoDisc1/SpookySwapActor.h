@@ -26,6 +26,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<AActor*> SpookyActors;
 
+	FTimerHandle InitializeTickTimerHandle;
+
 	bool bIsSpooky;
 
 	UFUNCTION(BlueprintCallable)

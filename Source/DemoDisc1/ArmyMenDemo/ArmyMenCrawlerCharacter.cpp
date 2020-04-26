@@ -11,11 +11,15 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+#include "DemoDisc1/SpookyEnableActorComponent.h"
+
 // Sets default values
 AArmyMenCrawlerCharacter::AArmyMenCrawlerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	SpookyEnableActorComponent = CreateDefaultSubobject<USpookyEnableActorComponent>(TEXT("SpookyEnableActorComponent"));
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));

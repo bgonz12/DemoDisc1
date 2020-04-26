@@ -8,12 +8,15 @@
 #include "Kismet/KismetSystemLibrary.h"
 
 #include "ArmyMenTargetComponent.h"
+#include "DemoDisc1/SpookyEnableActorComponent.h"
 
 // Sets default values
 AArmyMenExplosiveBarrel::AArmyMenExplosiveBarrel()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+
+	SpookyEnableActorComponent = CreateDefaultSubobject<USpookyEnableActorComponent>(TEXT("SpookyEnableActorComponent"));
 
 	MeshContainer = CreateDefaultSubobject<USceneComponent>(TEXT("MeshContainer"));
 	SetRootComponent(MeshContainer);
@@ -80,7 +83,15 @@ void AArmyMenExplosiveBarrel::Kill()
 	UWorld* World = GetWorld();
 	if (!World) return;
 
-	UGameplayStatics::SpawnEmitterAtLocation(World, ExplosionParticle, GetActorTransform());
+	if (ExplosionParticle)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(World, ExplosionParticle, GetActorTransform());
+	}
+
+	if (ExplosionSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(World, ExplosionSound, GetActorLocation());
+	}
 
 	if (bDebugDrawRadius)
 	{
