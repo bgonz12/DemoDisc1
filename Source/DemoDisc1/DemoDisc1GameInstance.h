@@ -32,18 +32,20 @@ protected:
 	class UMaterialParameterCollection* GlobalMaterialParamCollection;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int SpookyLevel;
+	int LevelsCompleted;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int SpookyLevelToTransition;
+	int LevelsCompletedToTransition;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bHasSpookyTransitioned;
 
 public:
-	bool GetIsTransitionTime();
+	void CompleteLevel();
 
 	void TriggerSpookyTransition();
+
+	bool GetIsTransitionTime();
 
 	UFUNCTION(BlueprintCallable)
 	bool GetHasSpookyTransitioned();

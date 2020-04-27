@@ -27,6 +27,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USoundBase* TransitionSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bForceSpookyTransition;
+
 	UFUNCTION()
 	void BeginOverlap(AActor* OverlappedActor, AActor* OtherActor );
 

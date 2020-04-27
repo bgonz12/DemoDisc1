@@ -32,15 +32,11 @@ void ASpookySwapActor::BeginPlay()
 
 	if (!DD1GameInstance->GetHasSpookyTransitioned())
 	{
-		//EnableNormal();
-
 		World->GetTimerManager().SetTimer(InitializeTickTimerHandle, this, &ASpookySwapActor::EnableNormal, 0.1f, false);
 		DD1GameInstance->OnSpookyTransition.AddDynamic(this, &ASpookySwapActor::EnableSpooky);
 	}
 	else
 	{
-		//EnableSpooky();
-
 		World->GetTimerManager().SetTimer(InitializeTickTimerHandle, this, &ASpookySwapActor::EnableSpooky, 0.1f, false);
 	}
 }

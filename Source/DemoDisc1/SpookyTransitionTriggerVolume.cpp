@@ -12,6 +12,7 @@ ASpookyTransitionTriggerVolume::ASpookyTransitionTriggerVolume()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	bForceSpookyTransition = false;
 }
 
 // Called when the game starts or when spawned
@@ -40,7 +41,7 @@ void ASpookyTransitionTriggerVolume::BeginOverlap(AActor * OverlappedActor, AAct
 	UDemoDisc1GameInstance* DD1GameInstance = Cast<UDemoDisc1GameInstance>(GameInstance);
 	if (!DD1GameInstance) return;
 
-	if (DD1GameInstance->GetIsTransitionTime())
+	if (bForceSpookyTransition || DD1GameInstance->GetIsTransitionTime())
 	{
 		DD1GameInstance->TriggerSpookyTransition();
 

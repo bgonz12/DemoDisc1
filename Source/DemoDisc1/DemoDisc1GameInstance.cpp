@@ -8,14 +8,14 @@
 
 UDemoDisc1GameInstance::UDemoDisc1GameInstance()
 {
-	SpookyLevel = 0;
-	SpookyLevelToTransition = 0;
+	LevelsCompleted = 0;
+	LevelsCompletedToTransition = 1;
 	bHasSpookyTransitioned = false;
 }
 
-bool UDemoDisc1GameInstance::GetIsTransitionTime()
+void UDemoDisc1GameInstance::CompleteLevel()
 {
-	return !bHasSpookyTransitioned && SpookyLevel >= SpookyLevelToTransition;
+	LevelsCompleted++;
 }
 
 void UDemoDisc1GameInstance::TriggerSpookyTransition()
@@ -39,6 +39,11 @@ void UDemoDisc1GameInstance::TriggerSpookyTransition()
 	if (!inst) return;
 
 	inst->SetScalarParameterValue(FName("SpookyLerp"), 1.0f);
+}
+
+bool UDemoDisc1GameInstance::GetIsTransitionTime()
+{
+	return !bHasSpookyTransitioned && LevelsCompleted >= LevelsCompletedToTransition;
 }
 
 bool UDemoDisc1GameInstance::GetHasSpookyTransitioned()

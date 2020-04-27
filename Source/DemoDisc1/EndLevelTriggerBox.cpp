@@ -6,6 +6,7 @@
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "DemoDisc1GameInstance.h"
 #include "LevelTransitioner.h"
 
 AEndLevelTriggerBox::AEndLevelTriggerBox()
@@ -25,6 +26,15 @@ void AEndLevelTriggerBox::BeginOverlap(AActor * OverlappedActor, AActor * OtherA
 {
 	UWorld* World = GetWorld();
 	if (!World) return;
+
+	// Notify DemoDisc1GameInstance that a level has been completed
+	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(World);
+	if (!GameInstance) return;
+
+	UDemoDisc1GameInstance* DD1GameInstance = Cast<UDemoDisc1GameInstance>(GameInstance);
+	if (!DD1GameInstance) return;
+
+	DD1GameInstance->CompleteLevel();
 
 	AGameModeBase* GameMode = UGameplayStatics::GetGameMode(World);
 	if (!GameMode)
