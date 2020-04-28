@@ -33,6 +33,9 @@ protected:
 	class UButton* Demo2Button;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USoundBase* ButtonHoverSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UMaterialInterface* DefaultPreviewMaterial;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -52,6 +55,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText Demo2Title;
+
+	void PlayButtonHoverSound();
 
 	UFUNCTION()
 	void Demo1ButtonPressed();

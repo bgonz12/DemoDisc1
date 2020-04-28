@@ -5,6 +5,7 @@
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
+#include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "DemoDisc1/LevelTransitioner.h"
@@ -37,6 +38,8 @@ void UMainMenuUI::Demo1ButtonHovered()
 {
 	PreviewImage->SetBrushFromMaterial(Demo1PreviewMaterial);
 	TitleText->SetText(Demo1Title);
+
+	PlayButtonHoverSound();
 }
 
 void UMainMenuUI::Demo1ButtonUnhovered()
@@ -56,10 +59,23 @@ void UMainMenuUI::Demo2ButtonHovered()
 {
 	PreviewImage->SetBrushFromMaterial(Demo2PreviewMaterial);
 	TitleText->SetText(Demo2Title);
+
+	PlayButtonHoverSound();
 }
 
 void UMainMenuUI::Demo2ButtonUnhovered()
 {
 	PreviewImage->SetBrushFromMaterial(DefaultPreviewMaterial);
 	TitleText->SetText(DefaultTitle);
+}
+
+void UMainMenuUI::PlayButtonHoverSound()
+{
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	if (ButtonHoverSound)
+	{
+		UGameplayStatics::PlaySound2D(World, ButtonHoverSound);
+	}
 }
