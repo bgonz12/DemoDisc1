@@ -130,10 +130,18 @@ void AArmyMenCrawlerCharacter::Kill()
 
 	bIsChasing = false;
 
-	PlayDeathAnimation();
-
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCapsuleComponent()->SetSimulatePhysics(false);
+
+	PlayDeathAnimation();
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	if (DeathSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(World, DeathSound, GetActorLocation());
+	}
 }
 
 void AArmyMenCrawlerCharacter::StartChase()

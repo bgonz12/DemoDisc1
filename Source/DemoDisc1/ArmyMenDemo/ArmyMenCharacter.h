@@ -48,6 +48,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class USceneComponent* MeshContainer;
 
+	/** Health Properties **/
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
+	class USoundBase* NormalDeathSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
+	class USoundBase* SpookyDeathSound;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	int MaxHealth;
 

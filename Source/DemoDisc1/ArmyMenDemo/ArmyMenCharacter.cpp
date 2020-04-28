@@ -237,9 +237,22 @@ void AArmyMenCharacter::Kill()
 
 	bIsDead = true;
 
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 	PlayDeathAnimation();
 
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	if (NormalDeathSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(World, NormalDeathSound, GetActorLocation());
+	}
+
+	if (SpookyDeathSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(World, SpookyDeathSound, GetActorLocation());
+	}
 }
 
 void AArmyMenCharacter::SetNormalValues()

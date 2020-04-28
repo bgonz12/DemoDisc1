@@ -40,7 +40,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* CharacterCamera;
 
-	/** Health and Life Properties **/
+	/** Health Properties **/
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
+	class USoundBase* DeathSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	int MaxHealth;
