@@ -48,6 +48,15 @@ protected:
 	class UMaterialInterface* Demo3PreviewMaterial;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMediaPlayer* PreviewMediaPlayer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMediaSource* Demo1MediaSource;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMediaSource* Demo2MediaSource;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText DefaultTitle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -75,6 +84,12 @@ protected:
 
 	UFUNCTION()
 	void Demo2ButtonUnhovered();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayPreviewTVStaticFadeOut();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayPreviewTVStaticFadeIn();
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)

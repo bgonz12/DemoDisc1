@@ -8,7 +8,7 @@ public class DemoDisc1 : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "ActorSequence", "UMG", "Slate", "SlateCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "ActorSequence", "UMG", "Slate", "SlateCore", "MediaAssets" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

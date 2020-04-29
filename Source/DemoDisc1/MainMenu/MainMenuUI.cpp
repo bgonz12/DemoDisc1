@@ -7,6 +7,8 @@
 #include "Components/Image.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
+#include "MediaPlayer.h"
+#include "MediaSource.h"
 
 #include "DemoDisc1/LevelTransitioner.h"
 
@@ -36,16 +38,31 @@ void UMainMenuUI::Demo1ButtonPressed()
 
 void UMainMenuUI::Demo1ButtonHovered()
 {
+	PlayPreviewTVStaticFadeIn();
+
 	PreviewImage->SetBrushFromMaterial(Demo1PreviewMaterial);
 	TitleText->SetText(Demo1Title);
+
+	if (Demo1MediaSource && PreviewMediaPlayer)
+	{
+		PreviewMediaPlayer->Close();
+		PreviewMediaPlayer->OpenSource(Demo1MediaSource);
+	}
 
 	PlayButtonHoverSound();
 }
 
 void UMainMenuUI::Demo1ButtonUnhovered()
 {
-	PreviewImage->SetBrushFromMaterial(DefaultPreviewMaterial);
+	PlayPreviewTVStaticFadeOut();
+
+	/*PreviewImage->SetBrushFromMaterial(DefaultPreviewMaterial);
 	TitleText->SetText(DefaultTitle);
+
+	if (PreviewMediaPlayer)
+	{
+		PreviewMediaPlayer->Close();
+	}*/
 }
 
 void UMainMenuUI::Demo2ButtonPressed()
@@ -57,16 +74,31 @@ void UMainMenuUI::Demo2ButtonPressed()
 
 void UMainMenuUI::Demo2ButtonHovered()
 {
+	PlayPreviewTVStaticFadeIn();
+
 	PreviewImage->SetBrushFromMaterial(Demo2PreviewMaterial);
 	TitleText->SetText(Demo2Title);
+
+	if (Demo2MediaSource && PreviewMediaPlayer)
+	{
+		PreviewMediaPlayer->Close();
+		PreviewMediaPlayer->OpenSource(Demo2MediaSource);
+	}
 
 	PlayButtonHoverSound();
 }
 
 void UMainMenuUI::Demo2ButtonUnhovered()
 {
-	PreviewImage->SetBrushFromMaterial(DefaultPreviewMaterial);
+	PlayPreviewTVStaticFadeOut();
+
+	/*PreviewImage->SetBrushFromMaterial(DefaultPreviewMaterial);
 	TitleText->SetText(DefaultTitle);
+
+	if (PreviewMediaPlayer)
+	{
+		PreviewMediaPlayer->Close();
+	}*/
 }
 
 void UMainMenuUI::PlayButtonHoverSound()
