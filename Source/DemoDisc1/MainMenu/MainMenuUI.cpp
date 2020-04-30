@@ -26,6 +26,12 @@ bool UMainMenuUI::Initialize()
 	Button2->OnHovered.AddDynamic(this, &UMainMenuUI::Demo2ButtonHovered);
 	Button2->OnUnhovered.AddDynamic(this, &UMainMenuUI::Demo2ButtonUnhovered);
 
+	CreditsButton->OnPressed.AddDynamic(this, &UMainMenuUI::CreditsButtonPressed);
+	CreditsButton->OnHovered.AddDynamic(this, &UMainMenuUI::CreditsButtonHovered);
+	CreditsButton->OnUnhovered.AddDynamic(this, &UMainMenuUI::CreditsButtonUnhovered);
+
+	CreditsBackButton->OnPressed.AddDynamic(this, &UMainMenuUI::CreditsBackButtonPressed);
+
 	return true;
 }
 
@@ -91,6 +97,41 @@ void UMainMenuUI::Demo2ButtonUnhovered()
 	PlayPreviewTVStaticFadeOut();
 
 	TitleImage->SetBrushFromMaterial(DefaultTitleMaterial);
+}
+
+void UMainMenuUI::CreditsButtonPressed()
+{
+	if (!MainMenuLevelTransitioner) return;
+
+	PlayTransitionToCredits();
+
+	PlayButtonPressSound();
+}
+
+void UMainMenuUI::CreditsButtonHovered()
+{
+	PlayPreviewTVStaticFadeIn();
+
+	PreviewImage->SetBrushFromMaterial(CreditsPreviewMaterial);
+	TitleImage->SetBrushFromMaterial(CreditsTitleMaterial);
+
+	PlayButtonHoverSound();
+}
+
+void UMainMenuUI::CreditsButtonUnhovered()
+{
+	PlayPreviewTVStaticFadeOut();
+
+	TitleImage->SetBrushFromMaterial(DefaultTitleMaterial);
+}
+
+void UMainMenuUI::CreditsBackButtonPressed()
+{
+	if (!MainMenuLevelTransitioner) return;
+
+	PlayTransitionToMainMenu();
+
+	PlayButtonPressSound();
 }
 
 void UMainMenuUI::PlayButtonPressSound()

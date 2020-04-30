@@ -32,6 +32,12 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Button2;
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* CreditsButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* CreditsBackButton;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Buttons)
 	class UMediaPlayer* PreviewMediaPlayer;
 
@@ -47,29 +53,29 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Default)
 	class UMaterialInterface* DefaultTitleMaterial;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button1)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Demo1)
 	class UMaterialInterface* Button1PreviewMaterial;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button1)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Demo1)
 	class UMaterialInterface* Button1TitleMaterial;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button1)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Demo1)
 	class UMediaSource* Button1MediaSource;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button2)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Demo2)
 	class UMaterialInterface* Button2PreviewMaterial;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button2)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Demo2)
 	class UMediaSource* Button2MediaSource;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button2)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Demo2)
 	class UMaterialInterface* Button2TitleMaterial;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button3)
-	class UMaterialInterface* Button3PreviewMaterial;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Credits)
+	class UMaterialInterface* CreditsPreviewMaterial;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button3)
-	class UMaterialInterface* Button3TitleMaterial;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Credits)
+	class UMaterialInterface* CreditsTitleMaterial;
 
 	void PlayButtonPressSound();
 
@@ -92,6 +98,24 @@ protected:
 
 	UFUNCTION()
 	void Demo2ButtonUnhovered();
+
+	UFUNCTION()
+	void CreditsButtonPressed();
+
+	UFUNCTION()
+	void CreditsButtonHovered();
+
+	UFUNCTION()
+	void CreditsButtonUnhovered();
+
+	UFUNCTION()
+	void CreditsBackButtonPressed();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayTransitionToCredits();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayTransitionToMainMenu();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayPreviewTVStaticFadeOut();
