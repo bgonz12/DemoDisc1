@@ -24,46 +24,54 @@ protected:
 	class UImage* PreviewImage;
 
 	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* TitleText;
+	class UImage* TitleImage;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* Demo1Button;
+	class UButton* Button1;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* Demo2Button;
+	class UButton* Button2;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class USoundBase* ButtonHoverSound;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UMaterialInterface* DefaultPreviewMaterial;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UMaterialInterface* Demo1PreviewMaterial;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UMaterialInterface* Demo2PreviewMaterial;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UMaterialInterface* Demo3PreviewMaterial;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Buttons)
 	class UMediaPlayer* PreviewMediaPlayer;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UMediaSource* Demo1MediaSource;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Buttons)
+	class USoundBase* ButtonPressSound;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UMediaSource* Demo2MediaSource;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Buttons)
+	class USoundBase* ButtonHoverSound;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText DefaultTitle;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Default)
+	class UMaterialInterface* DefaultPreviewMaterial;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText Demo1Title;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Default)
+	class UMaterialInterface* DefaultTitleMaterial;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText Demo2Title;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button1)
+	class UMaterialInterface* Button1PreviewMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button1)
+	class UMaterialInterface* Button1TitleMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button1)
+	class UMediaSource* Button1MediaSource;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button2)
+	class UMaterialInterface* Button2PreviewMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button2)
+	class UMediaSource* Button2MediaSource;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button2)
+	class UMaterialInterface* Button2TitleMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button3)
+	class UMaterialInterface* Button3PreviewMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Button3)
+	class UMaterialInterface* Button3TitleMaterial;
+
+	void PlayButtonPressSound();
 
 	void PlayButtonHoverSound();
 

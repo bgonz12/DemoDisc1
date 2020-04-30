@@ -18,13 +18,13 @@ bool UMainMenuUI::Initialize()
 
 	PreviewImage->SetBrushFromMaterial(DefaultPreviewMaterial);
 
-	Demo1Button->OnPressed.AddDynamic(this, &UMainMenuUI::Demo1ButtonPressed);
-	Demo1Button->OnHovered.AddDynamic(this, &UMainMenuUI::Demo1ButtonHovered);
-	Demo1Button->OnUnhovered.AddDynamic(this, &UMainMenuUI::Demo1ButtonUnhovered);
+	Button1->OnPressed.AddDynamic(this, &UMainMenuUI::Demo1ButtonPressed);
+	Button1->OnHovered.AddDynamic(this, &UMainMenuUI::Demo1ButtonHovered);
+	Button1->OnUnhovered.AddDynamic(this, &UMainMenuUI::Demo1ButtonUnhovered);
 
-	Demo2Button->OnPressed.AddDynamic(this, &UMainMenuUI::Demo2ButtonPressed);
-	Demo2Button->OnHovered.AddDynamic(this, &UMainMenuUI::Demo2ButtonHovered);
-	Demo2Button->OnUnhovered.AddDynamic(this, &UMainMenuUI::Demo2ButtonUnhovered);
+	Button2->OnPressed.AddDynamic(this, &UMainMenuUI::Demo2ButtonPressed);
+	Button2->OnHovered.AddDynamic(this, &UMainMenuUI::Demo2ButtonHovered);
+	Button2->OnUnhovered.AddDynamic(this, &UMainMenuUI::Demo2ButtonUnhovered);
 
 	return true;
 }
@@ -34,19 +34,21 @@ void UMainMenuUI::Demo1ButtonPressed()
 	if (!MainMenuLevelTransitioner) return;
 
 	MainMenuLevelTransitioner->TransitionToLevel(FName("PlatformerDemoLevel"));
+
+	PlayButtonPressSound();
 }
 
 void UMainMenuUI::Demo1ButtonHovered()
 {
 	PlayPreviewTVStaticFadeIn();
 
-	PreviewImage->SetBrushFromMaterial(Demo1PreviewMaterial);
-	TitleText->SetText(Demo1Title);
+	PreviewImage->SetBrushFromMaterial(Button1PreviewMaterial);
+	TitleImage->SetBrushFromMaterial(Button1TitleMaterial);
 
-	if (Demo1MediaSource && PreviewMediaPlayer)
+	if (Button1MediaSource && PreviewMediaPlayer)
 	{
 		PreviewMediaPlayer->Close();
-		PreviewMediaPlayer->OpenSource(Demo1MediaSource);
+		PreviewMediaPlayer->OpenSource(Button1MediaSource);
 	}
 
 	PlayButtonHoverSound();
@@ -56,13 +58,7 @@ void UMainMenuUI::Demo1ButtonUnhovered()
 {
 	PlayPreviewTVStaticFadeOut();
 
-	/*PreviewImage->SetBrushFromMaterial(DefaultPreviewMaterial);
-	TitleText->SetText(DefaultTitle);
-
-	if (PreviewMediaPlayer)
-	{
-		PreviewMediaPlayer->Close();
-	}*/
+	TitleImage->SetBrushFromMaterial(DefaultTitleMaterial);
 }
 
 void UMainMenuUI::Demo2ButtonPressed()
@@ -70,19 +66,21 @@ void UMainMenuUI::Demo2ButtonPressed()
 	if (!MainMenuLevelTransitioner) return;
 
 	MainMenuLevelTransitioner->TransitionToLevel(FName("ArmyMenDemoLevel"));
+
+	PlayButtonPressSound();
 }
 
 void UMainMenuUI::Demo2ButtonHovered()
 {
 	PlayPreviewTVStaticFadeIn();
 
-	PreviewImage->SetBrushFromMaterial(Demo2PreviewMaterial);
-	TitleText->SetText(Demo2Title);
+	PreviewImage->SetBrushFromMaterial(Button2PreviewMaterial);
+	TitleImage->SetBrushFromMaterial(Button2TitleMaterial);
 
-	if (Demo2MediaSource && PreviewMediaPlayer)
+	if (Button2MediaSource && PreviewMediaPlayer)
 	{
 		PreviewMediaPlayer->Close();
-		PreviewMediaPlayer->OpenSource(Demo2MediaSource);
+		PreviewMediaPlayer->OpenSource(Button2MediaSource);
 	}
 
 	PlayButtonHoverSound();
@@ -92,13 +90,18 @@ void UMainMenuUI::Demo2ButtonUnhovered()
 {
 	PlayPreviewTVStaticFadeOut();
 
-	/*PreviewImage->SetBrushFromMaterial(DefaultPreviewMaterial);
-	TitleText->SetText(DefaultTitle);
+	TitleImage->SetBrushFromMaterial(DefaultTitleMaterial);
+}
 
-	if (PreviewMediaPlayer)
+void UMainMenuUI::PlayButtonPressSound()
+{
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	if (ButtonPressSound)
 	{
-		PreviewMediaPlayer->Close();
-	}*/
+		UGameplayStatics::PlaySound2D(World, ButtonPressSound);
+	}
 }
 
 void UMainMenuUI::PlayButtonHoverSound()
