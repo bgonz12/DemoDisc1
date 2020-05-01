@@ -77,6 +77,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Credits)
 	class UMaterialInterface* CreditsTitleMaterial;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bIsMainMenuOpen;
+
 	void PlayButtonPressSound();
 
 	void PlayButtonHoverSound();
@@ -108,7 +111,7 @@ protected:
 	UFUNCTION()
 	void CreditsButtonUnhovered();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void CreditsBackButtonPressed();
 
 	UFUNCTION(BlueprintImplementableEvent)

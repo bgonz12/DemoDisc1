@@ -16,6 +16,8 @@ bool UMainMenuUI::Initialize()
 {
 	if (!Super::Initialize()) return false;
 
+	bIsMainMenuOpen = true;
+
 	PreviewImage->SetBrushFromMaterial(DefaultPreviewMaterial);
 
 	Button1->OnPressed.AddDynamic(this, &UMainMenuUI::Demo1ButtonPressed);
@@ -101,7 +103,9 @@ void UMainMenuUI::Demo2ButtonUnhovered()
 
 void UMainMenuUI::CreditsButtonPressed()
 {
-	if (!MainMenuLevelTransitioner) return;
+	if (!bIsMainMenuOpen) return;
+
+	bIsMainMenuOpen = false;
 
 	PlayTransitionToCredits();
 
@@ -127,7 +131,9 @@ void UMainMenuUI::CreditsButtonUnhovered()
 
 void UMainMenuUI::CreditsBackButtonPressed()
 {
-	if (!MainMenuLevelTransitioner) return;
+	if (bIsMainMenuOpen) return;
+
+	bIsMainMenuOpen = true;
 
 	PlayTransitionToMainMenu();
 

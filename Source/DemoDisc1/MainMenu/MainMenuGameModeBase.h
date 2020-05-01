@@ -28,5 +28,6 @@ public:
 
 	virtual void QuitLevel() override;
 
+	UFUNCTION(BlueprintCallable)
 	class UMainMenuUI* GetMainMenuUI();
 };
