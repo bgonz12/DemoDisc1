@@ -107,6 +107,17 @@ protected:
 	class USoundCue* SpookyShootSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	class USoundCue* EmptyClickSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	class UParticleSystem* NormalMuzzleFlashParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
+	class UParticleSystem* SpookyMuzzleFlashParticle;
+
+	class UParticleSystem* MuzzleFlashParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
 	TSubclassOf<class AArmyMenProjectile> ProjectileClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shooting)
@@ -158,6 +169,15 @@ protected:
 	bool bDrawDebugAimLine;
 
 	/** Ammo properties **/
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ammo)
+	int NormalStartAmmo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ammo)
+	int SpookyStartAmmo;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ammo)
+	int StartAmmo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ammo)
 	int MaxInventoryAmmo;

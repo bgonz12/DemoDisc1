@@ -88,13 +88,15 @@ AArmyMenCharacter::AArmyMenCharacter()
 
 	// Set ammo property defaults
 
-	MaxInventoryAmmo = 0;
+	NormalStartAmmo = 0;
+	SpookyStartAmmo = 0;
+	StartAmmo = 0;
 
+	MaxInventoryAmmo = 0;
 	InventoryAmmo = 0;
 
 	MaxLoadedAmmo = 0;
-
-	LoadedAmmo = MaxLoadedAmmo;
+	LoadedAmmo = 0;
 
 	bIsReloading = false;
 }
@@ -105,6 +107,7 @@ void AArmyMenCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	CurrentHealth = MaxHealth;
+	OnNotifyHealthChange.Broadcast();
 
 	bIsDead = false;
 
@@ -128,6 +131,10 @@ void AArmyMenCharacter::BeginPlay()
 	{
 		SetSpookyValues();
 	}
+
+	InventoryAmmo = StartAmmo;
+	LoadedAmmo = MaxLoadedAmmo;
+	OnNotifyAmmoChange.Broadcast();
 }
 
 // Called every frame
@@ -233,6 +240,8 @@ void AArmyMenCharacter::Reset()
 	CurrentHealth = MaxHealth;
 	OnNotifyHealthChange.Broadcast();
 
+	InventoryAmmo = StartAmmo;
+	LoadedAmmo = MaxLoadedAmmo;
 	OnNotifyAmmoChange.Broadcast();
 
 	bIsDead = false;
@@ -274,7 +283,9 @@ void AArmyMenCharacter::SetNormalValues()
 	GetCharacterMovement()->MaxWalkSpeed = NormalWalkSpeed;
 	BackstepMultiplier = NormalBackstepMultiplier;
 	AimRange = NormalAimRange;
+	MuzzleFlashParticle = NormalMuzzleFlashParticle;
 	FireRate = NormalFireRate;
+	StartAmmo = NormalStartAmmo;
 }
 
 void AArmyMenCharacter::SetSpookyValues()
@@ -283,7 +294,12 @@ void AArmyMenCharacter::SetSpookyValues()
 	BackstepMultiplier = SpookyBackstepMultiplier;
 	AimRange = SpookyAimRange;
 	AimAccuracy = SpookyAimAccuracy;
+	MuzzleFlashParticle = SpookyMuzzleFlashParticle;
 	FireRate = SpookyFireRate;
+	StartAmmo = SpookyStartAmmo;
+	InventoryAmmo = StartAmmo;
+	LoadedAmmo = MaxLoadedAmmo;
+	OnNotifyAmmoChange.Broadcast();
 }
 
 // Called to bind functionality to input
@@ -341,18 +357,6 @@ bool AArmyMenCharacter::Fire()
 
 	if (bIsReloading) return false;
 
-	if (MaxLoadedAmmo > 0)
-	{
-		if (LoadedAmmo <= 0)
-		{
-			if (!ReloadStart())
-			{
-				// Play out of ammo sound
-			}
-			return false;
-		}
-	}
-
 	if (ProjectileClass == nullptr) return false;
 
 	UWorld* World = GetWorld();
@@ -362,14 +366,27 @@ bool AArmyMenCharacter::Fire()
 
 	FVector SpawnLocation;
 
-	const USkeletalMeshSocket* GunNozzle = GetMesh()->GetSocketByName(FName("Muzzle"));
-	if (GunNozzle)
+	const USkeletalMeshSocket* GunMuzzle = GetMesh()->GetSocketByName(FName("Muzzle"));
+	if (GunMuzzle)
 	{
-		SpawnLocation = GunNozzle->GetSocketLocation(GetMesh());
+		SpawnLocation = GunMuzzle->GetSocketLocation(GetMesh());
 	}
 	else
 	{
 		SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.0f;
+	}
+
+	if (MaxLoadedAmmo > 0 && LoadedAmmo <= 0)
+	{
+		if (!ReloadStart())
+		{
+			// Play out of ammo sound
+			if (EmptyClickSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(World, EmptyClickSound, SpawnLocation);
+			}
+		}
+		return false;
 	}
 
 	float AccuracyX = FMath::FRandRange(-1.0f, 1.0f) * 90.0f * (1.0f - AimAccuracy);
@@ -411,6 +428,11 @@ bool AArmyMenCharacter::Fire()
 
 	// Animation and Effects
 	PlayFireAnimation();
+
+	if (MuzzleFlashParticle)
+	{
+		UGameplayStatics::SpawnEmitterAttached(MuzzleFlashParticle, GetMesh(), FName("Muzzle"));
+	}
 
 	if (NormalShootSound)
 	{
