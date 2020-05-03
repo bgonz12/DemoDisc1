@@ -547,6 +547,14 @@ void AArmyMenCharacter::ReceiveAmmo(int AmmoReceived)
 	}
 
 	OnNotifyAmmoChange.Broadcast();
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	if (AmmoPickupSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(World, AmmoPickupSound, GetActorLocation());
+	}
 }
 
 AActor* AArmyMenCharacter::GetAimTarget()

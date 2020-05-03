@@ -173,6 +173,10 @@ protected:
 
 	/** Ammo properties **/
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Ammo)
+	class USoundCue* AmmoPickupSound;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ammo)
 	int NormalStartAmmo;
 
