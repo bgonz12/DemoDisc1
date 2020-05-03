@@ -85,6 +85,18 @@ AArmyMenCharacter::AArmyMenCharacter()
 	NormalAimAccuracy = 0.985f;
 	SpookyAimAccuracy = 0.985f;
 	AimAccuracy = NormalAimAccuracy;
+
+	// Set ammo property defaults
+
+	MaxInventoryAmmo = 0;
+
+	InventoryAmmo = 0;
+
+	MaxLoadedAmmo = 0;
+
+	LoadedAmmo = MaxLoadedAmmo;
+
+	bIsReloading = false;
 }
 
 // Called when the game starts or when spawned
@@ -221,6 +233,8 @@ void AArmyMenCharacter::Reset()
 	CurrentHealth = MaxHealth;
 	OnNotifyHealthChange.Broadcast();
 
+	OnNotifyAmmoChange.Broadcast();
+
 	bIsDead = false;
 
 	ResetDeathAnimation();
@@ -280,8 +294,10 @@ void AArmyMenCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis(FName("MoveForward"), this, &AArmyMenCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &AArmyMenCharacter::TurnRight);
 
-	PlayerInputComponent->BindAction(FName("Jump"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::Fire);
-	PlayerInputComponent->BindAction(FName("Fire"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::Fire);
+	PlayerInputComponent->BindAction(FName("Jump"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::TriggerFire);
+	PlayerInputComponent->BindAction(FName("Fire"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::TriggerFire);
+
+	PlayerInputComponent->BindAction(FName("Reload"), EInputEvent::IE_Pressed, this, &AArmyMenCharacter::TriggerReload);
 }
 
 void AArmyMenCharacter::MoveForward(float Value)
@@ -314,14 +330,33 @@ void AArmyMenCharacter::TurnRight(float Value)
 	}
 }
 
-void AArmyMenCharacter::Fire()
+void AArmyMenCharacter::TriggerFire()
 {
-	if (FireTimer > 0.0f) return;
+	Fire();
+}
 
-	if (ProjectileClass == nullptr) return;
+bool AArmyMenCharacter::Fire()
+{
+	if (FireTimer > 0.0f) return false;
+
+	if (bIsReloading) return false;
+
+	if (MaxLoadedAmmo > 0)
+	{
+		if (LoadedAmmo <= 0)
+		{
+			if (!ReloadStart())
+			{
+				// Play out of ammo sound
+			}
+			return false;
+		}
+	}
+
+	if (ProjectileClass == nullptr) return false;
 
 	UWorld* World = GetWorld();
-	if (!World) return;
+	if (!World) return false;
 
 	/** Spawn Bullet **/
 
@@ -371,6 +406,9 @@ void AArmyMenCharacter::Fire()
 		MyCapsuleComponent->IgnoreActorWhenMoving(Projectile, true);
 	}
 
+	LoadedAmmo = FMath::Max(0, LoadedAmmo-1);
+	OnNotifyAmmoChange.Broadcast();
+
 	// Animation and Effects
 	PlayFireAnimation();
 
@@ -385,6 +423,60 @@ void AArmyMenCharacter::Fire()
 	}
 
 	FireTimer = 1.0f / FireRate;
+
+	return true;
+}
+
+void AArmyMenCharacter::TriggerReload()
+{
+	ReloadStart();
+}
+
+bool AArmyMenCharacter::ReloadStart()
+{
+	if (bIsReloading) return false;
+
+	if (MaxLoadedAmmo < 0) return false;
+
+	if (LoadedAmmo >= MaxLoadedAmmo) return false;
+
+	if (MaxInventoryAmmo > 0)
+	{
+		if (InventoryAmmo <= 0)
+		{
+			return false;
+		}
+	}
+
+	bIsReloading = true;
+
+	PlayReloadAnimation();
+
+	return true;
+}
+
+bool AArmyMenCharacter::ReloadEnd()
+{
+	if (!bIsReloading) return false;
+
+	int AmmoToLoad = MaxLoadedAmmo - LoadedAmmo;
+
+	if (InventoryAmmo <= AmmoToLoad)
+	{
+		LoadedAmmo = LoadedAmmo + InventoryAmmo;
+		InventoryAmmo = 0;
+	}
+	else
+	{
+		LoadedAmmo = MaxLoadedAmmo;
+		InventoryAmmo -= AmmoToLoad;
+	}
+
+	bIsReloading = false;
+
+	OnNotifyAmmoChange.Broadcast();
+
+	return true;
 }
 
 

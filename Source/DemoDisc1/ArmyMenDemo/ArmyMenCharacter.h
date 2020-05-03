@@ -9,6 +9,9 @@
 
 DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE(FNotifyHealthChange, AArmyMenCharacter, OnNotifyHealthChange);
 
+DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE(FNotifyAmmoChange, AArmyMenCharacter, OnNotifyAmmoChange);
+
+
 UCLASS()
 class DEMODISC1_API AArmyMenCharacter : public ACharacter, public IReloadableActor
 {
@@ -19,6 +22,8 @@ public:
 	AArmyMenCharacter();
 
 	FNotifyHealthChange OnNotifyHealthChange;
+
+	FNotifyAmmoChange OnNotifyAmmoChange;
 
 protected:
 	// Called when the game starts or when spawned
@@ -120,6 +125,8 @@ protected:
 
 	float FireTimer;
 
+	/** Aiming properties **/
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
 	float NormalAimRange;
 
@@ -150,6 +157,22 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Aiming)
 	bool bDrawDebugAimLine;
 
+	/** Ammo properties **/
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ammo)
+	int MaxInventoryAmmo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ammo)
+	int InventoryAmmo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ammo)
+	int MaxLoadedAmmo;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ammo)
+	int LoadedAmmo;
+
+	bool bIsReloading;
+
 	virtual void Kill();
 
 	virtual void SetNormalValues();
@@ -159,6 +182,9 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayFireAnimation();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayReloadAnimation();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayDeathAnimation();
@@ -179,7 +205,16 @@ public:
 	 */
 	void TurnRight(float Value);
 
-	void Fire();
+	void TriggerFire();
+
+	bool Fire();
+
+	void TriggerReload();
+
+	bool ReloadStart();
+
+	UFUNCTION(BlueprintCallable)
+	bool ReloadEnd();
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
@@ -189,6 +224,10 @@ public:
 	FORCEINLINE int GetMaxHealth() { return MaxHealth; }
 
 	FORCEINLINE int GetCurrentHealth() { return CurrentHealth; }
+
+	FORCEINLINE int GetInventoryAmmo() { return InventoryAmmo; }
+
+	FORCEINLINE int GetLoadedAmmo() { return LoadedAmmo; }
 
 	FORCEINLINE bool GetIsDead() { return bIsDead; }
 

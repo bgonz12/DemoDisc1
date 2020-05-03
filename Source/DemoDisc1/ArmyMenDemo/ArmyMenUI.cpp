@@ -4,6 +4,7 @@
 #include "ArmyMenUI.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
 #include "Materials/MaterialInstanceDynamic.h"
 
@@ -93,4 +94,10 @@ void UArmyMenUI::SetHealthBarPercent(float Value)
 	}
 
 	HealthBar->SetPercent(Value);
+}
+
+void UArmyMenUI::SetAmmoCount(int32 LoadedAmmo, int32 InventoryAmmo)
+{
+	FString AmmoCountString = FString::Printf(TEXT("%d / %d"), LoadedAmmo, InventoryAmmo);
+	AmmoCountText->SetText(FText::FromString(AmmoCountString));
 }

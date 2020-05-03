@@ -26,6 +26,9 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar* HealthBar;
 
+	UPROPERTY(Meta = (BindWidget))
+	class UTextBlock* AmmoCountText;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UMaterialInterface* DeathCurtainMaterial;
 
@@ -52,4 +55,7 @@ protected:
 public:
 	UFUNCTION()
 	void SetHealthBarPercent(float Value);
+
+	UFUNCTION()
+	void SetAmmoCount(int32 LoadedAmmo, int32 InventoryAmmo);
 };

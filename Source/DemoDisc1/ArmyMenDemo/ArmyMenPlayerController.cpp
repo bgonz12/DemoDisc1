@@ -30,6 +30,7 @@ void AArmyMenPlayerController::BeginPlay()
 	if (!MyCharacter) return;
 
 	MyCharacter->OnNotifyHealthChange.AddDynamic(this, &AArmyMenPlayerController::OnPawnNotifyHealthChange);
+	MyCharacter->OnNotifyAmmoChange.AddDynamic(this, &AArmyMenPlayerController::OnPawnNotifyAmmoChange);
 }
 
 void AArmyMenPlayerController::OnPawnNotifyHealthChange()
@@ -45,4 +46,17 @@ void AArmyMenPlayerController::OnPawnNotifyHealthChange()
 	float HealthPercent = (float) MyCharacter->GetCurrentHealth() / (float) MyCharacter->GetMaxHealth();
 
 	ArmyMenUI->SetHealthBarPercent(HealthPercent);
+}
+
+void AArmyMenPlayerController::OnPawnNotifyAmmoChange()
+{
+	if (!ArmyMenUI) return;
+
+	APawn* MyPawn = GetPawn();
+	if (!MyPawn) return;
+
+	AArmyMenCharacter* MyCharacter = Cast<AArmyMenCharacter>(MyPawn);
+	if (!MyCharacter) return;
+
+	ArmyMenUI->SetAmmoCount(MyCharacter->GetLoadedAmmo(), MyCharacter->GetInventoryAmmo());
 }

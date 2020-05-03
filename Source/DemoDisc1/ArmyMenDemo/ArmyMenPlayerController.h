@@ -28,4 +28,7 @@ protected:
 public:
 	UFUNCTION()
 	void OnPawnNotifyHealthChange();
+
+	UFUNCTION()
+	void OnPawnNotifyAmmoChange();
 };
