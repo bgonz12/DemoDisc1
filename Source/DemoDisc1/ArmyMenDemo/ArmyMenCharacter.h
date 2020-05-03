@@ -47,8 +47,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UDutchAngleCameraComponent* CharacterCamera;
 
-	UPROPERTY(VisibleAnywhere, blueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UArmyMenTargetComponent* TargetComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UAmmoPickupSphereComponent* AmmoPickupSphere;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class USceneComponent* MeshContainer;
@@ -237,6 +240,8 @@ public:
 	bool ReloadEnd();
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	virtual void ReceiveAmmo(int AmmoReceived);
 
 	UFUNCTION(BlueprintCallable)
 	AActor* GetAimTarget();

@@ -9,11 +9,13 @@
 #include "Engine/World.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "GameFramework/PawnMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Sound/SoundCue.h"
 
+#include "AmmoPickupSphereComponent.h"
 #include "ArmyMenProjectile.h"
 #include "ArmyMenTargetComponent.h"
 #include "DemoDisc1/DemoDisc1GameInstance.h"
@@ -44,6 +46,9 @@ AArmyMenCharacter::AArmyMenCharacter()
 
 	TargetComponent = CreateDefaultSubobject<UArmyMenTargetComponent>(TEXT("TargetComponent"));
 	TargetComponent->SetupAttachment(RootComponent);
+
+	AmmoPickupSphere = CreateDefaultSubobject<UAmmoPickupSphereComponent>(TEXT("AmmoPickupSphere"));
+	AmmoPickupSphere->SetupAttachment(RootComponent);
 
 	MeshContainer = CreateDefaultSubobject<USceneComponent>(TEXT("MeshContainer"));
 	MeshContainer->SetupAttachment(GetCapsuleComponent());
@@ -235,6 +240,8 @@ void AArmyMenCharacter::Reset()
 	// We do not call reset on parent class because doing so Destroys the actor 
 	//Super::Reset();
 
+	AmmoPickupSphere->DisablePickup();
+
 	if (!GetIsReloadable()) return;
 
 	CurrentHealth = MaxHealth;
@@ -261,6 +268,10 @@ void AArmyMenCharacter::Kill()
 	bIsDead = true;
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	GetMovementComponent()->Velocity = FVector::ZeroVector;
+
+	AmmoPickupSphere->EnablePickup();
 
 	PlayDeathAnimation();
 
@@ -520,6 +531,22 @@ float AArmyMenCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dam
 	OnNotifyHealthChange.Broadcast();
 
 	return DamageAmount;
+}
+
+void AArmyMenCharacter::ReceiveAmmo(int AmmoReceived)
+{
+	if (AmmoReceived <= 0) return;
+
+	if (InventoryAmmo + AmmoReceived > MaxInventoryAmmo)
+	{
+		InventoryAmmo = MaxInventoryAmmo;
+	}
+	else
+	{
+		InventoryAmmo += AmmoReceived;
+	}
+
+	OnNotifyAmmoChange.Broadcast();
 }
 
 AActor* AArmyMenCharacter::GetAimTarget()

@@ -11,6 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+#include "AmmoPickupSphereComponent.h"
 #include "DemoDisc1/SpookyEnableActorComponent.h"
 
 // Sets default values
@@ -34,6 +35,9 @@ AArmyMenCrawlerCharacter::AArmyMenCrawlerCharacter()
 	CharacterCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CharacterCamera"));
 	CharacterCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	CharacterCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	AmmoPickupSphere = CreateDefaultSubobject<UAmmoPickupSphereComponent>(TEXT("AmmoPickupSphere"));
+	AmmoPickupSphere->SetupAttachment(RootComponent);
 
 	// Pawn defaults
 	bUseControllerRotationYaw = false;
@@ -98,6 +102,8 @@ void AArmyMenCrawlerCharacter::Reset()
 
 	if (bDestroyOnReset) Destroy();
 
+	AmmoPickupSphere->DisablePickup();
+
 	if (!GetIsReloadable()) return;
 
 	CurrentHealth = MaxHealth;
@@ -132,6 +138,8 @@ void AArmyMenCrawlerCharacter::Kill()
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCapsuleComponent()->SetSimulatePhysics(false);
+
+	AmmoPickupSphere->EnablePickup();
 
 	PlayDeathAnimation();
 

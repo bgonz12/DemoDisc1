@@ -40,6 +40,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* CharacterCamera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UAmmoPickupSphereComponent* AmmoPickupSphere;
+
 	/** Health Properties **/
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
