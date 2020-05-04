@@ -32,6 +32,10 @@ bool UMainMenuUI::Initialize()
 	CreditsButton->OnHovered.AddDynamic(this, &UMainMenuUI::CreditsButtonHovered);
 	CreditsButton->OnUnhovered.AddDynamic(this, &UMainMenuUI::CreditsButtonUnhovered);
 
+	QuitButton->OnPressed.AddDynamic(this, &UMainMenuUI::QuitButtonPressed);
+	QuitButton->OnHovered.AddDynamic(this, &UMainMenuUI::QuitButtonHovered);
+	QuitButton->OnUnhovered.AddDynamic(this, &UMainMenuUI::QuitButtonUnhovered);
+
 	CreditsBackButton->OnPressed.AddDynamic(this, &UMainMenuUI::CreditsBackButtonPressed);
 
 	return true;
@@ -126,6 +130,23 @@ void UMainMenuUI::CreditsButtonUnhovered()
 {
 	PlayPreviewTVStaticFadeOut();
 
+	TitleImage->SetBrushFromMaterial(DefaultTitleMaterial);
+}
+
+void UMainMenuUI::QuitButtonPressed()
+{
+	MainMenuLevelTransitioner->QuitLevel();
+
+	PlayButtonPressSound();
+}
+
+void UMainMenuUI::QuitButtonHovered()
+{
+	TitleImage->SetBrushFromMaterial(QuitTitleMaterial);
+}
+
+void UMainMenuUI::QuitButtonUnhovered()
+{
 	TitleImage->SetBrushFromMaterial(DefaultTitleMaterial);
 }
 

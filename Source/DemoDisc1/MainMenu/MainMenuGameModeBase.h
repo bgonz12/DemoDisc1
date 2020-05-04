@@ -26,6 +26,7 @@ protected:
 public:
 	virtual void TransitionToLevel(FName LevelName) override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual void QuitLevel() override;
 
 	UFUNCTION(BlueprintCallable)

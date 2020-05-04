@@ -36,6 +36,9 @@ protected:
 	class UButton* CreditsButton;
 
 	UPROPERTY(meta = (BindWidget))
+	class UButton* QuitButton;
+
+	UPROPERTY(meta = (BindWidget))
 	class UButton* CreditsBackButton;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Buttons)
@@ -77,6 +80,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Credits)
 	class UMaterialInterface* CreditsTitleMaterial;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Quit)
+	class UMaterialInterface* QuitTitleMaterial;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bIsMainMenuOpen;
 
@@ -111,8 +117,14 @@ protected:
 	UFUNCTION()
 	void CreditsButtonUnhovered();
 
-	UFUNCTION(BlueprintCallable)
-	void CreditsBackButtonPressed();
+	UFUNCTION()
+	void QuitButtonPressed();
+
+	UFUNCTION()
+	void QuitButtonHovered();
+
+	UFUNCTION()
+	void QuitButtonUnhovered();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayTransitionToCredits();
@@ -127,12 +139,16 @@ protected:
 	void PlayPreviewTVStaticFadeIn();
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void CreditsBackButtonPressed();
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayCurtainFadeIn(float Delay);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayCurtainFadeOut(float Delay);
 
-	FORCEINLINE void SetMainMenuLevelTransitioner(class ILevelTransitioner* NewMainMenuLevelTransitioner) { MainMenuLevelTransitioner = NewMainMenuLevelTransitioner; }
+	FORCEINLINE bool GetIsMainMenuOpen() { return bIsMainMenuOpen; }
 
+	FORCEINLINE void SetMainMenuLevelTransitioner(class ILevelTransitioner* NewMainMenuLevelTransitioner) { MainMenuLevelTransitioner = NewMainMenuLevelTransitioner; }
 };

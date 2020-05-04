@@ -48,6 +48,12 @@ void AMainMenuGameModeBase::TransitionToLevel(FName LevelName)
 
 void AMainMenuGameModeBase::QuitLevel()
 {
+	if (MainMenuUI && !MainMenuUI->GetIsMainMenuOpen())
+	{
+		MainMenuUI->CreditsBackButtonPressed();
+		return;
+	}
+
 	// Check if game is in spooky mode
 	UWorld* World = GetWorld();
 	if (!World) return;
