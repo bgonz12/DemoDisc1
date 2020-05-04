@@ -31,6 +31,8 @@ void ASplashScreensGameModeBase::StartPlay()
 
 			SplashScreensUI->PlayFadeInAnimation();
 
+			OnTransitionToLevel.AddDynamic(SplashScreensUI, &USplashScreensUI::PlayFadeOutAnimation);
+
 			World->GetTimerManager().ClearTimer(ChangeSplashScreenTimerHandle);
 			World->GetTimerManager().SetTimer(ChangeSplashScreenTimerHandle, this, &ASplashScreensGameModeBase::ChangeSplashScreen, SplashScreenTime, true);
 		}
@@ -43,6 +45,11 @@ void ASplashScreensGameModeBase::StartPlay()
 
 void ASplashScreensGameModeBase::ChangeSplashScreen()
 {
+	if (bIsTransitioningLevel)
+	{
+		return;
+	}
+
 	UWorld* World = GetWorld();
 	if (!World) return;
 
@@ -87,7 +94,29 @@ void ASplashScreensGameModeBase::ChangeLevel(FName LevelName)
 		UGameplayStatics::PushSoundMixModifier(World, SilenceFadeSlow);
 	}
 
+	bIsTransitioningLevel = true;
+
 	World->GetTimerManager().SetTimer(OpenLevelTimerHandle, this, &ASplashScreensGameModeBase::OpenLevel, 1.0f, false);
+}
+
+
+void ASplashScreensGameModeBase::QuitLevel()
+{
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	LevelToOpen = FName("MainMenuLevel");
+
+	OnTransitionToLevel.Broadcast();
+
+	if (LevelFadeOutSoundMix)
+	{
+		UGameplayStatics::PushSoundMixModifier(World, LevelFadeOutSoundMix);
+	}
+
+	bIsTransitioningLevel = true;
+
+	World->GetTimerManager().SetTimer(OpenLevelTimerHandle, this, &ASplashScreensGameModeBase::OpenLevel, LevelTransitionTime, false);
 }
 
 USplashScreensUI* ASplashScreensGameModeBase::GetSplashScreensUI()

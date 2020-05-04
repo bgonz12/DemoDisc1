@@ -26,6 +26,7 @@ protected:
 public:
 	FCollectibleCountUpdatedSignature OnCollectibleCountUpdated;
 	
+	UFUNCTION(BlueprintCallable)
 	virtual void QuitLevel() override;
 
 	/** Getters **/

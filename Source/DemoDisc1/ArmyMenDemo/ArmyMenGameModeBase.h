@@ -16,5 +16,6 @@ class DEMODISC1_API AArmyMenGameModeBase : public ADemoDisc1GameModeBase
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable)
 	virtual void QuitLevel() override;
 };

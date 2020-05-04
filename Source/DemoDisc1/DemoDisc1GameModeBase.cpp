@@ -14,6 +14,8 @@ void ADemoDisc1GameModeBase::StartPlay()
 
 	bLoadingCheckpoint = false;
 
+	bIsTransitioningLevel = false;
+
 	UWorld* World = GetWorld();
 	if (!World) return;
 
@@ -59,6 +61,8 @@ void ADemoDisc1GameModeBase::OpenLevel()
 	World->GetTimerManager().ClearTimer(OpenLevelTimerHandle);
 
 	UGameplayStatics::OpenLevel(World, LevelToOpen);
+
+	bIsTransitioningLevel = true;
 }
 
 void ADemoDisc1GameModeBase::TransitionToLevel(FName LevelName)
@@ -74,6 +78,8 @@ void ADemoDisc1GameModeBase::TransitionToLevel(FName LevelName)
 	{
 		UGameplayStatics::PushSoundMixModifier(World, LevelFadeOutSoundMix);
 	}
+
+	bIsTransitioningLevel = true;
 
 	World->GetTimerManager().SetTimer(OpenLevelTimerHandle, this, &ADemoDisc1GameModeBase::OpenLevel, LevelTransitionTime, false);
 }

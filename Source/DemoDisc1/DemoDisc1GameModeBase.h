@@ -49,6 +49,8 @@ protected:
 
 	FName LevelToOpen;
 
+	bool bIsTransitioningLevel;
+
 	UFUNCTION()
 	void LoadCheckpoint();
 

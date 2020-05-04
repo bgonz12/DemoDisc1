@@ -39,7 +39,8 @@ protected:
 	void OpenLevel();
 
 public:
-	//FChangeLevelSignature OnChangeLevel;
+	UFUNCTION(BlueprintCallable)
+	virtual void QuitLevel() override;
 
 	void ChangeLevel(FName LevelName);
 
